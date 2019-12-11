@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
@@ -19,7 +20,8 @@ public class TeleOp_Experiment extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor; //clawMotor, clawMotor2, ;
+    DcMotor armMotor, armMotor2,  clawMotor; //LFMotor, LBMotor, RFMotor, RBMotor, clawMotor, clawMotor2, ;
+    DcMotorEx LFMotor, LBMotor, RFMotor, RBMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
     PIDCoefficients pidConfig;
@@ -34,10 +36,10 @@ public class TeleOp_Experiment extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
+        LFMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "RB Motor");
         armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
         armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
@@ -97,19 +99,19 @@ public class TeleOp_Experiment extends OpMode
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        if (gamepad1.start) {
+        /*if (gamepad1.start) {
             fieldRelativeMode = !fieldRelativeMode;
-        }
+        }*/
         xValue = gamepad1.left_stick_y;
         yValue = gamepad1.right_stick_x;
         strafeValue = gamepad1.left_stick_x;
 
-        if (fieldRelativeMode){
+        /*if (fieldRelativeMode){
             int angle = 0;
             double tempX = (strafeValue * Math.cos(Math.toRadians(angle))) - (xValue * Math.sin(Math.toRadians(angle)));
             xValue = (strafeValue * Math.sin(Math.toRadians(angle))) + (xValue * Math.cos(Math.toRadians(angle)));
             strafeValue = tempX;
-        }
+        }*/
 
         LFPower = -xValue + yValue + strafeValue;
         LBPower = -xValue + yValue - strafeValue;
@@ -120,6 +122,7 @@ public class TeleOp_Experiment extends OpMode
         slidesValue = gamepad2.left_stick_y;
 
         //The wheels in our code
+        
         LFMotor.setPower(Range.clip(LFPower, -1, 1));
         LBMotor.setPower(Range.clip(LBPower, -1, 1));
         RFMotor.setPower(Range.clip(RFPower, -1, 1));
