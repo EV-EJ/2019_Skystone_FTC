@@ -93,9 +93,9 @@ public class Skystone_Testing extends LinearOpMode {
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
-    DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
+    DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;//, armMotor, armMotor2;
     DigitalChannel limitSwitch;
-    Servo rotateServo, clawServo, foundServo, foundServo2;
+    Servo rotateServo, clawServo;//, foundServo, foundServo2;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -153,31 +153,31 @@ public class Skystone_Testing extends LinearOpMode {
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
         RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
         RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
-        armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
+        //armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
+        //armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
-        foundServo = hardwareMap.get(Servo.class, "found servo");
-        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+        //foundServo = hardwareMap.get(Servo.class, "found servo");
+        //foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        armMotor.setDirection(DcMotor.Direction.FORWARD);
-        armMotor2.setDirection(DcMotor.Direction.FORWARD);
+        //armMotor.setDirection(DcMotor.Direction.FORWARD);
+        //armMotor2.setDirection(DcMotor.Direction.FORWARD);
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.FORWARD);//reversed 10-4-2019 Dhruva
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor2.setDirection(DcMotor.Direction.REVERSE);
+        //armMotor.setDirection(DcMotor.Direction.REVERSE);
+        //armMotor2.setDirection(DcMotor.Direction.REVERSE);
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
-        foundServo2.setDirection(Servo.Direction.REVERSE);
-        foundServo.setDirection(Servo.Direction.FORWARD);
+        //foundServo2.setDirection(Servo.Direction.REVERSE);
+        //foundServo.setDirection(Servo.Direction.FORWARD);
 
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
