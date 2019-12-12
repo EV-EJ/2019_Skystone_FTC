@@ -375,7 +375,7 @@ public class Skystone_Testing extends LinearOpMode  {
             //StrafeRightDistance(1,15);
             telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
             //  sleep(1000);
-            DriveBackward(0.08);
+            //DriveBackward(0.1);
             boolean detected = false;
             //throw FileNotFoundException;
             //DriveBackwardDistance(1, 4);
@@ -421,12 +421,13 @@ public class Skystone_Testing extends LinearOpMode  {
                         // the last time that call was made, or if the trackable is not currently visible.
                         break;
                     }
-                    /*if (!detected) {
+                    if (!detected) {
                         telemetry.addData("?", detected);
-                        sleep(2000);
-                        DriveBackwardDistance(0.1, 2);
-                        sleep(1000);
-                    }*/
+                        telemetry.update();
+                        //sleep(2000);
+                        DriveBackwardDistance(0.2, 2);
+                        //sleep(1000);
+                    }
                 }
             }
 
