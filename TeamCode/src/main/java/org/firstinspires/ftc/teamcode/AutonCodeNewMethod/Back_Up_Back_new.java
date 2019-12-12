@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-//Autonomous program when facing crater
+//Back up Auton that goes to the wall side of the bridge, and parks there
 
 @Autonomous (name = "Back_Up_Back")
 //@Disabled
 public class Back_Up_Back_new extends LinearOpMode {
-
+    //initializaing the future variables
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo;
@@ -31,9 +31,9 @@ public class Back_Up_Back_new extends LinearOpMode {
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
-
+        
+        //Wheels on the robot funtions
         drive = new drivetrain(LFMotor, LBMotor, RFMotor, RBMotor);
-
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -46,6 +46,7 @@ public class Back_Up_Back_new extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
+        //Running the code
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
             drive.DriveForwardDistance(1,12);
