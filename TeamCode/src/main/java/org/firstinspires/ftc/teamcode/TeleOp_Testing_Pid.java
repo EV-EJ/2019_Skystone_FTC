@@ -25,6 +25,7 @@ public class TeleOp_Testing_Pid extends OpMode
     double speed = 1;
     double expectedSpeed = 0.1;
     double currSpeed = 0;
+    ElapsedTime timer;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -106,6 +107,9 @@ public class TeleOp_Testing_Pid extends OpMode
         RBPower = -xValue - yValue + strafeValue;
         RFPower = -xValue - yValue - strafeValue;
 
+        if (LFPower == 0){
+            timer.reset();
+        }
 
         slidesValue = gamepad2.left_stick_y;
 
@@ -114,12 +118,19 @@ public class TeleOp_Testing_Pid extends OpMode
         } else{
             speed = 1;
         }
+        /*if (expectedSpeed > speed){
+            expectedSpeed = speed;
+        }*/
+        expectedSpeed = speed;
+        telemetry.addData("Power for data",LFPower);
+        /*if (expectedSpeed < LFPower) {
 
+        }*/
         //The wheels in our code
-        LFMotor.setPower(Range.clip(LFPower, -speed, speed));
-        LBMotor.setPower(Range.clip(LBPower, -speed, speed));
-        RFMotor.setPower(Range.clip(RFPower, -speed, speed));
-        RBMotor.setPower(Range.clip(RBPower, -speed, speed));
+        LFMotor.setPower(Range.clip(LFPower, -expectedSpeed, expectedSpeed));
+        LBMotor.setPower(Range.clip(LBPower, -expectedSpeed, expectedSpeed));
+        RFMotor.setPower(Range.clip(RFPower, -expectedSpeed, expectedSpeed));
+        RBMotor.setPower(Range.clip(RBPower, -expectedSpeed, expectedSpeed));
 
         telemetry.addData("LF Motor",LFMotor.getVelocity());
         telemetry.addData("LB Motor",LBMotor.getVelocity());
