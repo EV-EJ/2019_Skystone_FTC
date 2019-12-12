@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 //imported packages for out code
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 //This file is a TeleOp file, which means that this will be using the joysticks in the 30 min period
 
 @TeleOp(name="TeleOp_Test_PID", group="Iterative TeamCode")
-//@Disabled
+@Disabled
 public class TeleOp_Testing_Pid extends OpMode
 {
     // Declare OpMode members.
