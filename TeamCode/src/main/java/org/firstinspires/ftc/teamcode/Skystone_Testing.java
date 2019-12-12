@@ -371,13 +371,16 @@ public class Skystone_Testing extends LinearOpMode {
 
             // check all the trackable targets to see which one (if any) is visible.
             StrafeRightDistance(1,15);
+            DriveBackward(0.2);
             boolean detected = false;
+            DriveBackward(0.2);
 
             while (!detected){
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
                         if (trackable.getName() == "Stone Target") {
+                            //StopDriving();
                             detected = true;
                             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                             if (robotLocationTransform != null) {
@@ -414,12 +417,12 @@ public class Skystone_Testing extends LinearOpMode {
                         // the last time that call was made, or if the trackable is not currently visible.
                         break;
                     }
-                    if (!detected) {
+                    /*if (!detected) {
                         telemetry.addData("?", detected);
                         sleep(2000);
                         DriveBackwardDistance(0.1, 2);
                         sleep(1000);
-                    }
+                    }*/
                 }
             }
 
