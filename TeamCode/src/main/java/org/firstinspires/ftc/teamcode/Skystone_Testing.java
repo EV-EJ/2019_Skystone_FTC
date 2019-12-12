@@ -375,7 +375,7 @@ public class Skystone_Testing extends LinearOpMode  {
             //StrafeRightDistance(1,15);
             telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
             //  sleep(1000);
-            DriveBackward(0.1);
+            DriveBackward(0.02);
             boolean detected = false;
             //throw FileNotFoundException;
             //DriveBackwardDistance(1, 4);
@@ -400,7 +400,6 @@ public class Skystone_Testing extends LinearOpMode  {
                                 clawMotor.setPower(-0.4);
                             }
                             clawMotor.setPower(-0.1);
-
                             rotateServo.setPosition(Servo.MAX_POSITION);
                             sleep(1000);
                             clawMotor.setPower(0);
