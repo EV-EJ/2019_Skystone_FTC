@@ -46,6 +46,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +90,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @Autonomous(name="Full skystone code Test", group ="Concept")
 //@Disabled
-public class Skystone_Testing extends LinearOpMode {
+public class Skystone_Testing extends LinearOpMode  {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
@@ -145,7 +147,7 @@ public class Skystone_Testing extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
-    @Override public void runOpMode() {
+    @Override public void runOpMode(){
         /*
          * Retrieve the camera we are to use.
          */
@@ -370,17 +372,20 @@ public class Skystone_Testing extends LinearOpMode {
         if (opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
-            StrafeRightDistance(1,15);
+            //StrafeRightDistance(1,15);
+            telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
+            //  sleep(1000);
             DriveBackward(0.2);
             boolean detected = false;
-            DriveBackward(0.2);
+            //throw FileNotFoundException;
+            //DriveBackwardDistance(1, 4);
 
             while (!detected){
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
                         if (trackable.getName() == "Stone Target") {
-                            //StopDriving();
+                            StopDriving();
                             detected = true;
                             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                             if (robotLocationTransform != null) {
@@ -543,12 +548,12 @@ public class Skystone_Testing extends LinearOpMode {
     }
 
     public void DriveBackward(double power) {
-
         DriveForward(-power);
+
     }
 
 
-    public void DriveBackwardDistance(double power, int distance) {
+    public void DriveBackwardDistance(double power, int distance){
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -558,13 +563,16 @@ public class Skystone_Testing extends LinearOpMode {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistanceLF = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistanceLB = LBMotor.getCurrentPosition() + distance * 90;
+        int encoderDistanceRF = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistanceRB = LBMotor.getCurrentPosition() + distance * 90;
 
         //Set target position
-        LFMotor.setTargetPosition(-encoderDistance);
-        LBMotor.setTargetPosition(-encoderDistance);
-        RFMotor.setTargetPosition(-encoderDistance);
-        RBMotor.setTargetPosition(-encoderDistance);
+        LFMotor.setTargetPosition(-encoderDistanceLF);
+        LBMotor.setTargetPosition(-encoderDistanceLB);
+        RFMotor.setTargetPosition(-encoderDistanceRF);
+        RBMotor.setTargetPosition(-encoderDistanceRB);
 
         //set run to position mode
         LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -576,6 +584,8 @@ public class Skystone_Testing extends LinearOpMode {
 
 
         while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
+            //PrintStream hi = new PrintStream("hello.txt");
+            //hi.println("LFMotor: " + LFMotor.getCurrentPosition() + " LBMotor: " + LBMotor.getCurrentPosition() + " RFMotor: " + RFMotor.getCurrentPosition() + " RBMotor: " + RBMotor.getCurrentPosition());
         }
 
         //Stop and change modes back to normal
