@@ -375,7 +375,7 @@ public class Skystone_Testing extends LinearOpMode  {
             //StrafeRightDistance(1,15);
             telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
             //  sleep(1000);
-            DriveBackward(0.02);
+            DriveBackward(0.08);
             boolean detected = false;
             //throw FileNotFoundException;
             //DriveBackwardDistance(1, 4);
