@@ -122,7 +122,7 @@ public class TeleOp_Testing_Pid extends OpMode
             expectedSpeed = speed;
         }*/
         expectedSpeed = speed;
-        telemetry.addData("Power for data",LFPower);
+        telemetry.addData("Power for data", LFPower);
         /*if (expectedSpeed < LFPower) {
 
         }*/
