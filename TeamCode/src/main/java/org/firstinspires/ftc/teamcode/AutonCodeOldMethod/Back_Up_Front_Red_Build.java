@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AutonCodeOldMethod;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -8,9 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Red_Load")
-//@Disabled
-public class Backup_Red_Loading_Zone extends LinearOpMode {
+@Autonomous (name = "Back_Up_Front_Red_Build")
+@Disabled
+public class Back_Up_Front_Red_Build extends LinearOpMode {
 
     DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
@@ -67,49 +68,8 @@ public class Backup_Red_Loading_Zone extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            StrafeRightDistance(1,15);
-
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-
-            rotateServo.setPosition(Servo.MAX_POSITION);
-            clawServo.setPosition(0);
-            sleep(2000);
-            clawMotor.setPower(0);
-            sleep(1000);
-            clawServo.setPosition(1);
-            sleep(1000);
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-            rotateServo.setPosition(Servo.MIN_POSITION);
-            sleep(1000);
-            clawMotor.setPower(0);
-            sleep(950);
-            clawMotor.setPower(-0.1);
-
-            StrafeLeftDistance(0.7, 20);
-            StrafeRightDistance(1,4);
-            DriveBackwardDistance(0.5,30 );
-
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-
-            rotateServo.setPosition(Servo.MAX_POSITION);
-            sleep(2000);
-            clawServo.setPosition(0);
-            sleep(500);
-            rotateServo.setPosition(Servo.MIN_POSITION);
-            sleep(1000);
-            clawMotor.setPower(0);
-            sleep(1000);
-            DriveForwardDistance(0.8,15);
-
+            DriveForwardDistance(1,12);
+            StrafeRightDistance(1,12);
         }
     }
 

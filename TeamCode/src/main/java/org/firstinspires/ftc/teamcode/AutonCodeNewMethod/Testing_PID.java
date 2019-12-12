@@ -10,7 +10,7 @@
 // Use PID controller to manage motor power during 90 degree turn to reduce
 // overshoot.
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AutonCodeNewMethod;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -27,28 +27,33 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 //@Disabled
 public class Testing_PID extends LinearOpMode
 {
-    DcMotor leftMotor, rightMotor;
-    TouchSensor touch;
+    DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
     double globalAngle, power = .30, correction, rotation;
-    boolean aButton, bButton, touched;
+    boolean aButton, bButton;
     PIDController pidRotate, pidDrive;
+    //drivetrain drive;
 
     // called when init button is  pressed.
     @Override
-    public void runOpMode() throws InterruptedException
-    {
-        leftMotor = hardwareMap.dcMotor.get("left_motor");
-        rightMotor = hardwareMap.dcMotor.get("right_motor");
+    public void runOpMode() throws InterruptedException {
+        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
 
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //drive = new drivetrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
-        // get a reference to REV Touch sensor.
-        touch = hardwareMap.touchSensor.get("touch_sensor");
+        LFMotor.setDirection(DcMotor.Direction.FORWARD);
+        LBMotor.setDirection(DcMotor.Direction.FORWARD);
+        RFMotor.setDirection(DcMotor.Direction.FORWARD);
+        RBMotor.setDirection(DcMotor.Direction.REVERSE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -116,8 +121,10 @@ public class Testing_PID extends LinearOpMode
             telemetry.update();
 
             // set power levels.
-            leftMotor.setPower(power - correction);
-            rightMotor.setPower(power + correction);
+            LFMotor.setPower(power - correction);
+            LBMotor.setPower(power - correction);
+            RBMotor.setPower(power + correction);
+            RFMotor.setPower(power + correction);
 
             // We record the sensor values because we will test them in more than
             // one place with time passing between those places. See the lesson on
@@ -125,22 +132,25 @@ public class Testing_PID extends LinearOpMode
 
             aButton = gamepad1.a;
             bButton = gamepad1.b;
-            touched = touch.isPressed();
 
-            if (touched || aButton || bButton)
+            if (aButton || bButton)
             {
                 // backup.
-                leftMotor.setPower(-power);
-                rightMotor.setPower(-power);
+                LFMotor.setPower(-power);
+                LBMotor.setPower(-power);
+                RFMotor.setPower(-power);
+                RBMotor.setPower(-power);
 
                 sleep(500);
 
                 // stop.
-                leftMotor.setPower(0);
-                rightMotor.setPower(0);
+                LFMotor.setPower(0);
+                LBMotor.setPower(0);
+                RFMotor.setPower(0);
+                RBMotor.setPower(0);
 
                 // turn 90 degrees right.
-                if (touched || aButton) rotate(-90, power);
+                if (aButton) rotate(-90, power);
 
                 // turn 90 degrees left.
                 if (bButton) rotate(90, power);
@@ -148,8 +158,10 @@ public class Testing_PID extends LinearOpMode
         }
 
         // turn the motors off.
-        rightMotor.setPower(0);
-        leftMotor.setPower(0);
+        LFMotor.setPower(0);
+        LBMotor.setPower(0);
+        RFMotor.setPower(0);
+        RBMotor.setPower(0);
     }
 
     /**
@@ -193,8 +205,7 @@ public class Testing_PID extends LinearOpMode
      * Rotate left or right the number of degrees. Does not support turning more than 359 degrees.
      * @param degrees Degrees to turn, + is left - is right
      */
-    private void rotate(int degrees, double power)
-    {
+    private void rotate(int degrees, double power) {
         // restart imu angle tracking.
         resetAngle();
 
@@ -227,29 +238,37 @@ public class Testing_PID extends LinearOpMode
             // On right turn we have to get off zero first.
             while (opModeIsActive() && getAngle() == 0)
             {
-                leftMotor.setPower(power);
-                rightMotor.setPower(-power);
+                LFMotor.setPower(power);
+                LBMotor.setPower(power);
+                RFMotor.setPower(-power);
+                RBMotor.setPower(-power);
                 sleep(100);
             }
 
             do
             {
                 power = pidRotate.performPID(getAngle()); // power will be - on right turn.
-                leftMotor.setPower(-power);
-                rightMotor.setPower(power);
+                LFMotor.setPower(-power);
+                LBMotor.setPower(-power);
+                RFMotor.setPower(power);
+                RBMotor.setPower(power);
             } while (opModeIsActive() && !pidRotate.onTarget());
         }
         else    // left turn.
             do
             {
                 power = pidRotate.performPID(getAngle()); // power will be + on left turn.
-                leftMotor.setPower(-power);
-                rightMotor.setPower(power);
+                LFMotor.setPower(-power);
+                LBMotor.setPower(-power);
+                RFMotor.setPower(power);
+                RBMotor.setPower(power);
             } while (opModeIsActive() && !pidRotate.onTarget());
 
         // turn the motors off.
-        rightMotor.setPower(0);
-        leftMotor.setPower(0);
+        LFMotor.setPower(0);
+        LBMotor.setPower(0);
+        RFMotor.setPower(0);
+        RBMotor.setPower(0);
 
         rotation = getAngle();
 

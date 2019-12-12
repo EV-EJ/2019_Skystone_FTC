@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AutonCodeNewMethod;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -46,8 +46,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,14 +88,15 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @Autonomous(name="Full skystone code Test", group ="Concept")
 //@Disabled
-public class Skystone_Testing extends LinearOpMode  {
+public class Skystone_Testing_2 extends LinearOpMode  {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
-    DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;//, armMotor, armMotor2;
+    DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
-    Servo rotateServo, clawServo;//, foundServo, foundServo2;
+    Servo rotateServo, clawServo;
+    drivetrain drive;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -155,31 +154,20 @@ public class Skystone_Testing extends LinearOpMode  {
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
         RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
         RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        //armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
-        //armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
-        //foundServo = hardwareMap.get(Servo.class, "found servo");
-        //foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        //armMotor.setDirection(DcMotor.Direction.FORWARD);
-        //armMotor2.setDirection(DcMotor.Direction.FORWARD);
-        LFMotor.setDirection(DcMotor.Direction.FORWARD);
-        LBMotor.setDirection(DcMotor.Direction.FORWARD);
-        RFMotor.setDirection(DcMotor.Direction.FORWARD);//reversed 10-4-2019 Dhruva
-        RBMotor.setDirection(DcMotor.Direction.REVERSE);
-        //armMotor.setDirection(DcMotor.Direction.REVERSE);
-        //armMotor2.setDirection(DcMotor.Direction.REVERSE);
+
+        drive = new drivetrain(LFMotor, LBMotor, RFMotor, RBMotor);
+
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
-        //foundServo2.setDirection(Servo.Direction.REVERSE);
-        //foundServo.setDirection(Servo.Direction.FORWARD);
 
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
@@ -372,20 +360,20 @@ public class Skystone_Testing extends LinearOpMode  {
         if (opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
-            //StrafeRightDistance(1,15);
+            //drive.StrafeRightDistance(1,15);
             telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
             //  sleep(1000);
-            //DriveBackward(0.1);
+            //drive.DriveBackward(0.1);
             boolean detected = false;
             //throw FileNotFoundException;
-            //DriveBackwardDistance(1, 4);
+            //drive.DriveBackwardDistance(1, 4);
 
             while (!detected){
                 for (VuforiaTrackable trackable : allTrackables) {
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
                         if (trackable.getName() == "Stone Target") {
-                            StopDriving();
+                            drive.StopDriving();
                             detected = true;
                             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                             if (robotLocationTransform != null) {
@@ -425,7 +413,7 @@ public class Skystone_Testing extends LinearOpMode  {
                         telemetry.addData("?", detected);
                         telemetry.update();
                         //sleep(2000);
-                        DriveBackwardDistance(0.2, 2);
+                        drive.DriveBackwardDistance(0.2, 2);
                         //sleep(1000);
                     }
                 }
@@ -437,311 +425,5 @@ public class Skystone_Testing extends LinearOpMode  {
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
     }
-    public void DriveForward(double power) {
 
-        LFMotor.setPower(power);
-        LBMotor.setPower(power);
-        RFMotor.setPower(power);
-        RBMotor.setPower(power);
-    }
-
-
-
-    public void StopDriving() {
-
-        DriveForward(0);
-    }
-
-
-    //Drive forward using encoders
-    public void DriveForwardDistance(double power, int distance) {
-
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
-        //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
-
-        //Set target position
-        LFMotor.setTargetPosition(encoderDistance);
-        LBMotor.setTargetPosition(encoderDistance);
-        RFMotor.setTargetPosition(encoderDistance);
-        RBMotor.setTargetPosition(encoderDistance);
-
-        //set run to position mode
-        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        DriveForward(power);
-
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-
-
-    public void TurnLeft(double power) {
-
-        LFMotor.setPower(-power);
-        LBMotor.setPower(-power);
-        RFMotor.setPower(power);
-        RBMotor.setPower(power);
-    }
-
-
-    public void TurnLeftTime(double power, long time) throws InterruptedException {
-
-        TurnLeft(power);
-        Thread.sleep(time);
-    }
-
-    public void TurnLeftDistance(double power, int distance) {
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
-        //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
-
-        //Set target position
-        LFMotor.setTargetPosition(-encoderDistance);
-        LBMotor.setTargetPosition(-encoderDistance);
-        RFMotor.setTargetPosition(encoderDistance);
-        RBMotor.setTargetPosition(encoderDistance);
-
-        //set run to position mode
-        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        TurnLeft(power);
-
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-    }
-
-    public void DriveBackward(double power) {
-        DriveForward(-power);
-
-    }
-
-
-    public void DriveBackwardDistance(double power, int distance){
-
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
-        //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistanceLF = LFMotor.getCurrentPosition() + distance * 90;
-        int encoderDistanceLB = LBMotor.getCurrentPosition() + distance * 90;
-        int encoderDistanceRF = LFMotor.getCurrentPosition() + distance * 90;
-        int encoderDistanceRB = LBMotor.getCurrentPosition() + distance * 90;
-
-        //Set target position
-        LFMotor.setTargetPosition(-encoderDistanceLF);
-        LBMotor.setTargetPosition(-encoderDistanceLB);
-        RFMotor.setTargetPosition(-encoderDistanceRF);
-        RBMotor.setTargetPosition(-encoderDistanceRB);
-
-        //set run to position mode
-        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        DriveBackward(power);
-
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-            //PrintStream hi = new PrintStream("hello.txt");
-            //hi.println("LFMotor: " + LFMotor.getCurrentPosition() + " LBMotor: " + LBMotor.getCurrentPosition() + " RFMotor: " + RFMotor.getCurrentPosition() + " RBMotor: " + RBMotor.getCurrentPosition());
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-
-
-    public void TurnRight(double power) {
-
-        LFMotor.setPower(power);
-        LBMotor.setPower(power);
-        RFMotor.setPower(-power);
-        RBMotor.setPower(-power);
-    }
-
-    public void TurnRightTime(double power, long time) throws InterruptedException {
-
-        TurnRight(power);
-        Thread.sleep(time);
-    }
-
-    public void TurnRightDistance(double power, int distance) {
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
-        //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
-
-        //Set target position
-        LFMotor.setTargetPosition(encoderDistance);
-        LBMotor.setTargetPosition(encoderDistance);
-        RFMotor.setTargetPosition(-encoderDistance);
-        RBMotor.setTargetPosition(-encoderDistance);
-
-        //set run to position mode
-        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        TurnRight(power);
-
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-
-
-    public void StrafeRight(double power) {
-
-        LFMotor.setPower(power);
-        LBMotor.setPower(-power);
-        RFMotor.setPower(-power);
-        RBMotor.setPower(power);
-    }
-
-
-    public void StrafeRightDistance(double power, int distance) {
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
-        //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
-
-        //Set target position
-        LFMotor.setTargetPosition(encoderDistance);
-        LBMotor.setTargetPosition(-encoderDistance);
-        RFMotor.setTargetPosition(-encoderDistance);
-        RBMotor.setTargetPosition(encoderDistance);
-
-        //set run to position mode
-        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        StrafeRight(power);
-
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
-
-
-    public void StrafeLeft(double power) {
-
-        LFMotor.setPower(-power);
-        LBMotor.setPower(power);
-        RFMotor.setPower(power);
-        RBMotor.setPower(-power);
-    }
-
-    public void StrafeLeftDistance(double power, int distance) {
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
-        //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
-
-        //Set target position
-        LFMotor.setTargetPosition(-encoderDistance);
-        LBMotor.setTargetPosition(encoderDistance);
-        RFMotor.setTargetPosition(encoderDistance);
-        RBMotor.setTargetPosition(-encoderDistance);
-
-        //set run to position mode
-        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        StrafeLeft(power);
-
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    }
 }

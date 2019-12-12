@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TeleOpCode;
 //imported packages for out code
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,20 +14,16 @@ import com.qualcomm.robotcore.util.Range;
 
 //This file is a TeleOp file, which means that this will be using the joysticks in the 30 min period
 
-@TeleOp(name="TeleOp_Test_PID", group="Iterative TeamCode")
-@Disabled
-public class TeleOp_Testing_Pid extends OpMode
+@TeleOp(name="TeleOp_Final", group="Iterative TeamCode")
+//@Disabled
+public class TeleOp_Final extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    DcMotor armMotor, armMotor2, clawMotor; //clawMotor, clawMotor2, LFMotor, LBMotor, RFMotor, RBMotor, ;
-    DcMotorEx LFMotor, LBMotor, RFMotor, RBMotor;
+    DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor; //clawMotor, clawMotor2, ;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
     double speed = 1;
-    double expectedSpeed = 0.1;
-    double currSpeed = 0;
-    ElapsedTime timer;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -37,10 +34,10 @@ public class TeleOp_Testing_Pid extends OpMode
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        LFMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = (DcMotorEx) hardwareMap.get(DcMotor.class, "RB Motor");
+        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
         armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
         armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
@@ -108,36 +105,20 @@ public class TeleOp_Testing_Pid extends OpMode
         RBPower = -xValue - yValue + strafeValue;
         RFPower = -xValue - yValue - strafeValue;
 
-        if (LFPower == 0){
-            timer.reset();
-        }
 
         slidesValue = gamepad2.left_stick_y;
 
         if (gamepad1.a){
-            speed = 0.2;
+            speed = 0.1;
         } else{
             speed = 1;
         }
-        /*if (expectedSpeed > speed){
-            expectedSpeed = speed;
-        }*/
-        expectedSpeed = speed;
-        telemetry.addData("Power for data", LFPower);
-        /*if (expectedSpeed < LFPower) {
 
-        }*/
         //The wheels in our code
-        LFMotor.setPower(Range.clip(LFPower, -expectedSpeed, expectedSpeed));
-        LBMotor.setPower(Range.clip(LBPower, -expectedSpeed, expectedSpeed));
-        RFMotor.setPower(Range.clip(RFPower, -expectedSpeed, expectedSpeed));
-        RBMotor.setPower(Range.clip(RBPower, -expectedSpeed, expectedSpeed));
-
-        telemetry.addData("LF Motor",LFMotor.getVelocity());
-        telemetry.addData("LB Motor",LBMotor.getVelocity());
-        telemetry.addData("RF Motor",RFMotor.getVelocity());
-        telemetry.addData("RB Motor",RBMotor.getVelocity());
-
+        LFMotor.setPower(Range.clip(LFPower, -speed, speed));
+        LBMotor.setPower(Range.clip(LBPower, -speed, speed));
+        RFMotor.setPower(Range.clip(RFPower, -speed, speed));
+        RBMotor.setPower(Range.clip(RBPower, -speed, speed));
         /*LFMotor.setPower(Range.clip(LFPower, -1, 1));
         LBMotor.setPower(Range.clip(LBPower, -1, 1));
         RFMotor.setPower(Range.clip(RFPower, -1, 1));

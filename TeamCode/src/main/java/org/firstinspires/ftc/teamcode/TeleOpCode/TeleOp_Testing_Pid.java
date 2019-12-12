@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TeleOpCode;
 //imported packages for out code
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -7,25 +7,26 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
 //This file is a TeleOp file, which means that this will be using the joysticks in the 30 min period
 
-@TeleOp(name="DONOTRUN!", group="Iterative TeamCode")
+@TeleOp(name="TeleOp_Test_PID", group="Iterative TeamCode")
 @Disabled
-public class TeleOp_Experiment extends OpMode
+public class TeleOp_Testing_Pid extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    DcMotor armMotor, armMotor2,  clawMotor; //LFMotor, LBMotor, RFMotor, RBMotor, clawMotor, clawMotor2, ;
+    DcMotor armMotor, armMotor2, clawMotor; //clawMotor, clawMotor2, LFMotor, LBMotor, RFMotor, RBMotor, ;
     DcMotorEx LFMotor, LBMotor, RFMotor, RBMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    PIDCoefficients pidConfig;
-    boolean fieldRelativeMode = false;
+    double speed = 1;
+    double expectedSpeed = 0.1;
+    double currSpeed = 0;
+    ElapsedTime timer;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -91,42 +92,56 @@ public class TeleOp_Experiment extends OpMode
     @Override
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
-        double LFPower, LBPower, RFPower, RBPower, xValue, strafeValue, yValue;
-        //(real one)float LFPower, LBPower, RFPower, RBPower, xValue, strafeValue, yValue;
+        float   LFPower, LBPower, RFPower, RBPower, xValue, strafeValue, yValue;
         float slidesValue;
         // Choose to drive using either Tank Mode, or POV Mode
         // Comment out the method that's not used.  The default below is POV.
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        /*if (gamepad1.start) {
-            fieldRelativeMode = !fieldRelativeMode;
-        }*/
         xValue = gamepad1.left_stick_y;
         yValue = gamepad1.right_stick_x;
         strafeValue = gamepad1.left_stick_x;
-
-        /*if (fieldRelativeMode){
-            int angle = 0;
-            double tempX = (strafeValue * Math.cos(Math.toRadians(angle))) - (xValue * Math.sin(Math.toRadians(angle)));
-            xValue = (strafeValue * Math.sin(Math.toRadians(angle))) + (xValue * Math.cos(Math.toRadians(angle)));
-            strafeValue = tempX;
-        }*/
 
         LFPower = -xValue + yValue + strafeValue;
         LBPower = -xValue + yValue - strafeValue;
         RBPower = -xValue - yValue + strafeValue;
         RFPower = -xValue - yValue - strafeValue;
 
+        if (LFPower == 0){
+            timer.reset();
+        }
 
         slidesValue = gamepad2.left_stick_y;
 
+        if (gamepad1.a){
+            speed = 0.2;
+        } else{
+            speed = 1;
+        }
+        /*if (expectedSpeed > speed){
+            expectedSpeed = speed;
+        }*/
+        expectedSpeed = speed;
+        telemetry.addData("Power for data", LFPower);
+        /*if (expectedSpeed < LFPower) {
+
+        }*/
         //The wheels in our code
-        
-        LFMotor.setPower(Range.clip(LFPower, -1, 1));
+        LFMotor.setPower(Range.clip(LFPower, -expectedSpeed, expectedSpeed));
+        LBMotor.setPower(Range.clip(LBPower, -expectedSpeed, expectedSpeed));
+        RFMotor.setPower(Range.clip(RFPower, -expectedSpeed, expectedSpeed));
+        RBMotor.setPower(Range.clip(RBPower, -expectedSpeed, expectedSpeed));
+
+        telemetry.addData("LF Motor",LFMotor.getVelocity());
+        telemetry.addData("LB Motor",LBMotor.getVelocity());
+        telemetry.addData("RF Motor",RFMotor.getVelocity());
+        telemetry.addData("RB Motor",RBMotor.getVelocity());
+
+        /*LFMotor.setPower(Range.clip(LFPower, -1, 1));
         LBMotor.setPower(Range.clip(LBPower, -1, 1));
         RFMotor.setPower(Range.clip(RFPower, -1, 1));
-        RBMotor.setPower(Range.clip(RBPower, -1, 1));
+        RBMotor.setPower(Range.clip(RBPower, -1, 1));*/
         //This is the lift mechanism
         if (slidesValue == 0){
             clawMotor.setPower(-0.1);

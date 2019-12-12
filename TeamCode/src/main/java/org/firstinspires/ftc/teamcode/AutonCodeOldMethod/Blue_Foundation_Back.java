@@ -1,18 +1,92 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AutonCodeOldMethod;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Servo;
 
-public class Commands {
-    DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
+//Autonomous program when facing crater
 
-    public void getMotors(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor){
-        this.LBMotor = m_LBMotor;
-        this.LFMotor = m_LFMotor;
-        this.RBMotor = m_RBMotor;
-        this.RFMotor = m_RFMotor;
+@Autonomous (name = "Blue_Build_Back")
+@Disabled
+public class Blue_Foundation_Back extends LinearOpMode {
+
+    DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
+    DigitalChannel limitSwitch;
+    Servo rotateServo, clawServo, foundServo, foundServo2;
+
+
+    //no. of ticks per one revolution of the yellow jacket motors
+    int Ticks_Per_Rev = 1316;
+
+    @Override
+    public void runOpMode() {
+        // Initialize the hardware variables.
+        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
+        armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
+        armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
+        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
+        limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
+        rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
+        clawServo = hardwareMap.get(Servo.class, "Claw Servo");
+        foundServo = hardwareMap.get(Servo.class, "found servo");
+        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+
+        //Run using encoders
+        LFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //Reverse the right motors to move forward based on their orientation on the robot
+        armMotor.setDirection(DcMotor.Direction.FORWARD);
+        armMotor2.setDirection(DcMotor.Direction.FORWARD);
+        LFMotor.setDirection(DcMotor.Direction.FORWARD);
+        LBMotor.setDirection(DcMotor.Direction.FORWARD);
+        RFMotor.setDirection(DcMotor.Direction.FORWARD);
+        RBMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor2.setDirection(DcMotor.Direction.REVERSE);
+        clawMotor.setDirection(DcMotor.Direction.REVERSE);
+        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
+        rotateServo.setDirection(Servo.Direction.FORWARD);
+        clawServo.setDirection(Servo.Direction.FORWARD);
+        foundServo2.setDirection(Servo.Direction.REVERSE);
+        foundServo.setDirection(Servo.Direction.FORWARD);
+
+
+
+        // Wait for the game to start (driver presses PLAY)
+        telemetry.addData("Mode", "Init");
+        telemetry.update();
+        waitForStart();
+
+        LFMotor.getCurrentPosition();
+        if (opModeIsActive()) {
+            DriveBackwardDistance(1,12);
+            StrafeLeftDistance(1,30);
+            foundServo.setPosition(0.6);
+            foundServo2.setPosition(0.8);
+            sleep(1000);
+            StrafeRightDistance(1,40);
+            TurnLeftDistance(1,15);
+            StrafeLeftDistance(1,20);
+            foundServo.setPosition(0.4);
+            foundServo2.setPosition(0.6);
+            sleep(1000);
+            StrafeRightDistance(1,33);
+            DriveBackwardDistance(0.5,5);
+            //DriveBackwardDistance(0.5, 8);
+        }
     }
 
     public void DriveForward(double power) {
+
         LFMotor.setPower(power);
         LBMotor.setPower(power);
         RFMotor.setPower(power);
@@ -311,4 +385,7 @@ public class Commands {
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
+
+
 }

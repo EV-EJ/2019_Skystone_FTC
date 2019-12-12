@@ -1,40 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AutonCodeNewMethod;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
 
-//Autonomous program when facing crater
+public class drivetrain {
+    private static DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
 
-@Autonomous (name = "Back_Up_Front_Red_Build")
-//@Disabled
-public class Back_Up_Front_Red_Build extends LinearOpMode {
-
-    DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
-    DigitalChannel limitSwitch;
-    Servo rotateServo, clawServo, foundServo, foundServo2;
-
-
-    //no. of ticks per one revolution of the yellow jacket motors
-    int Ticks_Per_Rev = 1316;
-
-    @Override
-    public void runOpMode() {
-        // Initialize the hardware variables.
-        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
-        armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
-        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
-        limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
-        rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
-        clawServo = hardwareMap.get(Servo.class, "Claw Servo");
-        foundServo = hardwareMap.get(Servo.class, "found servo");
-        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+    public drivetrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor){
+        this.LBMotor = m_LBMotor;
+        this.LFMotor = m_LFMotor;
+        this.RBMotor = m_RBMotor;
+        this.RFMotor = m_RFMotor;
 
         //Run using encoders
         LFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -42,52 +17,27 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
         RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //Reverse the right motors to move forward based on their orientation on the robot
-        armMotor.setDirection(DcMotor.Direction.FORWARD);
-        armMotor2.setDirection(DcMotor.Direction.FORWARD);
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.FORWARD);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor2.setDirection(DcMotor.Direction.REVERSE);
-        clawMotor.setDirection(DcMotor.Direction.REVERSE);
-        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
-        rotateServo.setDirection(Servo.Direction.FORWARD);
-        clawServo.setDirection(Servo.Direction.FORWARD);
-        foundServo2.setDirection(Servo.Direction.REVERSE);
-        foundServo.setDirection(Servo.Direction.FORWARD);
-
-
-
-        // Wait for the game to start (driver presses PLAY)
-        telemetry.addData("Mode", "Init");
-        telemetry.update();
-        waitForStart();
-
-        LFMotor.getCurrentPosition();
-        if (opModeIsActive()) {
-            DriveForwardDistance(1,12);
-            StrafeRightDistance(1,12);
-        }
     }
 
-    public void DriveForward(double power) {
-
+    public static void DriveForward(double power) {
         LFMotor.setPower(power);
         LBMotor.setPower(power);
         RFMotor.setPower(power);
         RBMotor.setPower(power);
     }
 
-    public void StopDriving() {
+    public static void StopDriving() {
 
         DriveForward(0);
     }
 
 
     //Drive forward using encoders
-    public void DriveForwardDistance(double power, int distance)  {
+    public static void DriveForwardDistance(double power, int distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -126,7 +76,7 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
     }
 
 
-    public void TurnLeft(double power) {
+    public static void TurnLeft(double power) {
 
         LFMotor.setPower(-power);
         LBMotor.setPower(-power);
@@ -135,13 +85,13 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
     }
 
 
-    public void TurnLeftTime(double power, long time) throws InterruptedException {
+    public static void TurnLeftTime(double power, long time) throws InterruptedException {
 
         TurnLeft(power);
         Thread.sleep(time);
     }
 
-    public void TurnLeftDistance(double power, int distance)   {
+    public static void TurnLeftDistance(double power, int distance)   {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -180,13 +130,13 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
 
     }
 
-    public void DriveBackward(double power) {
+    public static void DriveBackward(double power) {
 
         DriveForward(-power);
     }
 
 
-    public void DriveBackwardDistance(double power, int distance)  {
+    public static void DriveBackwardDistance(double power, int distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -226,7 +176,7 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
     }
 
 
-    public void TurnRight(double power) {
+    public static void TurnRight(double power) {
 
         LFMotor.setPower(power);
         LBMotor.setPower(power);
@@ -234,13 +184,13 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
         RBMotor.setPower(-power);
     }
 
-    public void TurnRightTime(double power, long time) throws InterruptedException {
+    public static void TurnRightTime(double power, long time) throws InterruptedException {
 
         TurnRight(power);
         Thread.sleep(time);
     }
 
-    public void TurnRightDistance(double power, int distance) {
+    public static void TurnRightDistance(double power, int distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -279,7 +229,7 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
     }
 
 
-    public void StrafeRight(double power) {
+    public static void StrafeRight(double power) {
 
         LFMotor.setPower(power);
         LBMotor.setPower(-power);
@@ -288,7 +238,7 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
     }
 
 
-    public void StrafeRightDistance(double power, int distance) {
+    public static void StrafeRightDistance(double power, int distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -327,7 +277,7 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
     }
 
 
-    public void StrafeLeft(double power) {
+    public static void StrafeLeft(double power) {
 
         LFMotor.setPower(-power);
         LBMotor.setPower(power);
@@ -335,7 +285,7 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
         RBMotor.setPower(-power);
     }
 
-    public void StrafeLeftDistance(double power, int distance) {
+    public static void StrafeLeftDistance(double power, int distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -372,7 +322,4 @@ public class Back_Up_Front_Red_Build extends LinearOpMode {
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
-
-
-
 }
