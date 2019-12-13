@@ -111,7 +111,7 @@ public class Testing_PID extends LinearOpMode
         pidDrive.setInputRange(-90, 90);
         pidDrive.enable();
 
-        pidDistance.setSetpoint(7000);
+        pidDistance.setSetpoint(1080);
         pidDistance.setOutputRange(-1, 1);
         pidDistance.setInputRange(0, 7000);
         pidDistance.reset();
@@ -124,15 +124,21 @@ public class Testing_PID extends LinearOpMode
             // Use PID with imu input to drive in a straight line.
             correction = pidDrive.performPID(getAngle());
 
-            int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/4;
+            LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            distance = pidDistance.performPID(encode);
+            while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
+                int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
 
-            telemetry.addData("1 imu heading", lastAngles.firstAngle);
-            telemetry.addData("2 global heading", globalAngle);
-            telemetry.addData("3 correction", correction);
-            telemetry.addData("4 turn rotation", rotation);
-            telemetry.update();
+                distance = pidDistance.performPID(encode);
+
+                telemetry.addData("1 imu heading", lastAngles.firstAngle);
+                telemetry.addData("2 global heading", globalAngle);
+                telemetry.addData("3 correction", correction);
+                telemetry.addData("4 turn rotation", rotation);
+                telemetry.update();
 
             /*// set power levels.
             LFMotor.setPower(power - correction);
@@ -140,11 +146,12 @@ public class Testing_PID extends LinearOpMode
             RBMotor.setPower(power + correction);
             RFMotor.setPower(power + correction);*/
 
-            // set power levels.
-            LFMotor.setPower(distance - correction);
-            LBMotor.setPower(distance - correction);
-            RBMotor.setPower(distance + correction);
-            RFMotor.setPower(distance + correction);
+                // set power levels.
+                LFMotor.setPower(distance - correction);
+                LBMotor.setPower(distance - correction);
+                RBMotor.setPower(distance + correction);
+                RFMotor.setPower(distance + correction);
+            }
 
             /*LFMotor.setPower(correction);
             LBMotor.setPower(correction);
@@ -155,7 +162,7 @@ public class Testing_PID extends LinearOpMode
             // one place with time passing between those places. See the lesson on
             // Timing Considerations to know why.
 
-            aButton = gamepad1.a;
+            /*aButton = gamepad1.a;
             bButton = gamepad1.b;
 
             if (aButton || bButton)
@@ -172,14 +179,14 @@ public class Testing_PID extends LinearOpMode
                 LFMotor.setPower(0);
                 LBMotor.setPower(0);
                 RFMotor.setPower(0);
-                RBMotor.setPower(0);
+                RBMotor.setPower(0);*/
 
                 // turn 90 degrees right.
-                if (aButton) rotate(-90, power);
+                //if (aButton) rotate(-90, power);
 
                 // turn 90 degrees left.
-                if (bButton) rotate(90, power);
-            }
+                //if (bButton) rotate(90, power);
+            //}
         }
 
         // turn the motors off.
