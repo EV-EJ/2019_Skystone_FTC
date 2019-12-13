@@ -31,7 +31,7 @@ public class Testing_PID extends LinearOpMode
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
-    double globalAngle, power = .30, correction, rotation;
+    double globalAngle, power = .30, correction, rotation, distance;
     boolean aButton, bButton;
     PIDController pidRotate, pidDrive, pidDistance;
     //PIDCoefficients pidConfig;
@@ -122,8 +122,11 @@ public class Testing_PID extends LinearOpMode
         if (opModeIsActive())
         {
             // Use PID with imu input to drive in a straight line.
-            //correction = pidDrive.performPID(getAngle());
-            correction = pidDistance.performPID(7000);
+            correction = pidDrive.performPID(getAngle());
+
+            int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/4;
+
+            distance = pidDistance.performPID(encode);
 
             telemetry.addData("1 imu heading", lastAngles.firstAngle);
             telemetry.addData("2 global heading", globalAngle);
@@ -137,10 +140,16 @@ public class Testing_PID extends LinearOpMode
             RBMotor.setPower(power + correction);
             RFMotor.setPower(power + correction);*/
 
-            LFMotor.setPower(correction);
+            // set power levels.
+            LFMotor.setPower(distance - correction);
+            LBMotor.setPower(distance - correction);
+            RBMotor.setPower(distance + correction);
+            RFMotor.setPower(distance + correction);
+
+            /*LFMotor.setPower(correction);
             LBMotor.setPower(correction);
             RFMotor.setPower(correction);
-            RFMotor.setPower(correction);
+            RFMotor.setPower(correction);*/
 
             // We record the sensor values because we will test them in more than
             // one place with time passing between those places. See the lesson on
