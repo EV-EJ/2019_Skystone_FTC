@@ -16,6 +16,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -32,7 +33,8 @@ public class Testing_PID extends LinearOpMode
     Orientation lastAngles = new Orientation();
     double globalAngle, power = .30, correction, rotation;
     boolean aButton, bButton;
-    PIDController pidRotate, pidDrive;
+    PIDController pidRotate, pidDrive, pidDistance;
+    //PIDCoefficients pidConfig;
     //drivetrain drive;
 
     // called when init button is  pressed.
@@ -74,6 +76,8 @@ public class Testing_PID extends LinearOpMode
         // causes the PID controller to gently increase power if the turn is not completed.
         pidRotate = new PIDController(.003, .00003, 0);
 
+        pidDistance = new PIDController(.003, .00003, 0);
+
         // Set PID proportional value to produce non-zero correction value when robot veers off
         // straight line. P value controls how sensitive the correction is.
         pidDrive = new PIDController(.05, 0, 0);
@@ -107,12 +111,19 @@ public class Testing_PID extends LinearOpMode
         pidDrive.setInputRange(-90, 90);
         pidDrive.enable();
 
+        pidDistance.setSetpoint(7000);
+        pidDistance.setOutputRange(-1, 1);
+        pidDistance.setInputRange(0, 7000);
+        pidDistance.reset();
+        pidDistance.enable();
+
         // drive until end of period.
 
-        while (opModeIsActive())
+        if (opModeIsActive())
         {
             // Use PID with imu input to drive in a straight line.
-            correction = pidDrive.performPID(getAngle());
+            //correction = pidDrive.performPID(getAngle());
+            correction = pidDistance.performPID(7000);
 
             telemetry.addData("1 imu heading", lastAngles.firstAngle);
             telemetry.addData("2 global heading", globalAngle);
@@ -120,11 +131,16 @@ public class Testing_PID extends LinearOpMode
             telemetry.addData("4 turn rotation", rotation);
             telemetry.update();
 
-            // set power levels.
+            /*// set power levels.
             LFMotor.setPower(power - correction);
             LBMotor.setPower(power - correction);
             RBMotor.setPower(power + correction);
-            RFMotor.setPower(power + correction);
+            RFMotor.setPower(power + correction);*/
+
+            LFMotor.setPower(correction);
+            LBMotor.setPower(correction);
+            RFMotor.setPower(correction);
+            RFMotor.setPower(correction);
 
             // We record the sensor values because we will test them in more than
             // one place with time passing between those places. See the lesson on
