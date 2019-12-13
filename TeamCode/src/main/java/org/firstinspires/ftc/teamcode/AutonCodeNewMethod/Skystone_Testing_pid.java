@@ -88,7 +88,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @Autonomous(name="PID + SKYSTONE", group ="Concept")
 //@Disabled
-public class Skystone_Testing_3 extends LinearOpMode  {
+public class Skystone_Testing_pid extends LinearOpMode  {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
@@ -99,7 +99,7 @@ public class Skystone_Testing_3 extends LinearOpMode  {
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
     PIDController pidDrive;
-    drivetrain drive;
+    drivetrain_pid drive;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -170,7 +170,7 @@ public class Skystone_Testing_3 extends LinearOpMode  {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        drive = new drivetrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new drivetrain_pid(LFMotor, LBMotor, RFMotor, RBMotor);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
@@ -396,7 +396,7 @@ public class Skystone_Testing_3 extends LinearOpMode  {
         // Set up parameters for driving in a straight line.
 
         pidDrive.setOutputRange(-1, 1);
-        pidDrive.setInputRange(0, 100000);
+        pidDrive.setInputRange(-100000, 100000);
         pidDrive.reset();
         pidDrive.enable();
 
@@ -461,7 +461,8 @@ public class Skystone_Testing_3 extends LinearOpMode  {
                         telemetry.addData("?", detected);
                         telemetry.update();
                         //sleep(2000);
-                        drive.DriveBackwardDistance(0.2, 2);
+                        drive.DriveForwardPID(2);
+                        //drive.DriveBackwardDistance(0.2, 2);
                         //sleep(1000);
                     }
                 }
@@ -472,25 +473,6 @@ public class Skystone_Testing_3 extends LinearOpMode  {
 
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
-    }
-
-    public void movingPidInches(double inches){
-        pidDrive.reset();
-        pidDrive.setSetpoint(inches * 90.37);
-
-        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
-            int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
-
-            double power = pidDrive.performPID(encode);
-
-            drivetrain.DriveForward(power);
-        }
-
     }
 
 }
