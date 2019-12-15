@@ -13,9 +13,9 @@ public class drivetrain {
 
         //Run using encoders
         LFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //LBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -55,16 +55,27 @@ public class drivetrain {
         RBMotor.setTargetPosition(encoderDistance);
 
         //set run to position mode
-        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        /*LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+         */
+
         DriveForward(power);
 
+        double av = 0;
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-        }
+        do {
+
+            int encodercountLF = LFMotor.getCurrentPosition();
+            int encodercountRB = RBMotor.getCurrentPosition();
+
+            av = (encodercountLF + encodercountRB) / 2;
+        } while (av < encoderDistance);
+
+        /*while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
+        }*/
 
         //Stop and change modes back to normal
         StopDriving();
