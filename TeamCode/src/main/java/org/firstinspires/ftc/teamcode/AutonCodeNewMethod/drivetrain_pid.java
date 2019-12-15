@@ -12,6 +12,8 @@ public class drivetrain_pid {
         this.RBMotor = m_RBMotor;
         this.RFMotor = m_RFMotor;
 
+        pidDrive = new PIDController(.003, .00003, 0);
+
         pidDrive.setOutputRange(-1, 1);
         pidDrive.setInputRange(-100000, 100000);
         pidDrive.reset();
@@ -42,21 +44,20 @@ public class drivetrain_pid {
     }
 
     public void DriveForwardPID(double inches){
-        pidDrive.reset();
-        pidDrive.setSetpoint(inches * 90.37);
+        double setpoint = 1136 / (4 * 3.14159265);
+        pidDrive.setSetpoint(inches * setpoint);
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
+        do {
             int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
 
             double power = pidDrive.performPID(encode);
 
             DriveForward(power);
-        }
+        } while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy());
 
     }
 

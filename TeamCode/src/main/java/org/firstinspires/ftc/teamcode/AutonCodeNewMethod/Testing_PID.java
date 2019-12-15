@@ -35,27 +35,22 @@ public class Testing_PID extends LinearOpMode
     boolean aButton, bButton;
     PIDController pidRotate, pidDrive, pidDistance;
     //PIDCoefficients pidConfig;
-    //drivetrain drive;
+    drivetrain_pid drive;
 
     // called when init button is  pressed.
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode(){//} throws InterruptedException {
         LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
         RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
         RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
 
-        LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        /*LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
 
-        //drive = new drivetrain(LFMotor, LBMotor, RFMotor, RBMotor);
-
-        LFMotor.setDirection(DcMotor.Direction.FORWARD);
-        LBMotor.setDirection(DcMotor.Direction.FORWARD);
-        RFMotor.setDirection(DcMotor.Direction.FORWARD);
-        RBMotor.setDirection(DcMotor.Direction.REVERSE);
+        drive = new drivetrain_pid(LFMotor, LBMotor, RFMotor, RBMotor);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -119,17 +114,60 @@ public class Testing_PID extends LinearOpMode
 
         // drive until end of period.
 
-        if (opModeIsActive())
+        telemetry.addData("Mode", "DOES THIS WORK?");
+        telemetry.update();
+
+
+        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        while (opModeIsActive())
         {
             // Use PID with imu input to drive in a straight line.
+
+            telemetry.addData("Mode", "MIHAR IS A BOT");
+            telemetry.update();
+
+            drive.DriveForward(0.3);
+
+            //drive.DriveForwardPID(5);
+
+            /*telemetry.addData("Mode", "yes");
+            telemetry.update();
             correction = pidDrive.performPID(getAngle());
 
-            LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
 
-            while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
+            distance = pidDistance.performPID(encode);
+
+            telemetry.addData("1 imu heading", lastAngles.firstAngle);
+            telemetry.addData("2 global heading", globalAngle);
+            telemetry.addData("3 correction", correction);
+            telemetry.addData("4 turn rotation", rotation);
+            telemetry.addData("5 encode", encode);
+            telemetry.addData("6 distance", distance);
+            telemetry.update();
+
+            /* set power levels.
+            LFMotor.setPower(power - correction);
+            LBMotor.setPower(power - correction);
+            RBMotor.setPower(power + correction);
+            RFMotor.setPower(power + correction);*/
+
+            // set power levels.
+
+            /*LFMotor.setPower(distance - correction);
+            LBMotor.setPower(distance - correction);
+            RBMotor.setPower(distance + correction);
+            RFMotor.setPower(distance + correction);*/
+            /*do {
+                telemetry.addData("Mode", "hhheNG");
+                telemetry.update();
+                correction = pidDrive.performPID(getAngle());
+
                 int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
 
                 distance = pidDistance.performPID(encode);
@@ -138,20 +176,24 @@ public class Testing_PID extends LinearOpMode
                 telemetry.addData("2 global heading", globalAngle);
                 telemetry.addData("3 correction", correction);
                 telemetry.addData("4 turn rotation", rotation);
+                telemetry.addData("5 encode", encode);
+                telemetry.addData("6 distance", distance);
                 telemetry.update();
 
-            /*// set power levels.
+            /* set power levels.
             LFMotor.setPower(power - correction);
             LBMotor.setPower(power - correction);
             RBMotor.setPower(power + correction);
             RFMotor.setPower(power + correction);*/
 
                 // set power levels.
-                LFMotor.setPower(distance - correction);
+                //drive.DriveForward(distance);
+                /*LFMotor.setPower(distance - correction);
                 LBMotor.setPower(distance - correction);
                 RBMotor.setPower(distance + correction);
-                RFMotor.setPower(distance + correction);
-            }
+                RFMotor.setPower(distance + correction);*/
+            //} while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy());
+
 
             /*LFMotor.setPower(correction);
             LBMotor.setPower(correction);
@@ -190,10 +232,10 @@ public class Testing_PID extends LinearOpMode
         }
 
         // turn the motors off.
-        LFMotor.setPower(0);
+        /*LFMotor.setPower(0);
         LBMotor.setPower(0);
         RFMotor.setPower(0);
-        RBMotor.setPower(0);
+        RBMotor.setPower(0);*/
     }
 
     /**
