@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.AutonCodeNewMethod;
+package org.firstinspires.ftc.teamcode.UsingPID;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -161,6 +161,7 @@ public class Skystone_Testing_pid extends LinearOpMode  {
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -170,7 +171,7 @@ public class Skystone_Testing_pid extends LinearOpMode  {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        drive = new drivetrain_pid(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new drivetrain_pid(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
@@ -178,15 +179,6 @@ public class Skystone_Testing_pid extends LinearOpMode  {
         clawServo.setDirection(Servo.Direction.FORWARD);
 
         BNO055IMU.Parameters parameters_robo = new BNO055IMU.Parameters();
-
-        parameters_robo.mode = BNO055IMU.SensorMode.IMU;
-        parameters_robo.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters_robo.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters_robo.loggingEnabled = false;
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-
-        imu.initialize(parameters_robo);
 
         pidDrive = new PIDController(.003, .00003, 0);
 

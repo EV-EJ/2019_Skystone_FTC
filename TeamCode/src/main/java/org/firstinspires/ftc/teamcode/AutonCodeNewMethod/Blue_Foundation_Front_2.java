@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 //Autonomous program when facing crater
 
 @Autonomous (name = "Blue_Build_Front")
-//@Disabled
+@Disabled
 public class Blue_Foundation_Front_2 extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;

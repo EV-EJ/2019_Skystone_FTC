@@ -10,14 +10,13 @@
 // Use PID controller to manage motor power during 90 degree turn to reduce
 // overshoot.
 
-package org.firstinspires.ftc.teamcode.AutonCodeNewMethod;
+package org.firstinspires.ftc.teamcode.UsingPID;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -25,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous(name="Testing PID", group="Exercises")
-//@Disabled
+@Disabled
 public class Testing_PID extends LinearOpMode
 {
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
@@ -34,7 +33,6 @@ public class Testing_PID extends LinearOpMode
     double globalAngle, power = .30, correction, rotation, distance;
     boolean aButton, bButton;
     PIDController pidRotate, pidDrive, pidDistance;
-    //PIDCoefficients pidConfig;
     drivetrain_pid drive;
 
     // called when init button is  pressed.
@@ -50,7 +48,7 @@ public class Testing_PID extends LinearOpMode
         LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
 
-        drive = new drivetrain_pid(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new drivetrain_pid(LFMotor, LBMotor, RFMotor, RBMotor,imu);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
