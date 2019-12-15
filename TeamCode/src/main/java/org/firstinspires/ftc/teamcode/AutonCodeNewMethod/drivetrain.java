@@ -72,6 +72,8 @@ public class drivetrain {
             int encodercountRB = RBMotor.getCurrentPosition();
 
             av = (encodercountLF + encodercountRB) / 2;
+
+            DriveForward(1);
         } while (av < encoderDistance);
 
         /*while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
