@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.AutonCodeNewMethod.drivetrain;
 //Back up Auton that goes to the wall side of the bridge, and parks there
 
 @Autonomous (name = "TESTING PID")
-@Disabled
+//@Disabled
 public class Back_Up_Back_pid extends LinearOpMode {
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();
