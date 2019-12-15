@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 //Back up Auton that goes to the wall side of the bridge, and parks there
 
-@Autonomous (name = "Back_Up_Back")
-@Disabled
+@Autonomous (name = "Back_Up_Back_TODOTTESTUNLESSYOUDONTWANTERRORS")
+//@Disabled
 public class Back_Up_Back_2 extends LinearOpMode {
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();
@@ -57,7 +57,7 @@ public class Back_Up_Back_2 extends LinearOpMode {
 
         //Running the code
         LFMotor.getCurrentPosition();
-        while (opModeIsActive()) {
+        if (opModeIsActive()) {
             drive.DriveForwardDistance(1,12);
         }
     }

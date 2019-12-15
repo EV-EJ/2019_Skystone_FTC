@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.UsingPID;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.AutonCodeNewMethod.drivetrain;
 //Back up Auton that goes to the wall side of the bridge, and parks there
 
 @Autonomous (name = "TESTING PID")
-//@Disabled
+@Disabled
 public class Back_Up_Back_pid extends LinearOpMode {
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();
@@ -49,6 +50,7 @@ public class Back_Up_Back_pid extends LinearOpMode {
 
         pidDrive.setOutputRange(-1, 1);
         pidDrive.setInputRange(-100000, 100000);
+        pidDrive.setTolerance(20);
         pidDrive.reset();
         pidDrive.enable();
 
@@ -80,16 +82,27 @@ public class Back_Up_Back_pid extends LinearOpMode {
 
                     /**/
                     do {
-                        int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
+                        int encode = (LFMotor.getCurrentPosition() /*+ LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition()*/ + RBMotor.getCurrentPosition()) / 2;
 
                         double power = pidDrive.performPID(encode);
 
                         telemetry.addData("encode", encode);
+                        telemetry.addData("LF Motor",LFMotor.getCurrentPosition());
+                        telemetry.addData("LB Motor",LBMotor.getCurrentPosition());
+                        telemetry.addData("RF Motor",RFMotor.getCurrentPosition());
+                        telemetry.addData("RB Motor",RBMotor.getCurrentPosition());
                         telemetry.addData("time", runtime);
-                        //telemetry.addData("power",power);
+                        telemetry.addData("power",power);
                         //telemetry.addData("setpoint",pidDrive.getSetpoint());
                         telemetry.log();
                         telemetry.update();
+
+                        //drive.DriveForward(1);
+
+                        /*LFMotor.setPower(pidDrive.performPID(LFMotor.getCurrentPosition()));
+                        LBMotor.setPower(pidDrive.performPID(LBMotor.getCurrentPosition()));
+                        RFMotor.setPower(pidDrive.performPID(RFMotor.getCurrentPosition()));
+                        RBMotor.setPower(pidDrive.performPID(RBMotor.getCurrentPosition()));*/
 
                         drive.DriveForward(power);
                     } while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy());

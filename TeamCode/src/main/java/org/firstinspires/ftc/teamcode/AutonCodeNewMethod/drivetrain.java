@@ -46,7 +46,7 @@ public class drivetrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistance = (LFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/2 + distance * 90;
 
         //Set target position
         LFMotor.setTargetPosition(encoderDistance);
