@@ -362,7 +362,7 @@ public class Skystone_Testing_Time extends LinearOpMode  {
             // check all the trackable targets to see which one (if any) is visible.
             drive.StrafeRight(1);
             telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
-            sleep(1000);
+            sleep(650);
             drive.StopDriving();
             //drive.DriveBackward(0.1);
             boolean detected = false;
@@ -409,14 +409,14 @@ public class Skystone_Testing_Time extends LinearOpMode  {
                         // getUpdatedRobotLocation() will return null if no new information is available since
                         // the last time that call was made, or if the trackable is not currently visible.
                         break;
-                    }
-                    if (!detected) {
+                    } else {
                         telemetry.addData("?", detected);
                         telemetry.update();
                         //sleep(2000);
-                        drive.DriveBackward(1);
-                        sleep(500);
+                        drive.DriveBackward(0.2);
+                        sleep(250);
                         drive.StopDriving();
+                        sleep(1000);
                         //sleep(1000);
                     }
                 }
