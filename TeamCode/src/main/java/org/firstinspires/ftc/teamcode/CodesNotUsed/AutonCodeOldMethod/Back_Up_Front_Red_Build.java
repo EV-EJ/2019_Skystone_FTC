@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.AutonCodeOldMethod;
+package org.firstinspires.ftc.teamcode.CodesNotUsed.AutonCodeOldMethod;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Red_Build_Front")
+@Autonomous (name = "Back_Up_Front_Red_Build")
 @Disabled
-public class Red_Foundation_Front extends LinearOpMode {
+public class Back_Up_Front_Red_Build extends LinearOpMode {
 
     DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
@@ -69,22 +69,7 @@ public class Red_Foundation_Front extends LinearOpMode {
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
             DriveForwardDistance(1,12);
-            StrafeLeftDistance(1,25);
-            foundServo.setPosition(0.6);
-            foundServo2.setPosition(0.8);
-            sleep(1000);
-            //DriveBackwardDistance(1,2);
-            StrafeRightDistance(1,45);
-            //TurnRightDistance(1,17);
-            //DriveForwardDistance(1,25);
-            //StrafeLeftDistance(1,30);
-            foundServo.setPosition(0.4);
-            foundServo2.setPosition(0.6);
-            sleep(1000);
-            //StrafeRightDistance(1,33);
-            DriveBackwardDistance(1,33);
-            StrafeLeftDistance(1, 22);
-            //DriveBackwardDistance(0.5, 8);
+            StrafeRightDistance(1,12);
         }
     }
 

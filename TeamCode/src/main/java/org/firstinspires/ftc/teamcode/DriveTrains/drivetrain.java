@@ -1,22 +1,15 @@
-package org.firstinspires.ftc.teamcode.UsingPID;
+package org.firstinspires.ftc.teamcode.DriveTrains;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class drivetrain_pid_ramping {
-    static DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
-    static PIDController pidDrive;
-    static double power, encode, previous_power = 0;
+public class drivetrain {
+    private static DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
 
-    public drivetrain_pid_ramping(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor){
+    public drivetrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor){
         this.LBMotor = m_LBMotor;
         this.LFMotor = m_LFMotor;
         this.RBMotor = m_RBMotor;
         this.RFMotor = m_RFMotor;
-
-        pidDrive.setOutputRange(-1, 1);
-        pidDrive.setInputRange(-100000, 100000);
-        pidDrive.reset();
-        pidDrive.enable();
 
         //Run using encoders
         LFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -28,14 +21,6 @@ public class drivetrain_pid_ramping {
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.FORWARD);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
-    }
-
-    public static double rampingUp(double previous_power, double power){
-        if (previous_power < power && power > 0){
-            return 0;
-        } else {
-            return power;
-        }
     }
 
     public static void DriveForward(double power) {
@@ -50,24 +35,44 @@ public class drivetrain_pid_ramping {
         DriveForward(0);
     }
 
-    public void DriveForwardPID(double inches){
-        pidDrive.reset();
-        pidDrive.setSetpoint(inches * 90.37);
+
+    //Drive forward using encoders
+    public static void DriveForwardDistance(double power, int distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
-            encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
+        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
+        //Ticks per inch = 1136/12.57 (approximately 90.37)
+        int encoderDistance = (LFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/2 + distance * 90;
 
-            power = pidDrive.performPID(encode);
+        //Set target position
+        LFMotor.setTargetPosition(encoderDistance);
+        LBMotor.setTargetPosition(encoderDistance);
+        RFMotor.setTargetPosition(encoderDistance);
+        RBMotor.setTargetPosition(encoderDistance);
 
-            DriveForward(power);
+        //set run to position mode
+        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            previous_power = power;
+
+        DriveForward(power);
+
+
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
         }
+
+        //Stop and change modes back to normal
+        StopDriving();
+        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
@@ -131,23 +136,43 @@ public class drivetrain_pid_ramping {
         DriveForward(-power);
     }
 
-    //Drive Backward using pid may not work. needs to be tested
-    public void DriveBackwardPID(double inches){
-        pidDrive.reset();
-        pidDrive.setSetpoint(inches * 90.37);
+
+    public static void DriveBackwardDistance(double power, int distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
-            int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
 
-            double power = pidDrive.performPID(encode);
+        //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
+        //Ticks per inch = 1136/12.57 (approximately 90.37)
+        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
 
-            DriveBackward(power);
+        //Set target position
+        LFMotor.setTargetPosition(-encoderDistance);
+        LBMotor.setTargetPosition(-encoderDistance);
+        RFMotor.setTargetPosition(-encoderDistance);
+        RBMotor.setTargetPosition(-encoderDistance);
+
+        //set run to position mode
+        LFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        DriveBackward(power);
+
+
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
         }
+
+        //Stop and change modes back to normal
+        StopDriving();
+        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 

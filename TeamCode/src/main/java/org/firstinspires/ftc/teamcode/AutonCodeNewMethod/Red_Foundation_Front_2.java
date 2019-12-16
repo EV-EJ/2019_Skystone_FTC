@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.DriveTrains.drivetrain;
+
 //Autonomous program when facing crater
 
 @Autonomous (name = "Red_Build_Front")

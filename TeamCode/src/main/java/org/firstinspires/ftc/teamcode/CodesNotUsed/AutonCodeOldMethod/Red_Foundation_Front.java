@@ -1,15 +1,41 @@
-package org.firstinspires.ftc.teamcode.AutonCodeNewMethod;
+package org.firstinspires.ftc.teamcode.CodesNotUsed.AutonCodeOldMethod;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Servo;
 
-public class drivetrain {
-    private static DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
+//Autonomous program when facing crater
 
-    public drivetrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor){
-        this.LBMotor = m_LBMotor;
-        this.LFMotor = m_LFMotor;
-        this.RBMotor = m_RBMotor;
-        this.RFMotor = m_RFMotor;
+@Autonomous (name = "Red_Build_Front")
+@Disabled
+public class Red_Foundation_Front extends LinearOpMode {
+
+    DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
+    DigitalChannel limitSwitch;
+    Servo rotateServo, clawServo, foundServo, foundServo2;
+
+
+    //no. of ticks per one revolution of the yellow jacket motors
+    int Ticks_Per_Rev = 1316;
+
+    @Override
+    public void runOpMode() {
+        // Initialize the hardware variables.
+        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
+        armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
+        armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
+        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
+        limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
+        rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
+        clawServo = hardwareMap.get(Servo.class, "Claw Servo");
+        foundServo = hardwareMap.get(Servo.class, "found servo");
+        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
 
         //Run using encoders
         LFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -17,27 +43,67 @@ public class drivetrain {
         RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //Reverse the right motors to move forward based on their orientation on the robot
+        armMotor.setDirection(DcMotor.Direction.FORWARD);
+        armMotor2.setDirection(DcMotor.Direction.FORWARD);
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.FORWARD);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor2.setDirection(DcMotor.Direction.REVERSE);
+        clawMotor.setDirection(DcMotor.Direction.REVERSE);
+        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
+        rotateServo.setDirection(Servo.Direction.FORWARD);
+        clawServo.setDirection(Servo.Direction.FORWARD);
+        foundServo2.setDirection(Servo.Direction.REVERSE);
+        foundServo.setDirection(Servo.Direction.FORWARD);
+
+
+
+        // Wait for the game to start (driver presses PLAY)
+        telemetry.addData("Mode", "Init");
+        telemetry.update();
+        waitForStart();
+
+        LFMotor.getCurrentPosition();
+        if (opModeIsActive()) {
+            DriveForwardDistance(1,12);
+            StrafeLeftDistance(1,25);
+            foundServo.setPosition(0.6);
+            foundServo2.setPosition(0.8);
+            sleep(1000);
+            //DriveBackwardDistance(1,2);
+            StrafeRightDistance(1,45);
+            //TurnRightDistance(1,17);
+            //DriveForwardDistance(1,25);
+            //StrafeLeftDistance(1,30);
+            foundServo.setPosition(0.4);
+            foundServo2.setPosition(0.6);
+            sleep(1000);
+            //StrafeRightDistance(1,33);
+            DriveBackwardDistance(1,33);
+            StrafeLeftDistance(1, 22);
+            //DriveBackwardDistance(0.5, 8);
+        }
     }
 
-    public static void DriveForward(double power) {
+    public void DriveForward(double power) {
+
         LFMotor.setPower(power);
         LBMotor.setPower(power);
         RFMotor.setPower(power);
         RBMotor.setPower(power);
     }
 
-    public static void StopDriving() {
+    public void StopDriving() {
 
         DriveForward(0);
     }
 
 
     //Drive forward using encoders
-    public static void DriveForwardDistance(double power, int distance)  {
+    public void DriveForwardDistance(double power, int distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -46,7 +112,7 @@ public class drivetrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = (LFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/2 + distance * 90;
+        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
 
         //Set target position
         LFMotor.setTargetPosition(encoderDistance);
@@ -59,7 +125,6 @@ public class drivetrain {
         LBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
 
         DriveForward(power);
 
@@ -77,7 +142,7 @@ public class drivetrain {
     }
 
 
-    public static void TurnLeft(double power) {
+    public void TurnLeft(double power) {
 
         LFMotor.setPower(-power);
         LBMotor.setPower(-power);
@@ -86,13 +151,13 @@ public class drivetrain {
     }
 
 
-    public static void TurnLeftTime(double power, long time) throws InterruptedException {
+    public void TurnLeftTime(double power, long time) throws InterruptedException {
 
         TurnLeft(power);
         Thread.sleep(time);
     }
 
-    public static void TurnLeftDistance(double power, int distance)   {
+    public void TurnLeftDistance(double power, int distance)   {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -131,13 +196,13 @@ public class drivetrain {
 
     }
 
-    public static void DriveBackward(double power) {
+    public void DriveBackward(double power) {
 
         DriveForward(-power);
     }
 
 
-    public static void DriveBackwardDistance(double power, int distance)  {
+    public void DriveBackwardDistance(double power, int distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -177,7 +242,7 @@ public class drivetrain {
     }
 
 
-    public static void TurnRight(double power) {
+    public void TurnRight(double power) {
 
         LFMotor.setPower(power);
         LBMotor.setPower(power);
@@ -185,13 +250,13 @@ public class drivetrain {
         RBMotor.setPower(-power);
     }
 
-    public static void TurnRightTime(double power, long time) throws InterruptedException {
+    public void TurnRightTime(double power, long time) throws InterruptedException {
 
         TurnRight(power);
         Thread.sleep(time);
     }
 
-    public static void TurnRightDistance(double power, int distance) {
+    public void TurnRightDistance(double power, int distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -230,7 +295,7 @@ public class drivetrain {
     }
 
 
-    public static void StrafeRight(double power) {
+    public void StrafeRight(double power) {
 
         LFMotor.setPower(power);
         LBMotor.setPower(-power);
@@ -239,7 +304,7 @@ public class drivetrain {
     }
 
 
-    public static void StrafeRightDistance(double power, int distance) {
+    public void StrafeRightDistance(double power, int distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -278,7 +343,7 @@ public class drivetrain {
     }
 
 
-    public static void StrafeLeft(double power) {
+    public void StrafeLeft(double power) {
 
         LFMotor.setPower(-power);
         LBMotor.setPower(power);
@@ -286,7 +351,7 @@ public class drivetrain {
         RBMotor.setPower(-power);
     }
 
-    public static void StrafeLeftDistance(double power, int distance) {
+    public void StrafeLeftDistance(double power, int distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -323,4 +388,7 @@ public class drivetrain {
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
+
+
+
 }
