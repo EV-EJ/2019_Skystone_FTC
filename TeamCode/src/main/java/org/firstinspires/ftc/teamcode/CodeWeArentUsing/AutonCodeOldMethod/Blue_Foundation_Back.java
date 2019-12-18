@@ -81,7 +81,6 @@ public class Blue_Foundation_Back extends LinearOpMode {
             sleep(1000);
             StrafeRightDistance(1,33);
             DriveBackwardDistance(0.5,5);
-            //DriveBackwardDistance(0.5, 8);
         }
     }
 

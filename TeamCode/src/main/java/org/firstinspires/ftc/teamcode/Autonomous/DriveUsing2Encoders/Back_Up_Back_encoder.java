@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.TwoEncoderDriveTrain;
 
 //Back up Auton that goes to the wall side of the bridge, and parks there
@@ -19,7 +20,7 @@ public class Back_Up_Back_encoder extends LinearOpMode {
     private DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     private DigitalChannel limitSwitch;
     private Servo rotateServo, clawServo;
-    private TwoEncoderDriveTrain drive;
+    private FourEncoderDriveTrain drive;
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
@@ -42,7 +43,7 @@ public class Back_Up_Back_encoder extends LinearOpMode {
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         
         //Wheels on the robot funtions
-        drive = new TwoEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.DriveTrainAndPID;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class NoEncoderDriveTrain {
     private DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
@@ -19,7 +20,7 @@ public class NoEncoderDriveTrain {
 
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
-        RFMotor.setDirection(DcMotor.Direction.FORWARD);
+        RFMotor.setDirection(DcMotor.Direction.REVERSE);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 

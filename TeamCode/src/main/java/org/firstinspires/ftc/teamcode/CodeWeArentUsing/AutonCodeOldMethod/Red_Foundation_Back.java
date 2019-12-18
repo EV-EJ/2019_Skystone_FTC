@@ -73,16 +73,11 @@ public class Red_Foundation_Back extends LinearOpMode {
             foundServo.setPosition(0.6);
             foundServo2.setPosition(0.8);
             sleep(1000);
-            //DriveBackwardDistance(1,2);
             StrafeRightDistance(1,45);
-            //TurnRightDistance(1,17);
-            //DriveForwardDistance(1,25);
-            //StrafeLeftDistance(1,30);
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
             sleep(1000);
             DriveBackwardDistance(1,33);
-            //DriveBackwardDistance(0.5, 8);
         }
     }
 

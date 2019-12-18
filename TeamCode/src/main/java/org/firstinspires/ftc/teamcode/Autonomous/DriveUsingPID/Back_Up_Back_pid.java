@@ -51,6 +51,7 @@ public class Back_Up_Back_pid extends LinearOpMode {
         pidDrive.setOutputRange(-1, 1);
         pidDrive.setInputRange(-100000, 100000);
         pidDrive.setTolerance(20);
+        pidDrive.setSetpoint(500);
         pidDrive.reset();
         pidDrive.enable();
 
@@ -69,16 +70,9 @@ public class Back_Up_Back_pid extends LinearOpMode {
         //Running the code
         LFMotor.getCurrentPosition();
             while (opModeIsActive()) {
-                //for (int i = 0; i == 1000; i ++) {
-                    //drive.DriveForwardDistance(1,12);
-                    //drive.DriveForwardPID(12);
-                    //drive.DriveForward(1);
-
                     int inches = 12;
 
                     double setpoint = 1136 / (4 * 3.14159265);
-
-                    pidDrive.setSetpoint(500);
 
                     /**/
                     do {
@@ -93,16 +87,9 @@ public class Back_Up_Back_pid extends LinearOpMode {
                         telemetry.addData("RB Motor",RBMotor.getCurrentPosition());
                         telemetry.addData("time", runtime);
                         telemetry.addData("power",power);
-                        //telemetry.addData("setpoint",pidDrive.getSetpoint());
                         telemetry.log();
                         telemetry.update();
 
-                        //drive.DriveForward(1);
-
-                        /*LFMotor.setPower(pidDrive.performPID(LFMotor.getCurrentPosition()));
-                        LBMotor.setPower(pidDrive.performPID(LBMotor.getCurrentPosition()));
-                        RFMotor.setPower(pidDrive.performPID(RFMotor.getCurrentPosition()));
-                        RBMotor.setPower(pidDrive.performPID(RBMotor.getCurrentPosition()));*/
 
                         drive.DriveForward(power);
                     } while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy());
