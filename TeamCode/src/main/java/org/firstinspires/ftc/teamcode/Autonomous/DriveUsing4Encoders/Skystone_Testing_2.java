@@ -361,18 +361,19 @@ public class Skystone_Testing_2 extends LinearOpMode  {
         if (opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
-            //drive.StrafeRightDistance(1,15);
+            drive.StrafeRightDistance(1,15);
             telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
             //  sleep(1000);
             //drive.DriveBackward(0.1);
             boolean detected = false;
-            //throw FileNotFoundException;
             //drive.DriveBackwardDistance(1, 4);
 
             while (!detected){
                 for (VuforiaTrackable trackable : allTrackables) {
+                    sleep(200);
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
+                        //sleep(100);
                         if (trackable.getName().equals("Stone Target")) {
                             drive.StopDriving();
                             detected = true;
@@ -405,19 +406,18 @@ public class Skystone_Testing_2 extends LinearOpMode  {
                             break;
                         }
 
-
                         // getUpdatedRobotLocation() will return null if no new information is available since
                         // the last time that call was made, or if the trackable is not currently visible.
-                        break;
-                    }
-                    //if (!detected) {
-                    telemetry.addData("?", detected);
-                    telemetry.update();
-                        //sleep(2000);
-                    drive.DriveBackwardDistance(0.2, 2);
-                        //sleep(1000);
+                        //break;
+                    } //else{
+
                     //}
+
                 }
+                telemetry.addData("?", detected);
+                telemetry.update();
+                drive.DriveBackwardDistance(0.2, 4);
+                //sleep(1000);
             }
 
             telemetry.update();

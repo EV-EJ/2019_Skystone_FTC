@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PIDController;
 //Back up Auton that goes to the wall side of the bridge, and parks there
 
 @Autonomous (name = "TESTING PID")
-@Disabled
+//@Disabled
 public class Back_Up_Back_pid extends LinearOpMode {
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();
@@ -51,7 +51,7 @@ public class Back_Up_Back_pid extends LinearOpMode {
 
         pidDrive.setOutputRange(-1, 1);
         pidDrive.setInputRange(-100000, 100000);
-        pidDrive.setTolerance(20);
+        pidDrive.setTolerance(100);
         pidDrive.setSetpoint(500);
         pidDrive.reset();
         pidDrive.enable();
@@ -71,6 +71,7 @@ public class Back_Up_Back_pid extends LinearOpMode {
         //Running the code
         LFMotor.getCurrentPosition();
             while (opModeIsActive()) {
+            //if (opModeIsActive()) {
                     int inches = 12;
 
                     double setpoint = 1136 / (4 * 3.14159265);

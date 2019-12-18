@@ -101,6 +101,9 @@ public class TeleOp_With_Field_Relative extends OpMode
         if (gamepad1.start) {
             fieldRelativeMode = !fieldRelativeMode;
         }
+
+        telemetry.addData("FieldRelative?", fieldRelativeMode);
+
         yValue = gamepad1.left_stick_y;
         turnValue = gamepad1.right_stick_x;
         xValue = gamepad1.left_stick_x;
