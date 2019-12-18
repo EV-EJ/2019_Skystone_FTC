@@ -362,7 +362,7 @@ public class Skystone_Testing_Time extends LinearOpMode  {
             // check all the trackable targets to see which one (if any) is visible.
             drive.StrafeRight(1);
             telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
-            sleep(650);
+            sleep(750);
             drive.StopDriving();
             //drive.DriveBackward(0.1);
             boolean detected = false;
