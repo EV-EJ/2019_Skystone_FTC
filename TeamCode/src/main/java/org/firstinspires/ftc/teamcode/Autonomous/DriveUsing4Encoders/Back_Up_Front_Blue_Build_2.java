@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 //Go to Neutral bridge side of zone when you are in the blue building zone
 
 @Autonomous (name = "Back_Up_Front_Blue_Build")
-@Disabled
+//@Disabled
 public class Back_Up_Front_Blue_Build_2 extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;

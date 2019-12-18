@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 //Autonomous program when facing crater
 
 @Autonomous (name = "Blue_Build_Back")
-@Disabled
+//@Disabled
 public class Blue_Foundation_Back_2 extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;

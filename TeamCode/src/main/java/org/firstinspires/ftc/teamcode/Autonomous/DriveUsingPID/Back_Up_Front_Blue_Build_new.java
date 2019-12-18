@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 //Go to Neutral bridge side of zone when you are in the blue building zone
 
 @Autonomous (name = "Back_Up_Front_Blue_Build")
-//@Disabled
+@Disabled
 public class Back_Up_Front_Blue_Build_new extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;

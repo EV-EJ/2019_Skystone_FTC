@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 //Autonomous program when facing crater
 
 @Autonomous (name = "Back_Up_Front_Red_Load")
-@Disabled
+//@Disabled
 public class Back_Up_Front_Red_Load_2 extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
