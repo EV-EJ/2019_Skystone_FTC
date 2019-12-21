@@ -1,41 +1,26 @@
-package org.firstinspires.ftc.teamcode.CodeWeArentUsing.AutonCodeOldMethod;
+package org.firstinspires.ftc.teamcode.DriveTrainAndPID;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-//Autonomous program when facing crater
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous (name = "Red_Build_Back")
-@Disabled
-public class Red_Foundation_Back extends LinearOpMode {
+public class FourEncoderCorrectDriveTrain {
+    private DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
+    private BNO055IMU imu;
+    private Orientation lastAngles = new Orientation();
+    private double globalAngle, correction;
+    private PIDController pidDrive;
 
-    DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
-    DigitalChannel limitSwitch;
-    Servo rotateServo, clawServo, foundServo, foundServo2;
-
-
-    //no. of ticks per one revolution of the yellow jacket motors
-    int Ticks_Per_Rev = 1316;
-
-    @Override
-    public void runOpMode() {
-        // Initialize the hardware variables.
-        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
-        armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
-        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
-        limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
-        rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
-        clawServo = hardwareMap.get(Servo.class, "Claw Servo");
-        foundServo = hardwareMap.get(Servo.class, "found servo");
-        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+    public FourEncoderCorrectDriveTrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor, BNO055IMU m_imu){
+        this.LBMotor = m_LBMotor;
+        this.LFMotor = m_LFMotor;
+        this.RBMotor = m_RBMotor;
+        this.RFMotor = m_RFMotor;
 
         //Run using encoders
         LFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -43,46 +28,31 @@ public class Red_Foundation_Back extends LinearOpMode {
         RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //Reverse the right motors to move forward based on their orientation on the robot
-        armMotor.setDirection(DcMotor.Direction.FORWARD);
-        armMotor2.setDirection(DcMotor.Direction.FORWARD);
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
-        RFMotor.setDirection(DcMotor.Direction.FORWARD);
+        RFMotor.setDirection(DcMotor.Direction.REVERSE);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor2.setDirection(DcMotor.Direction.REVERSE);
-        clawMotor.setDirection(DcMotor.Direction.REVERSE);
-        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
-        rotateServo.setDirection(Servo.Direction.FORWARD);
-        clawServo.setDirection(Servo.Direction.FORWARD);
-        foundServo2.setDirection(Servo.Direction.REVERSE);
-        foundServo.setDirection(Servo.Direction.FORWARD);
 
+        this.imu = m_imu;
 
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        // Wait for the game to start (driver presses PLAY)
-        telemetry.addData("Mode", "Init");
-        telemetry.update();
-        waitForStart();
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
 
-        LFMotor.getCurrentPosition();
-        if (opModeIsActive()) {
-            DriveForwardDistance(1,12);
-            StrafeLeftDistance(1,25);
-            foundServo.setPosition(0.6);
-            foundServo2.setPosition(0.8);
-            sleep(1000);
-            StrafeRightDistance(1,45);
-            foundServo.setPosition(0.4);
-            foundServo2.setPosition(0.6);
-            sleep(1000);
-            DriveBackwardDistance(1,33);
-        }
+        imu.initialize(parameters);
+
+        pidDrive = new PIDController(.05, 0, 0);
+
+        pidDrive.setSetpoint(0);
+        pidDrive.setOutputRange(-1, 1);
+        pidDrive.setInputRange(-90, 90);
+        pidDrive.enable();
     }
 
     public void DriveForward(double power) {
-
         LFMotor.setPower(power);
         LBMotor.setPower(power);
         RFMotor.setPower(power);
@@ -105,7 +75,7 @@ public class Red_Foundation_Back extends LinearOpMode {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistance = (LFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/2 + distance * 90;
 
         //Set target position
         LFMotor.setTargetPosition(encoderDistance);
@@ -119,10 +89,11 @@ public class Red_Foundation_Back extends LinearOpMode {
         RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
         DriveForward(power);
 
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
             DriveForward(power);
         }
 
@@ -176,8 +147,7 @@ public class Red_Foundation_Back extends LinearOpMode {
 
         TurnLeft(power);
 
-
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
             TurnLeft(power);
         }
 
@@ -224,7 +194,7 @@ public class Red_Foundation_Back extends LinearOpMode {
         DriveBackward(power);
 
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
             DriveBackward(power);
         }
 
@@ -278,7 +248,7 @@ public class Red_Foundation_Back extends LinearOpMode {
         TurnRight(power);
 
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
             TurnRight(power);
         }
 
@@ -292,12 +262,12 @@ public class Red_Foundation_Back extends LinearOpMode {
     }
 
 
-    public void StrafeRight(double power) {
+    public void StrafeRight(double power, double correct) {
 
-        LFMotor.setPower(power);
-        LBMotor.setPower(-power);
-        RFMotor.setPower(-power);
-        RBMotor.setPower(power);
+        LFMotor.setPower(power - correct);
+        LBMotor.setPower(-power - correct);
+        RFMotor.setPower(-power + correct);
+        RBMotor.setPower(power + correct);
     }
 
 
@@ -324,11 +294,17 @@ public class Red_Foundation_Back extends LinearOpMode {
         RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        StrafeRight(power);
+        resetAngle();
+
+        correction = pidDrive.performPID(getAngle());
+
+        StrafeRight(power, correction);
 
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
-            StrafeRight(power);
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
+            correction = pidDrive.performPID(getAngle());
+
+            StrafeRight(power, correction);
         }
 
         //Stop and change modes back to normal
@@ -375,7 +351,7 @@ public class Red_Foundation_Back extends LinearOpMode {
         StrafeLeft(power);
 
 
-        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {//wait until target position is reached
+        while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
             StrafeLeft(power);
         }
 
@@ -386,5 +362,35 @@ public class Red_Foundation_Back extends LinearOpMode {
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+    }
+
+    private void resetAngle()
+    {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    private double getAngle()
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
     }
 }

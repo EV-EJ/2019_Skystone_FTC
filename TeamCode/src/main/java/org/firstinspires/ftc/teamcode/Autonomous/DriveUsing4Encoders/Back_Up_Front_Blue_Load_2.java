@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -12,7 +11,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 //Autonomous program when facing crater
 
 @Autonomous (name = "Back_Up_Front_Blue_Load")
-@Disabled
+//@Disabled
 public class Back_Up_Front_Blue_Load_2 extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;

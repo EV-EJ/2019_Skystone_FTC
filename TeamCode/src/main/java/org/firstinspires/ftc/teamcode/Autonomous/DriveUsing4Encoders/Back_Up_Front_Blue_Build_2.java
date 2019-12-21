@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -12,7 +11,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 //Go to Neutral bridge side of zone when you are in the blue building zone
 
 @Autonomous (name = "Back_Up_Front_Blue_Build")
-@Disabled
+//@Disabled
 public class Back_Up_Front_Blue_Build_2 extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;

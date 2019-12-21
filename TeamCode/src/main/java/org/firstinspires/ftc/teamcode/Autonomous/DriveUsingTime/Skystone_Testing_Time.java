@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingTime;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -44,7 +45,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderCorrectDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.NoEncoderDriveTrain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +89,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @Autonomous(name="Time(you guess what;)", group ="Concept")
-//@Disabled
+@Disabled
 public class Skystone_Testing_Time extends LinearOpMode  {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
@@ -96,7 +98,7 @@ public class Skystone_Testing_Time extends LinearOpMode  {
     private DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     private DigitalChannel limitSwitch;
     private Servo rotateServo, clawServo;
-    private FourEncoderDriveTrain drive;
+    private NoEncoderDriveTrain drive;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -162,7 +164,7 @@ public class Skystone_Testing_Time extends LinearOpMode  {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new NoEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
