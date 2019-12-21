@@ -417,7 +417,7 @@ public class Skystone_Testing_2 extends LinearOpMode {
                 }
 
                 //drive.DriveForwardDistance(1, 60);
-                drive.TurnRightDistance(1, 31);
+                drive.TurnRightDistance(1, 30);
                 //rotate.TurnRightDegrees(1,180);
                 detected = false;
                 while (!detected) {
@@ -449,6 +449,7 @@ public class Skystone_Testing_2 extends LinearOpMode {
                 } //else{
             }
                 //}
+                    drive.DriveForwardDistance(1,5 );
                     if (!detected) {
                         telemetry.addData("?", detected);
                         telemetry.update();
@@ -457,7 +458,7 @@ public class Skystone_Testing_2 extends LinearOpMode {
                         //sleep(1000);
                     }
             }
-                drive.DriveBackwardDistance(1,65);
+                drive.DriveBackwardDistance(1,68);
                 drive.DriveForwardDistance(1, 16);
                 drive.StrafeLeftDistance(1, 20);
                 foundServo.setPosition(0.6);
