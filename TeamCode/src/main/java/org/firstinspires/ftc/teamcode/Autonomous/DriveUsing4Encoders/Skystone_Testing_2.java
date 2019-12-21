@@ -417,7 +417,7 @@ public class Skystone_Testing_2 extends LinearOpMode  {
             drive.DriveForwardDistance(1,60);
             drive.TurnRightDistance(1,30);
             //rotate.TurnRightDegrees(1,180);
-            for (VuforiaTrackable trackable : allTrackables) {
+            /*for (VuforiaTrackable trackable : allTrackables) {
                 sleep(200);
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
@@ -446,17 +446,17 @@ public class Skystone_Testing_2 extends LinearOpMode  {
 
                 //}
 
-            }
-            /*drive.StrafeLeftDistance(1,23);
+            }*/
+            drive.StrafeLeftDistance(1,23);
             foundServo.setPosition(0.6);
             foundServo2.setPosition(0.8);
             sleep(1000);
-            drive.StrafeRightDistance(1,120);
+            drive.StrafeRightDistance(1,1000);
             drive.DriveBackwardDistance(1,30);
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
             sleep(1000);
-            drive.DriveForwardDistance(1,40);*/
+            drive.DriveForwardDistance(1,40);
 
             telemetry.update();
         }
