@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderCorrectDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.NoEncoderDriveTrain;
 
 //Autonomous program when facing crater
 
@@ -18,7 +19,7 @@ public class Foundation_1 extends LinearOpMode {
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    FourEncoderDriveTrain drive;
+    NoEncoderDriveTrain drive;
 
 
     //no. of ticks per one revolution of the yellow jacket motors
@@ -38,7 +39,7 @@ public class Foundation_1 extends LinearOpMode {
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
 
-        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new NoEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);

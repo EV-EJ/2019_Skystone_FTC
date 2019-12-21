@@ -1,11 +1,22 @@
 package org.firstinspires.ftc.teamcode.DriveTrainAndPID;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class FourEncoderDriveTrain {
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+public class FourEncoderCorrectDriveTrain {
     private DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
+    private BNO055IMU imu;
+    private Orientation lastAngles = new Orientation();
+    private double globalAngle, correction;
+    private PIDController pidDrive;
 
-    public FourEncoderDriveTrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor){
+    public FourEncoderCorrectDriveTrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor, BNO055IMU m_imu){
         this.LBMotor = m_LBMotor;
         this.LFMotor = m_LFMotor;
         this.RBMotor = m_RBMotor;
@@ -21,6 +32,24 @@ public class FourEncoderDriveTrain {
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.REVERSE);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        this.imu = m_imu;
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        imu.initialize(parameters);
+
+        pidDrive = new PIDController(.05, 0, 0);
+
+        pidDrive.setSetpoint(0);
+        pidDrive.setOutputRange(-1, 1);
+        pidDrive.setInputRange(-90, 90);
+        pidDrive.enable();
     }
 
     public void DriveForward(double power) {
@@ -233,12 +262,12 @@ public class FourEncoderDriveTrain {
     }
 
 
-    public void StrafeRight(double power) {
+    public void StrafeRight(double power, double correct) {
 
-        LFMotor.setPower(power);
-        LBMotor.setPower(-power);
-        RFMotor.setPower(-power);
-        RBMotor.setPower(power);
+        LFMotor.setPower(power - correct);
+        LBMotor.setPower(-power - correct);
+        RFMotor.setPower(-power + correct);
+        RBMotor.setPower(power + correct);
     }
 
 
@@ -265,11 +294,17 @@ public class FourEncoderDriveTrain {
         RFMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         RBMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        StrafeRight(power);
+        resetAngle();
+
+        correction = pidDrive.performPID(getAngle());
+
+        StrafeRight(power, correction);
 
 
         while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy()) {
-            StrafeRight(power);
+            correction = pidDrive.performPID(getAngle());
+
+            StrafeRight(power, correction);
         }
 
         //Stop and change modes back to normal
@@ -327,5 +362,35 @@ public class FourEncoderDriveTrain {
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+    }
+
+    private void resetAngle()
+    {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    private double getAngle()
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
     }
 }

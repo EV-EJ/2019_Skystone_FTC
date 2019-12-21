@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -47,7 +46,7 @@ public class Back_Up_Back_pid extends LinearOpMode {
         
         //Wheels on the robot funtions
         drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
-        pidDrive = new PIDController(0.5, 1.2, 0.5);
+        pidDrive = new PIDController(0, 0, 0);
 
         pidDrive.setOutputRange(-1, 1);
         pidDrive.setInputRange(-100000, 100000);

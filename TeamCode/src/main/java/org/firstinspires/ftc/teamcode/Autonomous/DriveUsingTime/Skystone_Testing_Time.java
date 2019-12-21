@@ -45,7 +45,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderCorrectDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.NoEncoderDriveTrain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class Skystone_Testing_Time extends LinearOpMode  {
     private DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     private DigitalChannel limitSwitch;
     private Servo rotateServo, clawServo;
-    private FourEncoderDriveTrain drive;
+    private NoEncoderDriveTrain drive;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -163,7 +164,7 @@ public class Skystone_Testing_Time extends LinearOpMode  {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new NoEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
