@@ -90,7 +90,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @Autonomous(name="Full skystone code Test", group ="Concept")
 //@Disabled
-public class Skystone_Testing_2 extends LinearOpMode  {
+public class Skystone_Testing_2 extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
@@ -119,8 +119,8 @@ public class Skystone_Testing_2 extends LinearOpMode  {
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch = 25.4f;
+    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -134,7 +134,7 @@ public class Skystone_Testing_2 extends LinearOpMode  {
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField  = 36 * mmPerInch;
+    private static final float quadField = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
@@ -146,19 +146,20 @@ public class Skystone_Testing_2 extends LinearOpMode  {
      */
     private WebcamName webcamName = null;
 
-    private float phoneXRotate    = 0;
-    private float phoneYRotate    = 0;
-    private float phoneZRotate    = 0;
+    private float phoneXRotate = 0;
+    private float phoneYRotate = 0;
+    private float phoneZRotate = 0;
 
-    @Override public void runOpMode() throws InterruptedException {
+    @Override
+    public void runOpMode() throws InterruptedException {
         /*
          * Retrieve the camera we are to use.
          */
-        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
+        LFMotor = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor = hardwareMap.get(DcMotor.class, "RB Motor");
+        clawMotor = hardwareMap.get(DcMotor.class, "Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
@@ -290,7 +291,7 @@ public class Skystone_Testing_2 extends LinearOpMode  {
 
         front1.setLocation(OpenGLMatrix
                 .translation(-halfField, -quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
 
         front2.setLocation(OpenGLMatrix
                 .translation(-halfField, quadField, mmTargetHeight)
@@ -306,7 +307,7 @@ public class Skystone_Testing_2 extends LinearOpMode  {
 
         rear1.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         rear2.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
@@ -335,14 +336,14 @@ public class Skystone_Testing_2 extends LinearOpMode  {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90 ;
+            phoneXRotate = 90;
         }
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 3.5f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_FORWARD_DISPLACEMENT = 3.5f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
         final float CAMERA_VERTICAL_DISPLACEMENT = 1.75f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT     = 9;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = 9;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -371,14 +372,14 @@ public class Skystone_Testing_2 extends LinearOpMode  {
         if (opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
-            drive.StrafeRightDistance(1,15);
-            telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
+            drive.StrafeRightDistance(1, 15);
+            telemetry.addData("BEEEEP", "EEEEEEEEEEEEEP");
             //  sleep(1000);
             //drive.DriveBackward(0.1);
             boolean detected = false;
             //drive.DriveBackwardDistance(1, 4);
 
-            while (!detected){
+            while (!detected) {
                 for (VuforiaTrackable trackable : allTrackables) {
                     sleep(200);
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
@@ -407,22 +408,25 @@ public class Skystone_Testing_2 extends LinearOpMode  {
                     //}
 
                 }
-                //if (!detected) {
+                if (!detected) {
                     telemetry.addData("?", detected);
                     telemetry.update();
                     drive.DriveBackwardDistance(0.2, 4);
-                //}
-                //sleep(1000);
-            }
-            drive.DriveForwardDistance(1,60);
-            drive.TurnRightDistance(1,30);
-            //rotate.TurnRightDegrees(1,180);
-            /*for (VuforiaTrackable trackable : allTrackables) {
+                    //}
+                    //sleep(1000);
+                }
+
+                //drive.DriveForwardDistance(1, 60);
+                drive.TurnRightDistance(1, 31);
+                //rotate.TurnRightDegrees(1,180);
+                detected = false;
+                while (!detected) {
+            for (VuforiaTrackable trackable : allTrackables) {
                 sleep(200);
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     //sleep(100);
-                    if (trackable.getName().equals("Blue Perimeter 2")) {
+                    if (trackable.getName().equals("Blue Perimeter 1")) {
                         drive.StopDriving();
                         detected = true;
                         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
@@ -443,26 +447,47 @@ public class Skystone_Testing_2 extends LinearOpMode  {
                     // the last time that call was made, or if the trackable is not currently visible.
                     //break;
                 } //else{
-
+            }
                 //}
-
-            }*/
-            drive.StrafeLeftDistance(1,23);
-            foundServo.setPosition(0.6);
-            foundServo2.setPosition(0.8);
-            sleep(1000);
-            drive.StrafeRightDistance(1,1000);
+                    if (!detected) {
+                        telemetry.addData("?", detected);
+                        telemetry.update();
+                        drive.DriveBackwardDistance(0.2, 5);
+                        //}
+                        //sleep(1000);
+                    }
+            }
+                drive.DriveBackwardDistance(1,63);
+                drive.DriveForwardDistance(1, 16);
+                drive.StrafeLeftDistance(1, 20);
+                foundServo.setPosition(0.6);
+                foundServo2.setPosition(0.8);
+                sleep(1000);
+                //drive.DriveForwardDistance(1, 12);
+                drive.TurnLeftDistance(1, 30);
+                drive.StrafeLeftDistance(1, 30);
+                drive.StrafeRightDistance(1, 10);
+                drive.DriveBackwardDistance(1, 50);
+                drive.StrafeLeftDistance(1, 10);
+                foundServo.setPosition(0.4);
+                foundServo2.setPosition(0.6);
+                sleep(1000);
+                drive.StrafeRightDistance(1, 40);
+            /*drive.StrafeRightDistance(1,1000);
             drive.DriveBackwardDistance(1,30);
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
             sleep(1000);
-            drive.DriveForwardDistance(1,40);
+            drive.DriveForwardDistance(1,40);*/
 
-            telemetry.update();
+                telemetry.update();
+            }
+
+            // Disable Tracking when we are done;
+            targetsSkyStone.deactivate();
         }
 
-        // Disable Tracking when we are done;
-        targetsSkyStone.deactivate();
+
     }
 
 }
