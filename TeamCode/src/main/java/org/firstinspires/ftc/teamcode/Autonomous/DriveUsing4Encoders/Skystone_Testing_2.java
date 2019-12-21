@@ -457,7 +457,7 @@ public class Skystone_Testing_2 extends LinearOpMode {
                         //sleep(1000);
                     }
             }
-                drive.DriveBackwardDistance(1,63);
+                drive.DriveBackwardDistance(1,65);
                 drive.DriveForwardDistance(1, 16);
                 drive.StrafeLeftDistance(1, 20);
                 foundServo.setPosition(0.6);
