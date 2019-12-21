@@ -449,7 +449,7 @@ public class Skystone_Testing_2 extends LinearOpMode {
                 } //else{
             }
                 //}
-                    drive.DriveForwardDistance(1,5 );
+                    //drive.DriveForwardDistance(1,5 );
                     if (!detected) {
                         telemetry.addData("?", detected);
                         telemetry.update();
