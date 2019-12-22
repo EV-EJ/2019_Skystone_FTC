@@ -374,17 +374,16 @@ public class Skystone_Testing_2 extends LinearOpMode {
             // check all the trackable targets to see which one (if any) is visible.
             drive.StrafeRightDistance(1, 15);
             telemetry.addData("BEEEEP", "EEEEEEEEEEEEEP");
-            //  sleep(1000);
-            //drive.DriveBackward(0.1);
+
             boolean detected = false;
-            //drive.DriveBackwardDistance(1, 4);
+
 
             while (!detected) {
                 for (VuforiaTrackable trackable : allTrackables) {
                     sleep(200);
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
-                        //sleep(100);
+
                         if (trackable.getName().equals("Stone Target")) {
                             drive.StopDriving();
                             detected = true;
@@ -396,29 +395,25 @@ public class Skystone_Testing_2 extends LinearOpMode {
                             telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                            //DriveBackwardDistance(1,50);
+
 
                         }
 
                         // getUpdatedRobotLocation() will return null if no new information is available since
                         // the last time that call was made, or if the trackable is not currently visible.
-                        //break;
-                    } //else{
 
-                    //}
+                    }
 
                 }
                 if (!detected) {
                     telemetry.addData("?", detected);
                     telemetry.update();
                     drive.DriveBackwardDistance(0.2, 4);
-                    //}
-                    //sleep(1000);
+
                 }
 
-                //drive.DriveForwardDistance(1, 60);
+
                 drive.TurnRightDistance(1, 30);
-                //rotate.TurnRightDegrees(1,180);
                 detected = false;
                 while (!detected) {
             for (VuforiaTrackable trackable : allTrackables) {
@@ -439,23 +434,19 @@ public class Skystone_Testing_2 extends LinearOpMode {
 
                         drive.TurnLeft(1);
 
-                        //DriveBackwardDistance(1,50);
+
 
                     }
 
                     // getUpdatedRobotLocation() will return null if no new information is available since
                     // the last time that call was made, or if the trackable is not currently visible.
-                    //break;
-                } //else{
+
+                }
             }
-                //}
-                    //drive.DriveForwardDistance(1,5 );
                     if (!detected) {
                         telemetry.addData("?", detected);
                         telemetry.update();
                         drive.DriveBackwardDistance(0.2, 5);
-                        //}
-                        //sleep(1000);
                     }
             }
                 drive.DriveBackwardDistance(1,70);
@@ -464,7 +455,6 @@ public class Skystone_Testing_2 extends LinearOpMode {
                 foundServo.setPosition(0.6);
                 foundServo2.setPosition(0.8);
                 sleep(1000);
-                //drive.DriveForwardDistance(1, 12);
                 drive.TurnLeftDistance(1, 30);
                 drive.StrafeLeftDistance(1, 30);
                 drive.StrafeRightDistance(1, 10);
@@ -474,12 +464,6 @@ public class Skystone_Testing_2 extends LinearOpMode {
                 foundServo2.setPosition(0.6);
                 sleep(1000);
                 drive.StrafeRightDistance(1, 40);
-            /*drive.StrafeRightDistance(1,1000);
-            drive.DriveBackwardDistance(1,30);
-            foundServo.setPosition(0.4);
-            foundServo2.setPosition(0.6);
-            sleep(1000);
-            drive.DriveForwardDistance(1,40);*/
 
                 telemetry.update();
             }
