@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsing2Encoders;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.CodeWeArentUsing.TwoEncoderDriveTrain;
 //Back up Auton that goes to the wall side of the bridge, and parks there
 
 @Autonomous (name = "Back_Up_Back_TODOTTESTUNLESSYOUDONTWANTERRORS")
-//@Disabled
+@Disabled
 public class Back_Up_Back_encoder extends LinearOpMode {
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();

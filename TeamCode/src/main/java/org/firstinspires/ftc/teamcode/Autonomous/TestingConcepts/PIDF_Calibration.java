@@ -25,9 +25,16 @@ public class PIDF_Calibration extends LinearOpMode {
         LBMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        telemetry.addData("WHY HAVEN'T YOU STARTED?", "START!");
+        telemetry.update();
         waitForStart();
 
         while (opModeIsActive()) {
+            LFMotor.setPower(1);
+            LBMotor.setPower(1);
+            RFMotor.setPower(1);
+            RBMotor.setPower(1);
+
             currentVelocityLB = LBMotor.getVelocity();
             currentVelocityLF = LFMotor.getVelocity();
             currentVelocityRB = RBMotor.getVelocity();
