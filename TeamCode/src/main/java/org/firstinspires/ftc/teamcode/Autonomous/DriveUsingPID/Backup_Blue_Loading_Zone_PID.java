@@ -7,31 +7,26 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PIDController;
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 
+//Autonomous program when facing crater
 
-//Back up Auton that goes to the wall side of the bridge, and parks there
-
-@Autonomous (name = "Back_Up_Back")
+@Autonomous (name = "Blue_Load")
 @Disabled
-public class Back_Up_Back_PID extends LinearOpMode {
-    //initializaing the future variables
-    private ElapsedTime runtime = new ElapsedTime();
+public class Backup_Blue_Loading_Zone_PID extends LinearOpMode {
+
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
-    Servo rotateServo, clawServo;
+    Servo rotateServo, clawServo, foundServo, foundServo2;
     PidDriveTrain drive;
-    PIDController pidDrive;
     BNO055IMU imu;
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         // Initialize the hardware variables.
         LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
@@ -41,29 +36,72 @@ public class Back_Up_Back_PID extends LinearOpMode {
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
+        foundServo = hardwareMap.get(Servo.class, "found servo");
+        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        
-        //Wheels on the robot funtions
-        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
+
+        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor,imu);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
+        foundServo2.setDirection(Servo.Direction.REVERSE);
+        foundServo.setDirection(Servo.Direction.FORWARD);
+
+
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Mode", "Init");
         telemetry.update();
-        runtime.reset();
         waitForStart();
 
-        //Running the code
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardPID(12);
+            drive.StrafeRightPID(15);
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            clawServo.setPosition(0);
+            sleep(2000);
+            clawMotor.setPower(0);
+            sleep(1000);
+            clawServo.setPosition(1);
+            sleep(1000);
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(950);
+            clawMotor.setPower(-0.1);
+
+            drive.StrafeLeftPID( 20);
+            drive.StrafeRightPID(4);
+            drive.DriveForwardPID(30 );
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            sleep(2000);
+            clawServo.setPosition(0);
+            sleep(500);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(1000);
+            drive.DriveBackwardPID(15);
 
         }
     }
-
 }

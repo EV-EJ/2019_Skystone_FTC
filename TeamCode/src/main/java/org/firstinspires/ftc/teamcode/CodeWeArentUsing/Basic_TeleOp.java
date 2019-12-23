@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -10,23 +10,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-
-@TeleOp(name="TeleOp", group="Iterative TeamCode")
-//@Disabled
-public class TeleOp_With_Ramping extends OpMode
+@TeleOp(name="Basic_TeleOp", group="Iterative TeamCode")
+@Disabled
+public class Basic_TeleOp extends OpMode
 {
-
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor; //clawMotor, clawMotor2, ;
+    private DcMotor armMotor, armMotor2, LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     private DigitalChannel limitSwitch;
     private Servo rotateServo, clawServo, foundServo, foundServo2;
     private double speed = 1;
 
-
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-
 
         LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
@@ -40,7 +36,6 @@ public class TeleOp_With_Ramping extends OpMode
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-
 
         armMotor.setDirection(DcMotor.Direction.FORWARD);
         armMotor2.setDirection(DcMotor.Direction.FORWARD);
@@ -60,7 +55,6 @@ public class TeleOp_With_Ramping extends OpMode
         telemetry.addData("Status", "Initialized");
     }
 
-
     @Override
     public void init_loop() {
     }
@@ -73,43 +67,18 @@ public class TeleOp_With_Ramping extends OpMode
 
     @Override
     public void loop() {
-
         float   LFPower, LBPower, RFPower, RBPower, xValue, turnValue, yValue;
         float slidesValue;
-
 
         yValue = gamepad1.left_stick_y;
         turnValue = gamepad1.right_stick_x;
         xValue = gamepad1.left_stick_x;
 
-        LFPower = Range.clip(-yValue + turnValue + xValue,-1,1);
-        LBPower = Range.clip(-yValue + turnValue - xValue,-1,1);
-        RBPower = Range.clip(-yValue - turnValue + xValue,-1,1);
-        RFPower = Range.clip(-yValue - turnValue - xValue,-1,1);
+        LFPower = -yValue + turnValue + xValue;
+        LBPower = -yValue + turnValue - xValue;
+        RBPower = -yValue - turnValue + xValue;
+        RFPower = -yValue - turnValue - xValue;
 
-        if (LFPower < 0){
-            LFPower = (float) -Math.pow(Math.abs(LFPower),2);
-        } else if (LFPower > 0){
-            LFPower = (float) Math.pow(Math.abs(LFPower),2);
-        }
-
-        if (LBPower < 0){
-            LBPower = (float) -Math.pow(Math.abs(LBPower),2);
-        } else if (LBPower > 0){
-            LBPower = (float) Math.pow(Math.abs(LBPower),2);
-        }
-
-        if (RFPower < 0){
-            RFPower = (float) -Math.pow(Math.abs(RFPower),2);
-        } else if (RFPower > 0){
-            RFPower = (float) Math.pow(Math.abs(RFPower),2);
-        }
-
-        if (RBPower < 0){
-            RBPower = (float) -Math.pow(Math.abs(RBPower),2);
-        } else if (RBPower > 0){
-            RBPower = (float) Math.pow(Math.abs(RBPower),2);
-        }
 
         slidesValue = gamepad2.left_stick_y;
 
@@ -170,7 +139,6 @@ public class TeleOp_With_Ramping extends OpMode
         telemetry.addData("Status", "Run Time: " + runtime.toString());
 
     }
-
 
     @Override
     public void stop() {

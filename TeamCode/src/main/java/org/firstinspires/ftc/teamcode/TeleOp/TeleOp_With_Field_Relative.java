@@ -18,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name="TeleOpWithFieldRelative", group="Iterative TeamCode")
+@TeleOp(name="TeleOp_FieldRelative", group="Iterative TeamCode")
 /*@Disabled*/
 public class TeleOp_With_Field_Relative extends OpMode
 {
