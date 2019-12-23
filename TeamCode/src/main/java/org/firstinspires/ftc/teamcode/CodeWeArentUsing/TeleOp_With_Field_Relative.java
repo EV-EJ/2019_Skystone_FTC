@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @TeleOp(name="TeleOp_FieldRelative", group="Iterative TeamCode")
-/*@Disabled*/
+@Disabled
 public class TeleOp_With_Field_Relative extends OpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
@@ -75,6 +75,7 @@ public class TeleOp_With_Field_Relative extends OpMode
 
         imu.initialize(parameters);
 
+        resetAngle();
 
         telemetry.addData("Status", "Initialized");
     }
@@ -93,12 +94,11 @@ public class TeleOp_With_Field_Relative extends OpMode
 
     @Override
     public void loop() {
-        resetAngle();
 
         double LFPower, LBPower, RFPower, RBPower, xValue, turnValue, yValue;
         float slidesValue;
 
-        if (gamepad1.start) {
+        if (gamepad1.back) {
             fieldRelativeMode = !fieldRelativeMode;
         }
 
@@ -110,6 +110,7 @@ public class TeleOp_With_Field_Relative extends OpMode
 
 
         if (fieldRelativeMode){
+            telemetry.addData("hey", "hi?");
             double angle = getAngle();
             double tempX = (xValue * Math.cos(Math.toRadians(angle))) - (yValue * Math.sin(Math.toRadians(angle)));
             yValue = (xValue * Math.sin(Math.toRadians(angle))) + (yValue * Math.cos(Math.toRadians(angle)));

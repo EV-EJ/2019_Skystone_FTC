@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PIDController;
 //Back up Auton that goes to the wall side of the bridge, and parks there
 
 @Autonomous (name = "TESTING PID")
-//@Disabled
+@Disabled
 public class Testing_PID extends LinearOpMode {
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();
@@ -47,7 +47,7 @@ public class Testing_PID extends LinearOpMode {
         
         //Wheels on the robot funtions
         drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
-        pidDrive = new PIDController(0, 0, 0);
+        pidDrive = new PIDController(0, 0, 0.01);
 
         pidDrive.setOutputRange(-1, 1);
         pidDrive.setInputRange(-100000, 100000);
