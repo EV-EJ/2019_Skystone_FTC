@@ -429,7 +429,7 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                         telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                                 translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                        drive.TurnLeft(1);
+                        //drive.TurnLeft(1);
 
 
 
@@ -454,8 +454,8 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                 sleep(1000);
                 drive.StrafeRightDistance(1,60);
                 drive.TurnLeftDistance(1, 15);
-                drive.StrafeLeftDistance(1, 10);
-                drive.DriveBackwardDistance(1,3);
+                drive.StrafeLeftDistance(1, 100);
+                drive.DriveBackwardDistance(1,30);
                 /*drive.TurnLeftDistance(1, 30);
                 drive.StrafeLeftDistance(1, 30);
                 drive.StrafeRightDistance(1, 10);
