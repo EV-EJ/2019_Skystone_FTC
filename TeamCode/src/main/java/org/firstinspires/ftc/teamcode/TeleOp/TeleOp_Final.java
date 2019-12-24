@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -17,6 +21,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
+import java.io.File;
+import java.io.IOException;
+
 
 @TeleOp(name="TeleOp", group="Iterative TeamCode")
 //@Disabled
@@ -31,13 +38,17 @@ public class TeleOp_Final extends OpMode
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private double globalAngle;
+    private String soundPath = "https://www.youtube.com/watch?v=L0MK7qz13bU";
+    private File goldFile   = new File("C:\\Users\\mirco\\Downloads\\boston.mp3");
+
     private double speed = 1;
 
 
     @Override
-    public void init() {
+    public void init() throws IllegalArgumentException{
         telemetry.addData("Status", "Initialized");
 
+        //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, goldFile);
 
         LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
@@ -195,6 +206,7 @@ public class TeleOp_Final extends OpMode
             telemetry.addData("x","pressed");
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
+            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, goldFile);
         }
         if (gamepad2.y) {
             telemetry.addData("y","pressed");
