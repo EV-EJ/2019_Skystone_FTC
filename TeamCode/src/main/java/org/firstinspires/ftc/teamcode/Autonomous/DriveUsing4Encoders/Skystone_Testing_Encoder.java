@@ -464,7 +464,7 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                 foundServo.setPosition(0.4);
                 foundServo2.setPosition(0.6);
                 sleep(1000);
-                drive.StrafeRightDistance(1, 40);
+                drive.StrafeRightDistance(1, 35);
                 //drive.DriveForwardDistance(1,40);
 
                 telemetry.update();
