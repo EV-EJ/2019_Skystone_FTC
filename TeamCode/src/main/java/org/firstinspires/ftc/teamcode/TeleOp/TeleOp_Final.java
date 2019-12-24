@@ -110,7 +110,6 @@ public class TeleOp_Final extends OpMode
         turnValue = gamepad1.right_stick_x;
         xValue = gamepad1.left_stick_x;
 
-
         if (fieldRelativeMode){
             telemetry.addData("hey", "hi?");
             double angle = getAngle();
