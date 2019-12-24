@@ -51,6 +51,7 @@ public class TeleOp_Final extends OpMode
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
 
         armMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -99,7 +100,7 @@ public class TeleOp_Final extends OpMode
         double LFPower, LBPower, RFPower, RBPower, xValue, turnValue, yValue;
         float slidesValue;
 
-        if (gamepad1.back) {
+        if (gamepad1.b) {
             fieldRelativeMode = !fieldRelativeMode;
         }
 
