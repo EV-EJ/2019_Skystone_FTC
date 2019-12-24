@@ -193,7 +193,7 @@ public class FourEncoderDriveTrain {
         Thread.sleep(time);
     }
 
-    public void TurnRightDistance(double power, int distance) {
+    public void TurnRightDistance(double power, double distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -202,7 +202,7 @@ public class FourEncoderDriveTrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistance = (int) (LFMotor.getCurrentPosition() + distance * 90);
 
         //Set target position
         LFMotor.setTargetPosition(encoderDistance);

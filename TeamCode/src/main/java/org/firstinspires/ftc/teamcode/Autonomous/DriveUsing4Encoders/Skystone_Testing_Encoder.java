@@ -45,7 +45,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderCorrectDriveTrain;
+import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderCorrectDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +90,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @Autonomous(name="Skystone_blue", group ="Concept")
 //@Disabled
-public class Skystone_Testing_Correctional extends LinearOpMode {
+public class Skystone_Testing_Encoder extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
@@ -97,9 +98,7 @@ public class Skystone_Testing_Correctional extends LinearOpMode {
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    FourEncoderCorrectDriveTrain drive;
-    BNO055IMU imu;
-    //PidDriveTrain rotate;
+    FourEncoderDriveTrain drive;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -164,13 +163,12 @@ public class Skystone_Testing_Correctional extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        drive = new FourEncoderCorrectDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
+        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
         //rotate = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -412,7 +410,7 @@ public class Skystone_Testing_Correctional extends LinearOpMode {
                 }
 
 
-                drive.TurnRightDistance(1, 30);
+                drive.TurnRightDistance(1, 31.5);
                 detected = false;
                 while (!detected) {
             for (VuforiaTrackable trackable : allTrackables) {
@@ -449,20 +447,25 @@ public class Skystone_Testing_Correctional extends LinearOpMode {
                     }
             }
                 drive.DriveBackwardDistance(1,70);
-                drive.DriveForwardDistance(1, 14);
-                drive.StrafeLeftDistance(1, 13);
+                drive.DriveForwardDistance(1, 8);
+                drive.StrafeLeftDistance(1, 18);
                 foundServo.setPosition(0.6);
                 foundServo2.setPosition(0.8);
                 sleep(1000);
-                drive.TurnLeftDistance(1, 30);
+                drive.StrafeRightDistance(1,60);
+                drive.TurnLeftDistance(1, 15);
+                drive.StrafeLeftDistance(1, 10);
+                drive.DriveBackwardDistance(1,3);
+                /*drive.TurnLeftDistance(1, 30);
                 drive.StrafeLeftDistance(1, 30);
                 drive.StrafeRightDistance(1, 10);
                 drive.DriveBackwardDistance(1, 50);
-                drive.StrafeLeftDistance(1, 10);
+                drive.StrafeLeftDistance(1, 10);*/
                 foundServo.setPosition(0.4);
                 foundServo2.setPosition(0.6);
                 sleep(1000);
                 drive.StrafeRightDistance(1, 40);
+                //drive.DriveForwardDistance(1,40);
 
                 telemetry.update();
             }
