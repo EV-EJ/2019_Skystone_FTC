@@ -1,16 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-
 import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -38,8 +33,6 @@ public class TeleOp_Final extends OpMode
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private double globalAngle;
-    private String soundPath = "https://www.youtube.com/watch?v=L0MK7qz13bU";
-    private File goldFile   = new File("C:\\Users\\mirco\\Downloads\\boston.mp3");
 
     private double speed = 1;
 
@@ -206,7 +199,6 @@ public class TeleOp_Final extends OpMode
             telemetry.addData("x","pressed");
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
-            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, goldFile);
         }
         if (gamepad2.y) {
             telemetry.addData("y","pressed");
