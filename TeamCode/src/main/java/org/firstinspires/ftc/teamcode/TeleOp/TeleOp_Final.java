@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -66,7 +67,7 @@ public class TeleOp_Final extends OpMode
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor2.setDirection(DcMotor.Direction.REVERSE);
-        clawMotor.setDirection(DcMotor.Direction.REVERSE);
+        clawMotor.setDirection(DcMotor.Direction.FORWARD);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
@@ -165,13 +166,16 @@ public class TeleOp_Final extends OpMode
         RBMotor.setPower(Range.clip(RBPower, -speed, speed));
 
         if (slidesValue == 0){
-            clawMotor.setPower(-0.1);
+            clawMotor.setPower(-0.2);
+        /*if (slidesValue > -0.1) {
+            clawMotor.setPower(-0.4);
+        }*/
         } else if (limitSwitch.getState() || slidesValue >= 0) {
-            clawMotor.setPower(Range.clip(slidesValue, -0.6, 0.07));
+            clawMotor.setPower(Range.clip(slidesValue, -0.6, 0.0));
         }
 
         if (gamepad1.x) {
-            clawServo.setPosition(0.9);
+            clawServo.setPosition(0.5);
         }
         if (gamepad1.y) {
             clawServo.setPosition(1);
