@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsing4Encoders;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 //Autonomous program when facing crater
 
 @Autonomous (name = "Blue_Build_Back")
-//@Disabled
+@Disabled
 public class Blue_Foundation_Back_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
@@ -56,19 +57,19 @@ public class Blue_Foundation_Back_Encoder extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardDistance(1,12);
-            drive.StrafeRightDistance(1,30);
+            drive.DriveBackwardDistance(1,12);
+            drive.StrafeLeftDistance(1,30);
             foundServo.setPosition(0.6);
             foundServo2.setPosition(0.8);
             sleep(1000);
-            drive.StrafeLeftDistance(1,40);
-            drive.TurnRightDistance(1,15);
-            drive.StrafeRightDistance(1,10);
+            drive.StrafeRightDistance(1,40);
+            drive.TurnLeftDistance(1,15);
+            drive.StrafeLeftDistance(1,20);
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
             sleep(1000);
-            drive.StrafeLeftDistance(1,33);
-            drive.DriveForwardDistance(0.5,5);
+            drive.StrafeRightDistance(1,33);
+            drive.DriveBackwardDistance(0.5,5);
             //DriveBackwardDistance(0.5, 8);
         }
     }

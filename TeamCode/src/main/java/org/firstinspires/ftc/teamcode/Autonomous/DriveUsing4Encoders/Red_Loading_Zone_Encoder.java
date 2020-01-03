@@ -1,26 +1,24 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
+package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Blue_Load")
-@Disabled
-public class Backup_Blue_Loading_Zone_PID extends LinearOpMode {
+@Autonomous (name = "Red_Load")
+//@Disabled
+public class Red_Loading_Zone_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    PidDriveTrain drive;
-    BNO055IMU imu;
+    FourEncoderDriveTrain drive;
+
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
@@ -38,9 +36,8 @@ public class Backup_Blue_Loading_Zone_PID extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor,imu);
+        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -59,7 +56,7 @@ public class Backup_Blue_Loading_Zone_PID extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.StrafeRightPID(15);
+            drive.StrafeRightDistance(1,15);
 
             while (limitSwitch.getState()) {
                 clawMotor.setPower(-0.6);
@@ -83,9 +80,9 @@ public class Backup_Blue_Loading_Zone_PID extends LinearOpMode {
             sleep(950);
             clawMotor.setPower(-0.1);
 
-            drive.StrafeLeftPID( 20);
-            drive.StrafeRightPID(4);
-            drive.DriveForwardPID(30 );
+            drive.StrafeLeftDistance(0.7, 20);
+            drive.StrafeRightDistance(1,4);
+            drive.DriveBackwardDistance(0.5,30 );
 
             while (limitSwitch.getState()) {
                 clawMotor.setPower(-0.6);
@@ -100,7 +97,7 @@ public class Backup_Blue_Loading_Zone_PID extends LinearOpMode {
             sleep(1000);
             clawMotor.setPower(0);
             sleep(1000);
-            drive.DriveBackwardPID(15);
+            drive.DriveForwardDistance(0.8,15);
 
         }
     }

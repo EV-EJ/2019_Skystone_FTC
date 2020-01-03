@@ -1,23 +1,28 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsingPID;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 
-//Autonomous program when facing crater
 
-@Autonomous (name = "Red_Load")
-//@Disabled
-public class Backup_Red_Loading_Zone_Encoder extends LinearOpMode {
+//Go to Neutral bridge side of zone when you are in the blue building zone
+
+@Autonomous (name = "Back_Up_Front_Blue_Build")
+@Disabled
+public class Back_Up_Front_Blue_Build_PID extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    FourEncoderDriveTrain drive;
+    PidDriveTrain drive;
+    BNO055IMU imu;
+
 
 
     //no. of ticks per one revolution of the yellow jacket motors
@@ -36,8 +41,9 @@ public class Backup_Red_Loading_Zone_Encoder extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+        imu = hardwareMap.get(BNO055IMU .class, "imu");
 
-        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -56,49 +62,8 @@ public class Backup_Red_Loading_Zone_Encoder extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.StrafeRightDistance(1,15);
-
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-
-            rotateServo.setPosition(Servo.MAX_POSITION);
-            clawServo.setPosition(0);
-            sleep(2000);
-            clawMotor.setPower(0);
-            sleep(1000);
-            clawServo.setPosition(1);
-            sleep(1000);
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-            rotateServo.setPosition(Servo.MIN_POSITION);
-            sleep(1000);
-            clawMotor.setPower(0);
-            sleep(950);
-            clawMotor.setPower(-0.1);
-
-            drive.StrafeLeftDistance(0.7, 20);
-            drive.StrafeRightDistance(1,4);
-            drive.DriveBackwardDistance(0.5,30 );
-
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-
-            rotateServo.setPosition(Servo.MAX_POSITION);
-            sleep(2000);
-            clawServo.setPosition(0);
-            sleep(500);
-            rotateServo.setPosition(Servo.MIN_POSITION);
-            sleep(1000);
-            clawMotor.setPower(0);
-            sleep(1000);
-            drive.DriveForwardDistance(0.8,15);
-
+            drive.DriveForwardPID(12);
+            drive.StrafeLeftPID(12);
         }
     }
 }

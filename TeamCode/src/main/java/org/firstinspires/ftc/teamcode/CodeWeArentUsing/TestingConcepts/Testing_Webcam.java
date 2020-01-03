@@ -27,9 +27,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.TestingConcepts;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -86,16 +87,16 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@Autonomous(name="Skystone_blue", group ="Concept")
-//@Disabled
-public class Skystone_Testing_Encoder extends LinearOpMode {
+@Autonomous(name="Testing_Webcam", group ="Concept")
+@Disabled
+public class Testing_Webcam extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
-    Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo;
+    Servo rotateServo, clawServo, foundServo, foundServo2;
     FourEncoderDriveTrain drive;
 
     /*
@@ -161,7 +162,6 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-        skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -176,7 +176,7 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
         clawServo.setDirection(Servo.Direction.FORWARD);
         foundServo2.setDirection(Servo.Direction.REVERSE);
         foundServo.setDirection(Servo.Direction.FORWARD);
-        skystoneServo.setDirection(Servo.Direction.FORWARD);
+
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
         /*
@@ -368,7 +368,6 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
         if (opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
-            drive.StrafeLeftDistance(1, 15);
             telemetry.addData("BEEEEP", "EEEEEEEEEEEEEP");
 
             boolean detected = false;
@@ -381,7 +380,7 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                         telemetry.addData("Visible Target", trackable.getName());
 
                         if (trackable.getName().equals("Stone Target")) {
-                            drive.StopDriving();
+                            drive.DriveForwardDistance(1,10);
                             detected = true;
                             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                             if (robotLocationTransform != null) {
@@ -401,56 +400,6 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                     }
 
                 }
-                if (!detected) {
-                    telemetry.addData("?", detected);
-                    telemetry.update();
-                    drive.DriveForwardDistance(0.2, 4);
-
-                }
-
-                drive.StrafeLeftDistance(1, 20);
-                skystoneServo.setPosition(0.53);
-                sleep(500);
-                drive.StrafeRightDistance(1, 20);
-                drive.TurnRightDistance(1, 31.5);
-                detected = false;
-                while (!detected) {
-            for (VuforiaTrackable trackable : allTrackables) {
-                sleep(200);
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                    telemetry.addData("Visible Target", trackable.getName());
-                    //sleep(100);
-                    if (trackable.getName().equals("Blue Perimeter 1")) {
-                        drive.StopDriving();
-                        detected = true;
-                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                        if (robotLocationTransform != null) {
-                            lastLocation = robotLocationTransform;
-                        }
-                        VectorF translation = lastLocation.getTranslation();
-                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-                        //drive.TurnLeft(1);
-
-
-
-                    }
-
-                    // getUpdatedRobotLocation() will return null if no new information is available since
-                    // the last time that call was made, or if the trackable is not currently visible.
-
-                }
-            }
-                    if (!detected) {
-                        telemetry.addData("?", detected);
-                        telemetry.update();
-                        drive.DriveBackwardDistance(0.2, 5);
-                    }
-            }
-                drive.DriveForwardDistance(1,60);
-                skystoneServo.setPosition(0.475);
-                sleep(500);
 
                 telemetry.update();
             }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsingPID;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Blue_Build_Front")
+@Autonomous (name = "Blue_Build_Back")
 @Disabled
-public class Blue_Foundation_Front_PID extends LinearOpMode {
+public class Blue_Foundation_Back_PID extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
@@ -28,6 +28,10 @@ public class Blue_Foundation_Front_PID extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize the hardware variables.
+        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
@@ -67,8 +71,9 @@ public class Blue_Foundation_Front_PID extends LinearOpMode {
             foundServo2.setPosition(0.6);
             sleep(1000);
             drive.StrafeRightPID(33);
-            drive.DriveForwardPID(10);
+            drive.DriveBackwardPID(5);
             //DriveBackwardDistance(0.5, 8);
         }
     }
+
 }

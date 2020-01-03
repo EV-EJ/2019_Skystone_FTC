@@ -1,24 +1,26 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsingPID;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Blue_Build_Back")
-//@Disabled
-public class Blue_Foundation_Back_Encoder extends LinearOpMode {
+@Autonomous (name = "Red_Load")
+@Disabled
+public class Backup_Red_Loading_Zone_PID extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    FourEncoderDriveTrain drive;
-
+    PidDriveTrain drive;
+    BNO055IMU imu;
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
@@ -36,8 +38,9 @@ public class Blue_Foundation_Back_Encoder extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -56,21 +59,49 @@ public class Blue_Foundation_Back_Encoder extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardDistance(1,12);
-            drive.StrafeRightDistance(1,30);
-            foundServo.setPosition(0.6);
-            foundServo2.setPosition(0.8);
+            drive.StrafeRightPID(15);
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            clawServo.setPosition(0);
+            sleep(2000);
+            clawMotor.setPower(0);
             sleep(1000);
-            drive.StrafeLeftDistance(1,40);
-            drive.TurnRightDistance(1,15);
-            drive.StrafeRightDistance(1,10);
-            foundServo.setPosition(0.4);
-            foundServo2.setPosition(0.6);
+            clawServo.setPosition(1);
             sleep(1000);
-            drive.StrafeLeftDistance(1,33);
-            drive.DriveForwardDistance(0.5,5);
-            //DriveBackwardDistance(0.5, 8);
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(950);
+            clawMotor.setPower(-0.1);
+
+            drive.StrafeLeftPID(20);
+            drive.StrafeRightPID(4);
+            drive.DriveBackwardPID(30 );
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            sleep(2000);
+            clawServo.setPosition(0);
+            sleep(500);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(1000);
+            drive.DriveForwardPID(15);
+
         }
     }
-
 }

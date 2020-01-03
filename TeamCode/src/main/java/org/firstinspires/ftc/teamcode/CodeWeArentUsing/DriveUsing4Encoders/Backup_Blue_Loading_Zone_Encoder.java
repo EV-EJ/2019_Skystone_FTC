@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsing4Encoders;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,21 +7,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 
+//Autonomous program when facing crater
 
-//Go to Neutral bridge side of zone when you are in the blue building zone
-
-@Autonomous (name = "Back_Up_Front_Blue_Build")
+@Autonomous (name = "Blue_Load")
 @Disabled
-public class Back_Up_Front_Blue_Build_PID extends LinearOpMode {
+public class Backup_Blue_Loading_Zone_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    PidDriveTrain drive;
-    BNO055IMU imu;
-
+    FourEncoderDriveTrain drive;
 
 
     //no. of ticks per one revolution of the yellow jacket motors
@@ -41,9 +37,8 @@ public class Back_Up_Front_Blue_Build_PID extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-        imu = hardwareMap.get(BNO055IMU .class, "imu");
 
-        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
+        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -62,8 +57,49 @@ public class Back_Up_Front_Blue_Build_PID extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardPID(12);
-            drive.StrafeLeftPID(12);
+            drive.StrafeRightDistance(1,15);
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            clawServo.setPosition(0);
+            sleep(2000);
+            clawMotor.setPower(0);
+            sleep(1000);
+            clawServo.setPosition(1);
+            sleep(1000);
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(950);
+            clawMotor.setPower(-0.1);
+
+            drive.StrafeLeftDistance(0.7, 20);
+            drive.StrafeRightDistance(1,4);
+            drive.DriveForwardDistance(0.5,30 );
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            sleep(2000);
+            clawServo.setPosition(0);
+            sleep(500);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(1000);
+            drive.DriveBackwardDistance(0.8,15);
+
         }
     }
 }

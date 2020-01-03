@@ -27,9 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsing4Encoders;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -46,8 +45,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PIDController;
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,20 +87,17 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@Autonomous(name="Skystone_PID", group ="Concept")
+@Autonomous(name="Skystone_blue", group ="Concept")
 @Disabled
-public class Skystone_Testing_PID extends LinearOpMode  {
+public class Skystone_Testing_Encoder extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
-    private DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
-    private DigitalChannel limitSwitch;
-    private Servo rotateServo, clawServo;
-    private BNO055IMU imu;
-    private Orientation lastAngles = new Orientation();
-    private PIDController pidDrive;
-    private PidDriveTrain drive;
+    DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
+    DigitalChannel limitSwitch;
+    Servo rotateServo, clawServo, foundServo, foundServo2;
+    FourEncoderDriveTrain drive;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -121,8 +116,8 @@ public class Skystone_Testing_PID extends LinearOpMode  {
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmPerInch = 25.4f;
+    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
     private static final float stoneZ = 2.00f * mmPerInch;
@@ -136,7 +131,7 @@ public class Skystone_Testing_PID extends LinearOpMode  {
 
     // Constants for perimeter targets
     private static final float halfField = 72 * mmPerInch;
-    private static final float quadField  = 36 * mmPerInch;
+    private static final float quadField = 36 * mmPerInch;
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
@@ -148,42 +143,39 @@ public class Skystone_Testing_PID extends LinearOpMode  {
      */
     private WebcamName webcamName = null;
 
-    private float phoneXRotate    = 0;
-    private float phoneYRotate    = 0;
-    private float phoneZRotate    = 0;
+    private float phoneXRotate = 0;
+    private float phoneYRotate = 0;
+    private float phoneZRotate = 0;
 
-    @Override public void runOpMode(){
+    @Override
+    public void runOpMode() throws InterruptedException {
         /*
          * Retrieve the camera we are to use.
          */
-        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
+        LFMotor = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor = hardwareMap.get(DcMotor.class, "RB Motor");
+        clawMotor = hardwareMap.get(DcMotor.class, "Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        foundServo = hardwareMap.get(Servo.class, "found servo");
+        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
 
-        LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
+        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        //rotate = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
-
-        BNO055IMU.Parameters parameters_robo = new BNO055IMU.Parameters();
-
-        pidDrive = new PIDController(.003, .00003, 0);
+        foundServo2.setDirection(Servo.Direction.REVERSE);
+        foundServo.setDirection(Servo.Direction.FORWARD);
 
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
@@ -199,7 +191,8 @@ public class Skystone_Testing_PID extends LinearOpMode  {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
-        /* ** We also indicate which camera on the RC we wish to use.
+        /* *
+         * We also indicate which camera on the RC we wish to use.
          */
         parameters.cameraName = webcamName;
 
@@ -239,7 +232,7 @@ public class Skystone_Testing_PID extends LinearOpMode  {
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
         List<VuforiaTrackable> allTrackables = new ArrayList<>(targetsSkyStone);
-        //allTrackables.addAll();
+        //allTrackables.addAll(targetsSkyStone);
 
         /* *
          * In order for localization to work, we need to tell the system where each target is on the field, and
@@ -294,7 +287,7 @@ public class Skystone_Testing_PID extends LinearOpMode  {
 
         front1.setLocation(OpenGLMatrix
                 .translation(-halfField, -quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90)));
 
         front2.setLocation(OpenGLMatrix
                 .translation(-halfField, quadField, mmTargetHeight)
@@ -310,7 +303,7 @@ public class Skystone_Testing_PID extends LinearOpMode  {
 
         rear1.setLocation(OpenGLMatrix
                 .translation(halfField, quadField, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         rear2.setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
@@ -339,14 +332,14 @@ public class Skystone_Testing_PID extends LinearOpMode  {
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
-            phoneXRotate = 90 ;
+            phoneXRotate = 90;
         }
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 3.5f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_FORWARD_DISPLACEMENT = 3.5f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
         final float CAMERA_VERTICAL_DISPLACEMENT = 1.75f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT     = 9;     // eg: Camera is ON the robot's center line
+        final float CAMERA_LEFT_DISPLACEMENT = 9;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -362,37 +355,10 @@ public class Skystone_Testing_PID extends LinearOpMode  {
         // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
-
-        telemetry.addData("Mode", "calibrating...");
-        telemetry.update();
-
-        // make sure the imu gyro is calibrated before continuing.
-        while (!isStopRequested() && !imu.isGyroCalibrated())
-        {
-            sleep(50);
-            idle();
-        }
-
-        telemetry.addData("Mode", "waiting for start");
-        telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
-        telemetry.update();
-
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
         waitForStart();
-
-        telemetry.addData("Mode", "running");
-        telemetry.update();
-
-        sleep(1000);
-
-        // Set up parameters for driving in a straight line.
-
-        pidDrive.setOutputRange(-1, 1);
-        pidDrive.setInputRange(-100000, 100000);
-        pidDrive.reset();
-        pidDrive.enable();
 
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
@@ -402,18 +368,18 @@ public class Skystone_Testing_PID extends LinearOpMode  {
         if (opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
-            //drive.StrafeRightDistance(1,15);
-            telemetry.addData("BEEEEP","EEEEEEEEEEEEEP");
-            //  sleep(1000);
-            //drive.DriveBackward(0.1);
-            boolean detected = false;
-            //throw FileNotFoundException;
-            //drive.DriveBackwardDistance(1, 4);
+            drive.StrafeRightDistance(1, 15);
+            telemetry.addData("BEEEEP", "EEEEEEEEEEEEEP");
 
-            while (!detected){
+            boolean detected = false;
+
+
+            while (!detected) {
                 for (VuforiaTrackable trackable : allTrackables) {
+                    sleep(200);
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
+
                         if (trackable.getName().equals("Stone Target")) {
                             drive.StopDriving();
                             detected = true;
@@ -425,48 +391,89 @@ public class Skystone_Testing_PID extends LinearOpMode  {
                             telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
-                            //DriveBackwardDistance(1,50);
-                            while (limitSwitch.getState()) {
-                                clawMotor.setPower(-0.4);
-                            }
-                            clawMotor.setPower(-0.1);
-                            rotateServo.setPosition(Servo.MAX_POSITION);
-                            sleep(1000);
-                            clawMotor.setPower(0);
-                            sleep(1000);
-                            clawServo.setPosition(1);
-                            sleep(1000);
-                            while (limitSwitch.getState()) {
-                                clawMotor.setPower(-0.4);
-                            }
-                            clawMotor.setPower(-0.1);
-                            rotateServo.setPosition(Servo.MIN_POSITION);
-                            sleep(1000);
-                            clawMotor.setPower(0);
-                            break;
-                        }
 
+
+                        }
 
                         // getUpdatedRobotLocation() will return null if no new information is available since
                         // the last time that call was made, or if the trackable is not currently visible.
-                        break;
+
                     }
-                    //if (!detected) {
+
+                }
+                if (!detected) {
                     telemetry.addData("?", detected);
                     telemetry.update();
-                        //sleep(2000);
-                    drive.DriveForwardPID(2);
-                        //drive.DriveBackwardDistance(0.2, 2);
-                        //sleep(1000);
-                    //}
+                    drive.DriveBackwardDistance(0.2, 4);
+
+                }
+
+
+                drive.TurnRightDistance(1, 31.5);
+                detected = false;
+                while (!detected) {
+            for (VuforiaTrackable trackable : allTrackables) {
+                sleep(200);
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                    telemetry.addData("Visible Target", trackable.getName());
+                    //sleep(100);
+                    if (trackable.getName().equals("Blue Perimeter 1")) {
+                        drive.StopDriving();
+                        detected = true;
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastLocation = robotLocationTransform;
+                        }
+                        VectorF translation = lastLocation.getTranslation();
+                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+                        //drive.TurnLeft(1);
+
+
+
+                    }
+
+                    // getUpdatedRobotLocation() will return null if no new information is available since
+                    // the last time that call was made, or if the trackable is not currently visible.
+
                 }
             }
+                    if (!detected) {
+                        telemetry.addData("?", detected);
+                        telemetry.update();
+                        drive.DriveBackwardDistance(0.2, 5);
+                    }
+            }
+                drive.DriveBackwardDistance(1,70);
+                drive.DriveForwardDistance(1, 8);
+                drive.StrafeLeftDistance(1, 18);
+                foundServo.setPosition(0.6);
+                foundServo2.setPosition(0.8);
+                sleep(1000);
+                drive.StrafeRightDistance(1,60);
+                drive.TurnLeftDistance(1, 15);
+                drive.StrafeLeftDistance(1, 100);
+                drive.DriveBackwardDistance(1,30);
+                /*drive.TurnLeftDistance(1, 30);
+                drive.StrafeLeftDistance(1, 30);
+                drive.StrafeRightDistance(1, 10);
+                drive.DriveBackwardDistance(1, 50);
+                drive.StrafeLeftDistance(1, 10);*/
+                foundServo.setPosition(0.4);
+                foundServo2.setPosition(0.6);
+                sleep(1000);
+                drive.StrafeRightDistance(1, 35);
+                //drive.DriveForwardDistance(1,40);
 
-            telemetry.update();
+                telemetry.update();
+            }
+
+            // Disable Tracking when we are done;
+            targetsSkyStone.deactivate();
         }
 
-        // Disable Tracking when we are done;
-        targetsSkyStone.deactivate();
+
     }
 
 }

@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsing4Encoders;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,19 +7,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Red_Build_Back")
+@Autonomous (name = "Red_Build_Front")
 @Disabled
-public class Red_Foundation_Back_PID extends LinearOpMode {
+public class Red_Foundation_Front_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    PidDriveTrain drive;
-    BNO055IMU imu;
+    FourEncoderDriveTrain drive;
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
@@ -38,9 +36,8 @@ public class Red_Foundation_Back_PID extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
+        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -59,20 +56,22 @@ public class Red_Foundation_Back_PID extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardPID(12);
-            drive.StrafeLeftPID(25);
+            drive.DriveForwardDistance(1,12);
+            drive.StrafeLeftDistance(1,25);
             foundServo.setPosition(0.6);
             foundServo2.setPosition(0.8);
             sleep(1000);
             //DriveBackwardDistance(1,2);
-            drive.StrafeRightPID(45);
+            drive.StrafeRightDistance(1,45);
             //TurnRightDistance(1,17);
             //DriveForwardDistance(1,25);
             //StrafeLeftDistance(1,30);
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
             sleep(1000);
-            drive.DriveBackwardPID(33);
+            //StrafeRightDistance(1,33);
+            drive.DriveBackwardDistance(1,33);
+            drive.StrafeLeftDistance(1, 22);
             //DriveBackwardDistance(0.5, 8);
         }
     }

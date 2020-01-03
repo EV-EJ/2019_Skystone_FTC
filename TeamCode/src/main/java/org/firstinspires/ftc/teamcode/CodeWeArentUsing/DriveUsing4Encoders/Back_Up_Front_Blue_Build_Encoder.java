@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsing4Encoders;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -8,11 +9,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 
-//Autonomous program when facing crater
+//Go to Neutral bridge side of zone when you are in the blue building zone
 
-@Autonomous (name = "Blue_Build_Back")
-//@Disabled
-public class Blue_Foundation_Back_Encoder extends LinearOpMode {
+@Autonomous (name = "Back_Up_Front_Blue_Build")
+@Disabled
+public class Back_Up_Front_Blue_Build_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
@@ -57,20 +58,7 @@ public class Blue_Foundation_Back_Encoder extends LinearOpMode {
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
             drive.DriveForwardDistance(1,12);
-            drive.StrafeRightDistance(1,30);
-            foundServo.setPosition(0.6);
-            foundServo2.setPosition(0.8);
-            sleep(1000);
-            drive.StrafeLeftDistance(1,40);
-            drive.TurnRightDistance(1,15);
-            drive.StrafeRightDistance(1,10);
-            foundServo.setPosition(0.4);
-            foundServo2.setPosition(0.6);
-            sleep(1000);
-            drive.StrafeLeftDistance(1,33);
-            drive.DriveForwardDistance(0.5,5);
-            //DriveBackwardDistance(0.5, 8);
+            drive.StrafeLeftDistance(1,12);
         }
     }
-
 }

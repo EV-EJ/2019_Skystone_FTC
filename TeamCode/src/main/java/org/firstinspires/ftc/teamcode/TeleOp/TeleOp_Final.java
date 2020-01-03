@@ -173,7 +173,7 @@ public class TeleOp_Final extends OpMode
             clawMotor.setPower(-0.4);
         }*/
         } else if (limitSwitch.getState() || slidesValue >= 0) {
-            clawMotor.setPower(Range.clip(slidesValue, -0.6, 0.0));
+            clawMotor.setPower(Range.clip(slidesValue, -0.6, -0.02));
         }
 
         if (gamepad1.x) {
@@ -214,11 +214,11 @@ public class TeleOp_Final extends OpMode
         }
         if (gamepad2.a) {
             telemetry.addData("a","pressed");
-            skystoneServo.setPosition(0.2);
+            skystoneServo.setPosition(0.53);
         }
         if (gamepad2.b) {
             telemetry.addData("b", "pressed");
-            skystoneServo.setPosition(-1);
+            skystoneServo.setPosition(0.475);
 
 
         }

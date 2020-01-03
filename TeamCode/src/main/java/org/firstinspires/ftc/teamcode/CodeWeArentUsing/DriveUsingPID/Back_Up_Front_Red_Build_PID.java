@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPID;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsingPID;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Back_Up_Front_Red_Load")
+@Autonomous (name = "Back_Up_Front_Red_Build")
 @Disabled
-public class Back_Up_Front_Red_Load_PID extends LinearOpMode {
+public class Back_Up_Front_Red_Build_PID extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
@@ -29,19 +29,19 @@ public class Back_Up_Front_Red_Load_PID extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Initialize the hardware variables.
-        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
+        LFMotor = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor = hardwareMap.get(DcMotor.class, "RB Motor");
+        clawMotor = hardwareMap.get(DcMotor.class, "Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(BNO055IMU .class, "imu");
 
-        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor,imu);
+        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -52,7 +52,6 @@ public class Back_Up_Front_Red_Load_PID extends LinearOpMode {
         foundServo.setDirection(Servo.Direction.FORWARD);
 
 
-
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Mode", "Init");
         telemetry.update();
@@ -61,7 +60,7 @@ public class Back_Up_Front_Red_Load_PID extends LinearOpMode {
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
             drive.DriveForwardPID(12);
-            drive.StrafeLeftPID(12);
+            drive.StrafeRightPID(12);
         }
     }
 }

@@ -1,30 +1,32 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsing4Encoders;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
 
-//Autonomous program when facing crater
+//Back up Auton that goes to the wall side of the bridge, and parks there
 
-@Autonomous (name = "Blue_Build_Back")
-//@Disabled
-public class Blue_Foundation_Back_Encoder extends LinearOpMode {
-
+@Autonomous (name = "Back_Up_Back")
+@Disabled
+public class Back_Up_Back_Encoder extends LinearOpMode {
+    //initializaing the future variables
+    private ElapsedTime runtime = new ElapsedTime();
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
-    Servo rotateServo, clawServo, foundServo, foundServo2;
+    Servo rotateServo, clawServo;
     FourEncoderDriveTrain drive;
-
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode(){
         // Initialize the hardware variables.
         LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
@@ -34,9 +36,13 @@ public class Blue_Foundation_Back_Encoder extends LinearOpMode {
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
-        foundServo = hardwareMap.get(Servo.class, "found servo");
-        foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
 
+        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        
+        //Wheels on the robot funtions
         drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
 
         //Reverse the right motors to move forward based on their orientation on the robot
@@ -44,32 +50,17 @@ public class Blue_Foundation_Back_Encoder extends LinearOpMode {
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
-        foundServo2.setDirection(Servo.Direction.REVERSE);
-        foundServo.setDirection(Servo.Direction.FORWARD);
-
-
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Mode", "Init");
         telemetry.update();
+        runtime.reset();
         waitForStart();
 
+        //Running the code
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
             drive.DriveForwardDistance(1,12);
-            drive.StrafeRightDistance(1,30);
-            foundServo.setPosition(0.6);
-            foundServo2.setPosition(0.8);
-            sleep(1000);
-            drive.StrafeLeftDistance(1,40);
-            drive.TurnRightDistance(1,15);
-            drive.StrafeRightDistance(1,10);
-            foundServo.setPosition(0.4);
-            foundServo2.setPosition(0.6);
-            sleep(1000);
-            drive.StrafeLeftDistance(1,33);
-            drive.DriveForwardDistance(0.5,5);
-            //DriveBackwardDistance(0.5, 8);
         }
     }
 
