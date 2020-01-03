@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.ftccommon.SoundPlayer;
+//importing the statements for the code below
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,33 +16,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-import java.io.File;
-import java.io.IOException;
-
 
 @TeleOp(name="TeleOp", group="Iterative TeamCode")
 //@Disabled
-public class TeleOp_Final extends OpMode
-{
+public class TeleOp_Final extends OpMode {
+
+    //defining all of the variables needed for the code
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor armMotor, armMotor2,  clawMotor;
-    private DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
-    private DigitalChannel limitSwitch;
+    private DcMotor armMotor, armMotor2, clawMotor, LFMotor, LBMotor, RFMotor, RBMotor;
     private Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo;
-    private boolean fieldRelativeMode = false;
+    private DigitalChannel limitSwitch;
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
-    private double globalAngle;
-
-    private double speed = 1;
+    private boolean fieldRelativeMode = false;
+    private double globalAngle, speed = 1;
 
 
     @Override
     public void init() throws IllegalArgumentException{
-        telemetry.addData("Status", "Initialized");
 
-        //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, goldFile);
-
+        //grabbing the hardware from the expansion hubs, and the configuration
         LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
         RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
@@ -51,15 +43,18 @@ public class TeleOp_Final extends OpMode
         armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
         armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
-        limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
+
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
         skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
+
+        limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
+
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-
+        //reversing the motors that need to be reversed, otherwise it sets it as forward
         armMotor.setDirection(DcMotor.Direction.FORWARD);
         armMotor2.setDirection(DcMotor.Direction.FORWARD);
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -69,13 +64,16 @@ public class TeleOp_Final extends OpMode
         armMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor2.setDirection(DcMotor.Direction.REVERSE);
         clawMotor.setDirection(DcMotor.Direction.FORWARD);
-        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
+
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
         foundServo2.setDirection(Servo.Direction.REVERSE);
         foundServo.setDirection(Servo.Direction.FORWARD);
         skystoneServo.setDirection(Servo.Direction.FORWARD);
 
+        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
+
+        //setting up the IMU on the expansion hubs, for our use
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
         parameters.mode = BNO055IMU.SensorMode.IMU;
@@ -104,19 +102,23 @@ public class TeleOp_Final extends OpMode
     @Override
     public void loop() {
 
+        //defining the value to get from phones
         double LFPower, LBPower, RFPower, RBPower, xValue, turnValue, yValue;
         float slidesValue;
 
+        //checking to see if field relative mode is on
         if (gamepad1.b) {
             fieldRelativeMode = !fieldRelativeMode;
         }
 
         telemetry.addData("FieldRelative?", fieldRelativeMode);
 
+        //getting the movement values from the gamepad
         yValue = gamepad1.left_stick_y;
         turnValue = gamepad1.right_stick_x;
         xValue = gamepad1.left_stick_x;
 
+        //changing the values for the field relative mode
         if (fieldRelativeMode){
             telemetry.addData("hey", "hi?");
             double angle = getAngle();
@@ -125,11 +127,13 @@ public class TeleOp_Final extends OpMode
             xValue = tempX;
         }
 
+        //getting the values for the powers for each motor
         LFPower = Range.clip(-yValue + turnValue + xValue,-1,1);
         LBPower = Range.clip(-yValue + turnValue - xValue,-1,1);
         RBPower = Range.clip(-yValue - turnValue + xValue,-1,1);
         RFPower = Range.clip(-yValue - turnValue - xValue,-1,1);
 
+        //applying the ramping up and ramping down features
         if (LFPower < 0){
             LFPower = (float) -Math.pow(Math.abs(LFPower),2);
         } else if (LFPower > 0){
@@ -162,16 +166,15 @@ public class TeleOp_Final extends OpMode
             speed = 1;
         }
 
+        //setting the powers for each of the motors
         LFMotor.setPower(Range.clip(LFPower, -speed, speed));
         LBMotor.setPower(Range.clip(LBPower, -speed, speed));
         RFMotor.setPower(Range.clip(RFPower, -speed, speed));
         RBMotor.setPower(Range.clip(RBPower, -speed, speed));
 
+        //getting the double reverse 4 bar linkage to move up and down
         if (slidesValue == 0){
             clawMotor.setPower(-0.2);
-        /*if (slidesValue > -0.1) {
-            clawMotor.setPower(-0.4);
-        }*/
         } else if (limitSwitch.getState() || slidesValue >= 0) {
             clawMotor.setPower(Range.clip(slidesValue, -0.6, -0.02));
         }

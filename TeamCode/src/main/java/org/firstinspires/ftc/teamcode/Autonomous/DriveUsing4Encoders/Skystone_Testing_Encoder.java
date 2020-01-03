@@ -369,7 +369,6 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
 
             // check all the trackable targets to see which one (if any) is visible.
             drive.StrafeLeftDistance(1, 15);
-            telemetry.addData("BEEEEP", "EEEEEEEEEEEEEP");
 
             boolean detected = false;
 
@@ -392,7 +391,6 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
 
-
                         }
 
                         // getUpdatedRobotLocation() will return null if no new information is available since
@@ -404,55 +402,20 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                 if (!detected) {
                     telemetry.addData("?", detected);
                     telemetry.update();
-                    drive.DriveForwardDistance(0.2, 4);
+                    drive.DriveForwardDistance(0.2, 5);
 
                 }
 
-                drive.StrafeLeftDistance(1, 20);
-                skystoneServo.setPosition(0.53);
-                sleep(500);
-                drive.StrafeRightDistance(1, 20);
-                drive.TurnRightDistance(1, 31.5);
-                detected = false;
-                while (!detected) {
-            for (VuforiaTrackable trackable : allTrackables) {
-                sleep(200);
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                    telemetry.addData("Visible Target", trackable.getName());
-                    //sleep(100);
-                    if (trackable.getName().equals("Blue Perimeter 1")) {
-                        drive.StopDriving();
-                        detected = true;
-                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                        if (robotLocationTransform != null) {
-                            lastLocation = robotLocationTransform;
-                        }
-                        VectorF translation = lastLocation.getTranslation();
-                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-                        //drive.TurnLeft(1);
-
-
-
-                    }
-
-                    // getUpdatedRobotLocation() will return null if no new information is available since
-                    // the last time that call was made, or if the trackable is not currently visible.
-
-                }
-            }
-                    if (!detected) {
-                        telemetry.addData("?", detected);
-                        telemetry.update();
-                        drive.DriveBackwardDistance(0.2, 5);
-                    }
-            }
-                drive.DriveForwardDistance(1,60);
+                drive.StrafeLeftDistance(1, 8.8);
+                skystoneServo.setPosition(0.55);
+                sleep(700);
+                drive.StrafeRightDistance(1, 8.8);
+                drive.DriveBackwardDistance(0.8,30);
                 skystoneServo.setPosition(0.475);
-                sleep(500);
+                sleep(750);
+                drive.DriveForwardDistance(1,40);
 
-                telemetry.update();
+               telemetry.update();
             }
 
             // Disable Tracking when we are done;

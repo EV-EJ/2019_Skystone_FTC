@@ -37,7 +37,7 @@ public class FourEncoderDriveTrain {
 
 
     //Drive forward using encoders
-    public void DriveForwardDistance(double power, int distance)  {
+    public void DriveForwardDistance(double power, double distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -46,7 +46,7 @@ public class FourEncoderDriveTrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = (LFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/2 + distance * 90;
+        int encoderDistance = (int) ((LFMotor.getCurrentPosition() + RBMotor.getCurrentPosition())/2 + distance * 90);
 
         //Set target position
         LFMotor.setTargetPosition(encoderDistance);
@@ -93,7 +93,7 @@ public class FourEncoderDriveTrain {
         Thread.sleep(time);
     }
 
-    public void TurnLeftDistance(double power, int distance)   {
+    public void TurnLeftDistance(double power, double distance)   {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -102,7 +102,7 @@ public class FourEncoderDriveTrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistance = (int) (LFMotor.getCurrentPosition() + distance * 90);
 
         //Set target position
         LFMotor.setTargetPosition(-encoderDistance);
@@ -138,7 +138,7 @@ public class FourEncoderDriveTrain {
     }
 
 
-    public void DriveBackwardDistance(double power, int distance)  {
+    public void DriveBackwardDistance(double power, double distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -148,7 +148,7 @@ public class FourEncoderDriveTrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistance = (int) (LFMotor.getCurrentPosition() + distance * 90);
 
         //Set target position
         LFMotor.setTargetPosition(-encoderDistance);
@@ -242,7 +242,7 @@ public class FourEncoderDriveTrain {
     }
 
 
-    public void StrafeRightDistance(double power, int distance) {
+    public void StrafeRightDistance(double power, double distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -251,7 +251,7 @@ public class FourEncoderDriveTrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistance = (int) (LFMotor.getCurrentPosition() + distance * 90);
 
         //Set target position
         LFMotor.setTargetPosition(encoderDistance);
@@ -290,7 +290,7 @@ public class FourEncoderDriveTrain {
         RBMotor.setPower(-power);
     }
 
-    public void StrafeLeftDistance(double power, int distance) {
+    public void StrafeLeftDistance(double power, double distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -299,7 +299,7 @@ public class FourEncoderDriveTrain {
 
         //Diameter of wheel = 4in.  Circumference = 12.57; Ticks per revolution of goBilda motor = 1136
         //Ticks per inch = 1136/12.57 (approximately 90.37)
-        int encoderDistance = LFMotor.getCurrentPosition() + distance * 90;
+        int encoderDistance = (int) (LFMotor.getCurrentPosition() + distance * 90);
 
         //Set target position
         LFMotor.setTargetPosition(-encoderDistance);
