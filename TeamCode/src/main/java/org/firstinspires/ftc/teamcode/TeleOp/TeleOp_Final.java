@@ -29,7 +29,7 @@ public class TeleOp_Final extends OpMode
     private DcMotor armMotor, armMotor2,  clawMotor;
     private DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
     private DigitalChannel limitSwitch;
-    private Servo rotateServo, clawServo, foundServo, foundServo2;
+    private Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo;
     private boolean fieldRelativeMode = false;
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
@@ -56,6 +56,7 @@ public class TeleOp_Final extends OpMode
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+        skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
 
@@ -73,6 +74,7 @@ public class TeleOp_Final extends OpMode
         clawServo.setDirection(Servo.Direction.FORWARD);
         foundServo2.setDirection(Servo.Direction.REVERSE);
         foundServo.setDirection(Servo.Direction.FORWARD);
+        skystoneServo.setDirection(Servo.Direction.FORWARD);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -210,8 +212,17 @@ public class TeleOp_Final extends OpMode
             foundServo2.setPosition(0.8);
 
         }
+        if (gamepad2.a) {
+            telemetry.addData("a","pressed");
+            skystoneServo.setPosition(0.2);
+        }
+        if (gamepad2.b) {
+            telemetry.addData("b", "pressed");
+            skystoneServo.setPosition(-1);
 
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+
+        }
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
 
     }
 
