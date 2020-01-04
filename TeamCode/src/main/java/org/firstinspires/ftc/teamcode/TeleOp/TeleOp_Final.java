@@ -179,15 +179,15 @@ public class TeleOp_Final extends OpMode {
             clawMotor.setPower(Range.clip(slidesValue, -0.6, -0.02));
         }
 
+        //moving the claw servo to pick up or release the stone
         if (gamepad1.x) {
             clawServo.setPosition(0.5);
         }
         if (gamepad1.y) {
             clawServo.setPosition(1);
         }
-        telemetry.addData("found",foundServo.getPosition());
-        telemetry.addData("found2",foundServo2.getPosition());
 
+        //Using the intake, intaking or releasing
         if(gamepad1.right_bumper){
             armMotor.setPower(0.5);
             armMotor2.setPower(0.5);
@@ -199,11 +199,14 @@ public class TeleOp_Final extends OpMode {
             armMotor2.setPower(0);
         }
 
+        //moving the claw to move it from the inside of the robot to the outside
         if (gamepad2.right_bumper){
             rotateServo.setPosition(Servo.MIN_POSITION);
         } else if(gamepad2.left_bumper){
             rotateServo.setPosition(Servo.MAX_POSITION);
         }
+
+        //using the foundation servos to pick up the foundation
         if (gamepad2.x) {
             telemetry.addData("x","pressed");
             foundServo.setPosition(0.4);
@@ -215,6 +218,8 @@ public class TeleOp_Final extends OpMode {
             foundServo2.setPosition(0.8);
 
         }
+
+        //using the stone claw to pick up the stones
         if (gamepad2.a) {
             telemetry.addData("a","pressed");
             skystoneServo.setPosition(0.53);
@@ -234,6 +239,7 @@ public class TeleOp_Final extends OpMode {
     public void stop() {
     }
 
+    //reseting the IMU
     private void resetAngle()
     {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -241,6 +247,7 @@ public class TeleOp_Final extends OpMode {
         globalAngle = 0;
     }
 
+    //getting the angle from the IMU
     private double getAngle()
     {
 
