@@ -119,7 +119,6 @@ public class TeleOp_Final extends OpMode {
 
         //changing the values for the field relative mode
         if (fieldRelativeMode){
-            telemetry.addData("hey", "hi?");
             double angle = getAngle();
             double tempX = (xValue * Math.cos(Math.toRadians(angle))) - (yValue * Math.sin(Math.toRadians(angle)));
             yValue = (xValue * Math.sin(Math.toRadians(angle))) + (yValue * Math.cos(Math.toRadians(angle)));
