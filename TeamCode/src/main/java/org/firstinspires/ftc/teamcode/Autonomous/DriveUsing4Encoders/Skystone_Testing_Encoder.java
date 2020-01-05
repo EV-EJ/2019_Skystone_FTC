@@ -166,6 +166,8 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
         skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
+
+        webcamName = hardwareMap.get(WebcamName.class, "webcam");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -173,7 +175,6 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
 
         //drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
         drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
-        //rotate = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
@@ -182,7 +183,6 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
         foundServo2.setDirection(Servo.Direction.REVERSE);
         foundServo.setDirection(Servo.Direction.FORWARD);
         skystoneServo.setDirection(Servo.Direction.FORWARD);
-        webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -372,9 +372,8 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
 
         targetsSkyStone.activate();
         if (opModeIsActive()) {
-
-            // check all the trackable targets to see which one (if any) is visible.
-            drive.StrafeLeftDistance(1, 22);
+            //check all the trackable targets to see which one (if any) is visible.
+            drive.StrafeLeftDistance(1, 10);
 
             boolean detected = false;
 
@@ -386,17 +385,25 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                         telemetry.addData("Visible Target", trackable.getName());
 
                         if (trackable.getName().equals("Stone Target")) {
-                            drive.StopDriving();
                             detected = true;
                             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                             if (robotLocationTransform != null) {
                                 lastLocation = robotLocationTransform;
                             }
                             VectorF translation = lastLocation.getTranslation();
-                            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                            /*telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);*/
+
+
+                            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+
                             telemetry.update();
-                            sleep(30000);
+
+                            //drive.TurnLeftDegrees(1,rotation.firstAngle);
+
+                            drive.DriveForwardDistance(1,translation.get(1) / mmPerInch);
+                            drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 6);
 
                         }
 
@@ -407,16 +414,14 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
 
                 }
                 if (!detected) {
-                    telemetry.addData("?", detected);
-                    telemetry.update();
                     drive.DriveForwardDistance(0.2, 6);
 
                 }
 
                 //drive.StrafeLeftDistance(1, 8.8);
-                skystoneServo.setPosition(0.55);
-                sleep(700);
-                drive.StrafeRightDistance(1, 9.5);
+                //skystoneServo.setPosition(0.5275);
+                //sleep(700);
+                /*drive.StrafeRightDistance(1, 9.5);
                 drive.DriveBackwardDistance(0.8, 30);
                 skystoneServo.setPosition(0.475);
                 sleep(750);
@@ -426,9 +431,9 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                 if (Math.abs(m) > 5){
                     drive.TurnLeftDegrees(1, m);
                 }*/
-                drive.DriveForwardDistance(1, 51);
+                /*drive.DriveForwardDistance(1, 49.4);
                 drive.StrafeLeftDistance(1, 10);
-                skystoneServo.setPosition(0.55);
+                skystoneServo.setPosition(0.5275);
                 sleep(700);
                 drive.StrafeRightDistance(1, 15);
                 drive.DriveBackwardDistance(0.8, 62);

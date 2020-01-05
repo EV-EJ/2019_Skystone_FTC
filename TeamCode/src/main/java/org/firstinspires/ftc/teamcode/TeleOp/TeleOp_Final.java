@@ -83,8 +83,6 @@ public class TeleOp_Final extends OpMode {
 
         imu.initialize(parameters);
 
-        resetAngle();
-
         telemetry.addData("Status", "Initialized");
     }
 
@@ -108,6 +106,7 @@ public class TeleOp_Final extends OpMode {
 
         //checking to see if field relative mode is on
         if (gamepad1.b) {
+            resetAngle();
             fieldRelativeMode = !fieldRelativeMode;
         }
 
@@ -161,7 +160,7 @@ public class TeleOp_Final extends OpMode {
         slidesValue = gamepad2.left_stick_y;
 
         if (gamepad1.a){
-            speed = 0.1;
+            speed = 0.2;
         } else{
             speed = 1;
         }
@@ -181,10 +180,10 @@ public class TeleOp_Final extends OpMode {
 
         //moving the claw servo to pick up or release the stone
         if (gamepad1.x) {
-            clawServo.setPosition(0.5);
+            clawServo.setPosition(Servo.MAX_POSITION);
         }
         if (gamepad1.y) {
-            clawServo.setPosition(1);
+            clawServo.setPosition(((Servo.MAX_POSITION - Servo.MIN_POSITION)/2) + Servo.MIN_POSITION + 0.05);
         }
 
         //Using the intake, intaking or releasing
@@ -222,11 +221,11 @@ public class TeleOp_Final extends OpMode {
         //using the stone claw to pick up the stones
         if (gamepad2.a) {
             telemetry.addData("a","pressed");
-            skystoneServo.setPosition(0.53);
+            skystoneServo.setPosition(0.527);
         }
         if (gamepad2.b) {
             telemetry.addData("b", "pressed");
-            skystoneServo.setPosition(0.475);
+            skystoneServo.setPosition(0.49);
 
 
         }
