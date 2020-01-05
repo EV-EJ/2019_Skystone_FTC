@@ -101,6 +101,7 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
     //FourEncoderDriveTrain drive;
     EncoderAndPIDDriveTrain drive;
     BNO055IMU imu;
+    boolean detected = false, reached = false;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -373,18 +374,22 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
         targetsSkyStone.activate();
         if (opModeIsActive()) {
             //check all the trackable targets to see which one (if any) is visible.
-            drive.StrafeLeftDistance(1, 20);
-
-            boolean detected = false;
-
+            drive.StrafeLeftDistance(1, 17);
 
             while (!detected) {
+                telemetry.addData("detected?", detected);
+                telemetry.addData("reached?", reached);
+                telemetry.update();
                 for (VuforiaTrackable trackable : allTrackables) {
                     sleep(200);
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                         telemetry.addData("Visible Target", trackable.getName());
+                        telemetry.update();
+                        detected = true;
+                        sleep(500);
 
                         if (trackable.getName().equals("Stone Target")) {
+                            skystoneServo.setPosition(0.49);
                             detected = true;
                             OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                             if (robotLocationTransform != null) {
@@ -402,8 +407,8 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
 
                             //drive.TurnLeftDegrees(1,rotation.firstAngle);
 
-                            drive.DriveForwardDistance(1,translation.get(1) / mmPerInch);
-                            drive.StrafeRightDistance(1,translation.get(0) / mmPerInch);
+                            drive.DriveForwardDistance(1, translation.get(1) / mmPerInch);
+                            drive.StrafeRightDistance(1, (translation.get(0) / mmPerInch) + 2);
 
                         }
 
@@ -413,24 +418,18 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                     }
 
                 }
-                if (!detected) {
-                    drive.DriveForwardDistance(0.2, 6);
 
+                if (!detected) {
+                    drive.DriveForwardDistance(0.2, 5.5);
                 }
 
-                //drive.StrafeLeftDistance(1, 8.8);
-                //skystoneServo.setPosition(0.5275);
-                //sleep(700);
-                /*drive.StrafeRightDistance(1, 9.5);
+                skystoneServo.setPosition(0.5275);
+                sleep(750);
+                drive.StrafeRightDistance(1, 9.5);
                 drive.DriveBackwardDistance(0.8, 30);
                 skystoneServo.setPosition(0.475);
                 sleep(750);
-                telemetry.addData("angle", drive.getAngle());
-                telemetry.update();
-                /*double m = drive.getAngle();
-                if (Math.abs(m) > 5){
-                    drive.TurnLeftDegrees(1, m);
-                }*/
+
                 /*drive.DriveForwardDistance(1, 49.4);
                 drive.StrafeLeftDistance(1, 10);
                 skystoneServo.setPosition(0.5275);
@@ -438,8 +437,8 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                 drive.StrafeRightDistance(1, 15);
                 drive.DriveBackwardDistance(0.8, 62);
                 skystoneServo.setPosition(0.475);
-                sleep(750);
-                drive.TurnRightDegrees(1, 180);
+                sleep(750);*/
+                /*drive.TurnRightDegrees(1, 180);
                 for (VuforiaTrackable trackable : allTrackables) {
                     sleep(200);
                     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
@@ -462,9 +461,9 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                         // the last time that call was made, or if the trackable is not currently visible.
 
                     }
-                }
-                drive.DriveBackwardDistance(1, 36);
-                sleep(100000);
+                }*/
+                //drive.DriveBackwardDistance(1, 36);
+                //sleep(100000);
                 /*drive.DriveForwardDistance(1, 20);
                 drive.StrafeRightDistance(1, 45);
                 foundServo.setPosition(0.6);
