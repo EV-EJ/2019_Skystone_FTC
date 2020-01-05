@@ -373,7 +373,7 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
         targetsSkyStone.activate();
         if (opModeIsActive()) {
             //check all the trackable targets to see which one (if any) is visible.
-            drive.StrafeLeftDistance(1, 10);
+            drive.StrafeLeftDistance(1, 20);
 
             boolean detected = false;
 
@@ -403,7 +403,7 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                             //drive.TurnLeftDegrees(1,rotation.firstAngle);
 
                             drive.DriveForwardDistance(1,translation.get(1) / mmPerInch);
-                            drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 6);
+                            drive.StrafeRightDistance(1,translation.get(0) / mmPerInch);
 
                         }
 

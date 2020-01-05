@@ -105,7 +105,7 @@ public class TeleOp_Final extends OpMode {
         float slidesValue;
 
         //checking to see if field relative mode is on
-        if (gamepad1.b) {
+        if (gamepad1.back) {
             resetAngle();
             fieldRelativeMode = !fieldRelativeMode;
         }
@@ -175,7 +175,7 @@ public class TeleOp_Final extends OpMode {
         if (slidesValue == 0){
             clawMotor.setPower(-0.2);
         } else if (limitSwitch.getState() || slidesValue >= 0) {
-            clawMotor.setPower(Range.clip(slidesValue, -0.6, -0.02));
+            clawMotor.setPower(Range.clip(slidesValue, -0.6, -0.015));
         }
 
         //moving the claw servo to pick up or release the stone
