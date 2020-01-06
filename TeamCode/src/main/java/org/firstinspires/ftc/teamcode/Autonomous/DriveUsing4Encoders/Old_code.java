@@ -466,7 +466,7 @@ public class Old_code extends LinearOpMode {
                                         telemetry.update();
                                         drive.DriveBackwardDistance(1,30);
                                         drive.StrafeRightDistance(1,20);
-                                        drive.DriveForwardDistance(1, 60);
+                                        drive.DriveForwardDistance(1, 40);
 
                                         /*drive.DriveForwardDistance(1,12);
                                         drive.StrafeLeftDistance(1,10);
