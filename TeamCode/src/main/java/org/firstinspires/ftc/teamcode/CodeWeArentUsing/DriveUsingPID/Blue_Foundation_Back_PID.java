@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
+import org.firstinspires.ftc.teamcode.CodeWeArentUsing.PidDriveTrain;
 
 //Autonomous program when facing crater
 

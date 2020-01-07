@@ -1,24 +1,26 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPIDAndEncoders;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.EncoderAndPIDDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Red_Load")
+@Autonomous (name = "Red_Build_Front")
 //@Disabled
-public class Red_Loading_Zone_Encoder extends LinearOpMode {
+public class Red_Foundation_Front_Final extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    FourEncoderDriveTrain drive;
-
+    EncoderAndPIDDriveTrain drive;
+    BNO055IMU imu;
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
@@ -36,8 +38,9 @@ public class Red_Loading_Zone_Encoder extends LinearOpMode {
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
+        drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -56,49 +59,23 @@ public class Red_Loading_Zone_Encoder extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.StrafeRightDistance(1,15);
-
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-
-            rotateServo.setPosition(Servo.MAX_POSITION);
-            clawServo.setPosition(0);
-            sleep(2000);
-            clawMotor.setPower(0);
+            drive.DriveForwardDistance(1,12);
+            drive.StrafeLeftDistance(1,25);
+            foundServo.setPosition(0.6);
+            foundServo2.setPosition(0.8);
             sleep(1000);
-            clawServo.setPosition(1);
+            //DriveBackwardDistance(1,2);
+            drive.StrafeRightDistance(1,45);
+            //TurnRightDistance(1,17);
+            //DriveForwardDistance(1,25);
+            //StrafeLeftDistance(1,30);
+            foundServo.setPosition(0.4);
+            foundServo2.setPosition(0.6);
             sleep(1000);
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-            rotateServo.setPosition(Servo.MIN_POSITION);
-            sleep(1000);
-            clawMotor.setPower(0);
-            sleep(950);
-            clawMotor.setPower(-0.1);
-
-            drive.StrafeLeftDistance(0.7, 20);
-            drive.StrafeRightDistance(1,4);
-            drive.DriveBackwardDistance(0.5,30 );
-
-            while (limitSwitch.getState()) {
-                clawMotor.setPower(-0.6);
-            }
-            clawMotor.setPower(-0.1);
-
-            rotateServo.setPosition(Servo.MAX_POSITION);
-            sleep(2000);
-            clawServo.setPosition(0);
-            sleep(500);
-            rotateServo.setPosition(Servo.MIN_POSITION);
-            sleep(1000);
-            clawMotor.setPower(0);
-            sleep(1000);
-            drive.DriveForwardDistance(0.8,15);
-
+            //StrafeRightDistance(1,33);
+            drive.DriveBackwardDistance(1,33);
+            drive.StrafeLeftDistance(1, 22);
+            //DriveBackwardDistance(0.5, 8);
         }
     }
 }

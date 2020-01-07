@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Blue_Load")
+@Autonomous (name = "Red_Load")
 //@Disabled
-public class Blue_Loading_Zone_Encoder extends LinearOpMode {
+public class Red_Loading_Zone_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
@@ -82,7 +82,7 @@ public class Blue_Loading_Zone_Encoder extends LinearOpMode {
 
             drive.StrafeLeftDistance(0.7, 20);
             drive.StrafeRightDistance(1,4);
-            drive.DriveForwardDistance(0.5,30 );
+            drive.DriveBackwardDistance(0.5,30 );
 
             while (limitSwitch.getState()) {
                 clawMotor.setPower(-0.6);
@@ -97,7 +97,7 @@ public class Blue_Loading_Zone_Encoder extends LinearOpMode {
             sleep(1000);
             clawMotor.setPower(0);
             sleep(1000);
-            drive.DriveBackwardDistance(0.8,15);
+            drive.DriveForwardDistance(0.8,15);
 
         }
     }

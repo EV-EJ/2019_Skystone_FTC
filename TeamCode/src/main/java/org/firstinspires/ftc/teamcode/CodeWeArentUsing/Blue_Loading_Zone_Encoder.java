@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsing4Encoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Back_Up_Front_Blue_Load")
+@Autonomous (name = "Blue_Load")
 //@Disabled
-public class Back_Up_Front_Blue_Load_Encoder extends LinearOpMode {
+public class Blue_Loading_Zone_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
@@ -56,8 +56,49 @@ public class Back_Up_Front_Blue_Load_Encoder extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardDistance(1,12);
-            drive.StrafeRightDistance(1,12);
+            drive.StrafeRightDistance(1,15);
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            clawServo.setPosition(0);
+            sleep(2000);
+            clawMotor.setPower(0);
+            sleep(1000);
+            clawServo.setPosition(1);
+            sleep(1000);
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(950);
+            clawMotor.setPower(-0.1);
+
+            drive.StrafeLeftDistance(0.7, 20);
+            drive.StrafeRightDistance(1,4);
+            drive.DriveForwardDistance(0.5,30 );
+
+            while (limitSwitch.getState()) {
+                clawMotor.setPower(-0.6);
+            }
+            clawMotor.setPower(-0.1);
+
+            rotateServo.setPosition(Servo.MAX_POSITION);
+            sleep(2000);
+            clawServo.setPosition(0);
+            sleep(500);
+            rotateServo.setPosition(Servo.MIN_POSITION);
+            sleep(1000);
+            clawMotor.setPower(0);
+            sleep(1000);
+            drive.DriveBackwardDistance(0.8,15);
+
         }
     }
 }

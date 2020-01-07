@@ -47,7 +47,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PIDController;
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 
 import java.util.ArrayList;
 import java.util.List;

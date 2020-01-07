@@ -23,7 +23,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PIDController;
-import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PidDriveTrain;
 
 @Autonomous(name="Testing PID", group="Exercises")
 @Disabled

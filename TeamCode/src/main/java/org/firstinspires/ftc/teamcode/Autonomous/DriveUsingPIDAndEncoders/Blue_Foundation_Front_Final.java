@@ -1,27 +1,26 @@
-package org.firstinspires.ftc.teamcode.CodeWeArentUsing.DriveUsingPID;
+package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPIDAndEncoders;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.CodeWeArentUsing.PidDriveTrain;
+import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderDriveTrain;
+import org.firstinspires.ftc.teamcode.DriveTrainAndPID.EncoderAndPIDDriveTrain;
 
 //Autonomous program when facing crater
 
-@Autonomous (name = "Back_Up_Front_Blue_Load")
-@Disabled
-public class Back_Up_Front_Blue_Load_PID extends LinearOpMode {
+@Autonomous (name = "Blue_Build_Front")
+//@Disabled
+public class Blue_Foundation_Front_Final extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     Servo rotateServo, clawServo, foundServo, foundServo2;
-    PidDriveTrain drive;
+    EncoderAndPIDDriveTrain drive;
     BNO055IMU imu;
-
 
     //no. of ticks per one revolution of the yellow jacket motors
     int Ticks_Per_Rev = 1316;
@@ -29,19 +28,15 @@ public class Back_Up_Front_Blue_Load_PID extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Initialize the hardware variables.
-        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
-        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
-        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
-        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
-        imu = hardwareMap.get(BNO055IMU .class, "imu");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        drive = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
+        drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         //Reverse the right motors to move forward based on their orientation on the robot
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -60,8 +55,20 @@ public class Back_Up_Front_Blue_Load_PID extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardPID(12);
-            drive.StrafeRightPID(12);
+            drive.DriveBackwardDistance(1,12);
+            drive.StrafeLeftDistance(1,30);
+            foundServo.setPosition(0.6);
+            foundServo2.setPosition(0.8);
+            sleep(1000);
+            drive.StrafeRightDistance(1,40);
+            drive.TurnLeftDistance(1,15);
+            drive.StrafeLeftDistance(1,20);
+            foundServo.setPosition(0.4);
+            foundServo2.setPosition(0.6);
+            sleep(1000);
+            drive.StrafeRightDistance(1,33);
+            drive.DriveForwardDistance(0.5,10);
+            //DriveBackwardDistance(0.5, 8);
         }
     }
 }
