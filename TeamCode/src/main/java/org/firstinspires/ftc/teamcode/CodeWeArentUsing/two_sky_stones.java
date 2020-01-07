@@ -89,9 +89,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@Autonomous(name="Old code", group ="Concept")
+@Autonomous(name="Blue Skystone", group ="Concept")
 @Disabled
-public class Old_code extends LinearOpMode {
+public class two_sky_stones extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
@@ -386,87 +386,88 @@ public class Old_code extends LinearOpMode {
                 telemetry.addData("detected?", detected);
                 //for (VuforiaTrackable trackable : allTrackables) {
                 VuforiaTrackable trackable = stoneTarget;
-                    sleep(500);
-                    telemetry.addData("Trackable", trackable.getName());
+                sleep(500);
+                telemetry.addData("Trackable", trackable.getName());
+                telemetry.update();
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                    telemetry.addData("Visible Target", trackable.getName());
                     telemetry.update();
-                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                        telemetry.addData("Visible Target", trackable.getName());
+                    sleep(200);
+
+                    if (trackable.getName().equals("Stone Target")) {
+                        if (runtest == 0){
+                            runtest = runtime.milliseconds();
+                        }
+                        telemetry.addData("Status", "Run Time: " + runtest);
+                        //drive.StopDriving();
+                        detected = true;
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastLocation = robotLocationTransform;
+                        }
+                        VectorF translation = lastLocation.getTranslation();
+                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                         telemetry.update();
-                        sleep(200);
 
-                        if (trackable.getName().equals("Stone Target")) {
-                            if (runtest == 0){
-                                runtest = runtime.milliseconds();
-                            }
-                            telemetry.addData("Status", "Run Time: " + runtest);
-                            //drive.StopDriving();
-                            detected = true;
-                            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                            if (robotLocationTransform != null) {
-                                lastLocation = robotLocationTransform;
-                            }
-                            VectorF translation = lastLocation.getTranslation();
-                            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
+                        drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
+
+                        skystoneServo.setPosition(0.5275);
+                        sleep(700);
+                        drive.StrafeRightDistance(1, 9.5);
+                        drive.DriveBackwardDistance(1, 32);
+                        skystoneServo.setPosition(0.475);
+                        sleep(750);
+                        telemetry.addData("angle", drive.getAngle());
+                        telemetry.update();
+                        drive.DriveForwardDistance(1, 55);
+                        drive.DriveBackwardDistance(1,30);
+
+                        detected = false;
+
+                        while (!detected) {
+                            telemetry.addData("detected?", detected);
+                            //for (VuforiaTrackable trackable : allTrackables) {
+                            trackable = stoneTarget;
+                            sleep(500);
+                            telemetry.addData("Trackable", trackable.getName());
                             telemetry.update();
-
-                            drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
-                            drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
-
-                            skystoneServo.setPosition(0.5275);
-                            sleep(700);
-                            drive.StrafeRightDistance(1, 9.5);
-                            drive.DriveBackwardDistance(1, 32);
-                            skystoneServo.setPosition(0.475);
-                            sleep(750);
-                            telemetry.addData("angle", drive.getAngle());
-                            telemetry.update();
-                            drive.DriveForwardDistance(1, 30);
-
-                            detected = false;
-
-                            while (!detected) {
-                                telemetry.addData("detected?", detected);
-                                //for (VuforiaTrackable trackable : allTrackables) {
-                                trackable = stoneTarget;
-                                sleep(500);
-                                telemetry.addData("Trackable", trackable.getName());
+                            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                                telemetry.addData("Visible Target", trackable.getName());
                                 telemetry.update();
-                                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                                    telemetry.addData("Visible Target", trackable.getName());
+                                sleep(200);
+
+                                if (trackable.getName().equals("Stone Target")) {
+                                    if (runtest == 0) {
+                                        runtest = runtime.milliseconds();
+                                    }
+                                    telemetry.addData("Status", "Run Time: " + runtest);
+                                    //drive.StopDriving();
+                                    detected = true;
+                                    robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                                    if (robotLocationTransform != null) {
+                                        lastLocation = robotLocationTransform;
+                                    }
+                                    translation = lastLocation.getTranslation();
+                                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                            translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                                     telemetry.update();
-                                    sleep(200);
 
-                                    if (trackable.getName().equals("Stone Target")) {
-                                        if (runtest == 0) {
-                                            runtest = runtime.milliseconds();
-                                        }
-                                        telemetry.addData("Status", "Run Time: " + runtest);
-                                        //drive.StopDriving();
-                                        detected = true;
-                                        robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                                        if (robotLocationTransform != null) {
-                                            lastLocation = robotLocationTransform;
-                                        }
-                                        translation = lastLocation.getTranslation();
-                                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-                                        telemetry.update();
+                                    drive.DriveForwardDistance(1, (translation.get(1) / mmPerInch) - 0.5);
+                                    drive.StrafeRightDistance(1, (translation.get(0) / mmPerInch) + 2.65);
 
-                                        drive.DriveForwardDistance(1, (translation.get(1) / mmPerInch) - 0.7);
-                                        drive.StrafeRightDistance(1, (translation.get(0) / mmPerInch) + 3);
-
-                                        skystoneServo.setPosition(0.5275);
-                                        sleep(700);
-                                        drive.StrafeRightDistance(1, 9.5);
-                                        drive.DriveBackwardDistance(1, 52);
-                                        skystoneServo.setPosition(0.475);
-                                        sleep(750);
-                                        telemetry.addData("angle", drive.getAngle());
-                                        telemetry.update();
-                                        drive.DriveBackwardDistance(1,30);
-                                        drive.StrafeRightDistance(1,20);
-                                        drive.DriveForwardDistance(1, 40);
+                                    skystoneServo.setPosition(0.5275);
+                                    sleep(800);
+                                    drive.StrafeRightDistance(1, 9.5);
+                                    drive.DriveBackwardDistance(1, 52);
+                                    skystoneServo.setPosition(0.475);
+                                    sleep(750);
+                                    telemetry.addData("angle", drive.getAngle());
+                                    telemetry.update();
+                                    drive.DriveBackwardDistance(1,30);
+                                    drive.StrafeRightDistance(1,20);
+                                    drive.DriveForwardDistance(1, 40);
 
                                         /*drive.DriveForwardDistance(1,12);
                                         drive.StrafeLeftDistance(1,10);
@@ -484,77 +485,27 @@ public class Old_code extends LinearOpMode {
                                         drive.StrafeLeftDistance(1,45);
                                         drive.DriveForwardDistance(0.5,5);*/
 
-                                    }
-
                                 }
-                                if (!detected) {
-                                    telemetry.addData("?", detected);
-                                    telemetry.update();
-                                    drive.DriveForwardDistance(0.2, 6);
 
-                                }
                             }
-                            /*drive.StrafeLeftDistance(1, 10);
-                            skystoneServo.setPosition(0.5275);
-                            sleep(700);
-                            drive.StrafeRightDistance(1, 15);
-                            drive.DriveBackwardDistance(0.8, 62);
-                            skystoneServo.setPosition(0.475);
-                            sleep(750);
-                            drive.TurnRightDegrees(1, 180);*/
+                            if (!detected) {
+                                telemetry.addData("?", detected);
+                                telemetry.update();
+                                drive.DriveForwardDistance(0.2, 6);
 
+                            }
                         }
-
-                        // getUpdatedRobotLocation() will return null if no new information is available since
-                        // the last time that call was made, or if the trackable is not currently visible.
 
                     }
 
-                //}
+                }
+
                 if (!detected) {
                     telemetry.addData("?", detected);
                     telemetry.update();
                     drive.DriveForwardDistance(0.2, 6);
 
                 }
-
-               /*for (VuforiaTrackable trackable : allTrackables) {
-                    sleep(200);
-                    if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                        telemetry.addData("Visible Target", trackable.getName());
-
-                        if (trackable.getName().equals("Blue Perimeter 2")) {
-                            drive.StopDriving();
-                            detected = true;
-                            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                            if (robotLocationTransform != null) {
-                                lastLocation = robotLocationTransform;
-                            }
-                            VectorF translation = lastLocation.getTranslation();
-                            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-                            telemetry.update();
-                            sleep(30000);
-                        }
-                        // getUpdatedRobotLocation() will return null if no new information is available since
-                        // the last time that call was made, or if the trackable is not currently visible.
-
-                    }
-                }
-                drive.DriveBackwardDistance(1, 36);
-                sleep(100000);
-                /*drive.DriveForwardDistance(1, 20);
-                drive.StrafeRightDistance(1, 45);
-                foundServo.setPosition(0.6);
-                foundServo2.setPosition(0.8);
-                sleep(750);
-                drive.StrafeLeftDistance(1, 50);
-                foundServo.setPosition(0.4);
-                foundServo2.setPosition(0.6);
-                sleep(750);
-                drive.DriveBackwardDistance(1, 68);
-                */
-                //telemetry.update();
             }
 
             // Disable Tracking when we are done;
