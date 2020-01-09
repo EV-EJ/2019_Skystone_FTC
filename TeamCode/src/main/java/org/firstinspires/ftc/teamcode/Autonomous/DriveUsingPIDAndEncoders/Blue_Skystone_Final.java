@@ -423,21 +423,20 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         drive.DriveBackwardDistance(1, 30);
                         drive.StrafeRightDistance(1,30);
 
-                        drive.DriveForwardDistance(1,12);
+                        drive.DriveForwardDistance(1,7);
                         drive.StrafeLeftDistance(1,10);
                         drive.TurnRightDistance(1, 31);
-                        drive.StrafeRightDistance(1,20);
+                        drive.StrafeRightDistance(1,15);
                         foundServo.setPosition(0.6);
                         foundServo2.setPosition(0.8);
                         sleep(1000);
                         drive.StrafeLeftDistance(1,40);
-                        drive.TurnRightDistance(1,15);
-                        drive.StrafeRightDistance(1,5);
+                        drive.TurnLeftDistance(1,30);
                         foundServo.setPosition(0.4);
                         foundServo2.setPosition(0.6);
                         sleep(1000);
-                        drive.StrafeLeftDistance(1,45);
-                        drive.DriveForwardDistance(0.5,5);
+                        drive.StrafeRightDistance(1,5);
+                        drive.StrafeLeftDistance(1,40);
 
 
                     }

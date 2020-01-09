@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import static java.lang.Thread.sleep;
 
 public class EncoderAndPIDDriveTrain {
+    //initializing the variables that the methods will need later on
     private DcMotor LFMotor, LBMotor, RFMotor, RBMotor;
     private PIDController pidRotate;
     private BNO055IMU imu;
@@ -18,11 +19,13 @@ public class EncoderAndPIDDriveTrain {
     private double globalAngle;
 
     public EncoderAndPIDDriveTrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor, BNO055IMU m_imu){
+        //defining the motors as the motor values that we get from the class
         this.LBMotor = m_LBMotor;
         this.LFMotor = m_LFMotor;
         this.RBMotor = m_RBMotor;
         this.RFMotor = m_RFMotor;
 
+        //creating the PID controller for use in the turning
         pidRotate = new PIDController(.003, .00003, 0);
 
         //Run using encoders
@@ -31,11 +34,13 @@ public class EncoderAndPIDDriveTrain {
         RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //setting the motor directions
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.REVERSE);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
 
+        //defining and creating the IMU sensor for the robot to use
         this.imu = m_imu;
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -48,12 +53,14 @@ public class EncoderAndPIDDriveTrain {
         imu.initialize(parameters);
     }
 
+    //resetting the angle in the IMU
     public void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAngle = 0;
     }
 
+    //getting the current angle of the IMU
     public double getAngle() {
 
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -72,6 +79,7 @@ public class EncoderAndPIDDriveTrain {
         return globalAngle;
     }
 
+    //setting the motors, allowing the robot to drive forwards
     public void DriveForward(double power) {
         LFMotor.setPower(power);
         LBMotor.setPower(power);
@@ -79,6 +87,7 @@ public class EncoderAndPIDDriveTrain {
         RBMotor.setPower(power);
     }
 
+    //stop driving the robot
     public void StopDriving() {
 
         DriveForward(0);
@@ -126,7 +135,7 @@ public class EncoderAndPIDDriveTrain {
 
     }
 
-
+    //turns left by setting the motors to do that
     public void TurnLeft(double power) {
 
         LFMotor.setPower(-power);
@@ -135,13 +144,14 @@ public class EncoderAndPIDDriveTrain {
         RBMotor.setPower(power);
     }
 
-
+    //using timing to turn left
     public void TurnLeftTime(double power, long time) throws InterruptedException {
 
         TurnLeft(power);
         Thread.sleep(time);
     }
 
+    //turns left using PID
     public void TurnLeftDegrees(double power, double degrees) throws InterruptedException {
         resetAngle();
 
@@ -169,6 +179,7 @@ public class EncoderAndPIDDriveTrain {
         resetAngle();
     }
 
+    //turns left using encoders, with the encoder distance
     public void TurnLeftDistance(double power, double distance)   {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -208,12 +219,13 @@ public class EncoderAndPIDDriveTrain {
 
     }
 
+    //driving the robot backwards, by using the drove forwards method
     public void DriveBackward(double power) {
 
         DriveForward(-power);
     }
 
-
+    //driving the robot backwards using encoder ticks
     public void DriveBackwardDistance(double power, double distance)  {
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -254,7 +266,7 @@ public class EncoderAndPIDDriveTrain {
 
     }
 
-
+    //turning right, by setting the motors to the correct power
     public void TurnRight(double power) {
 
         LFMotor.setPower(power);
@@ -263,12 +275,14 @@ public class EncoderAndPIDDriveTrain {
         RBMotor.setPower(-power);
     }
 
+    //turn right by using the timing to do so
     public void TurnRightTime(double power, long time) throws InterruptedException {
 
         TurnRight(power);
         Thread.sleep(time);
     }
 
+    //turn right using the degree and PID
     public void TurnRightDegrees(double power, double degrees) throws InterruptedException {
         resetAngle();
 
@@ -301,6 +315,7 @@ public class EncoderAndPIDDriveTrain {
         resetAngle();
     }
 
+    //turning right using encoders and distance
     public void TurnRightDistance(double power, double distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -340,7 +355,7 @@ public class EncoderAndPIDDriveTrain {
 
     }
 
-
+    //strafe right by setting the best powers
     public void StrafeRight(double power) {
 
         LFMotor.setPower(power);
@@ -349,7 +364,7 @@ public class EncoderAndPIDDriveTrain {
         RBMotor.setPower(power);
     }
 
-
+    //strafing right using the correct encoder distances
     public void StrafeRightDistance(double power, double distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -389,7 +404,7 @@ public class EncoderAndPIDDriveTrain {
 
     }
 
-
+    //strafing left
     public void StrafeLeft(double power) {
 
         LFMotor.setPower(-power);
@@ -398,6 +413,7 @@ public class EncoderAndPIDDriveTrain {
         RBMotor.setPower(-power);
     }
 
+    //strafing left a distance based on encoder values
     public void StrafeLeftDistance(double power, double distance) {
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
