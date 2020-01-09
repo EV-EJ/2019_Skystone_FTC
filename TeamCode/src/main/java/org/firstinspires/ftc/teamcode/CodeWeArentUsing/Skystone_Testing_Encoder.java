@@ -27,7 +27,7 @@
         * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         */
 
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPIDAndEncoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -390,9 +390,21 @@ public class Skystone_Testing_Encoder extends LinearOpMode {
                     sleep(200);
 
                     if (trackable.getName().equals("Stone Target")) {
-                        drive.StrafeLeftDistance(1, 8.8);
+                        //drive.StopDriving();
+                        detected = true;
+                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                        if (robotLocationTransform != null) {
+                            lastLocation = robotLocationTransform;
+                        }
+                        VectorF translation = lastLocation.getTranslation();
+                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                        telemetry.update();
+
+                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.8);
+                        drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
                         skystoneServo.setPosition(0.5275);
-                        sleep(700);
+                        sleep(800);
                         drive.StrafeRightDistance(1, 9.5);
                         drive.DriveBackwardDistance(0.8,30);
                         skystoneServo.setPosition(0.475);

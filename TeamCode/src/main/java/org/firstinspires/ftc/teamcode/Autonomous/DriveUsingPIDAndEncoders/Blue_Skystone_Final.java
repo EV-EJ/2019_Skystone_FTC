@@ -410,7 +410,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                                 translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                         telemetry.update();
 
-                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
+                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.5);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
 
                         skystoneServo.setPosition(0.5275);
@@ -426,13 +426,13 @@ public class Blue_Skystone_Final extends LinearOpMode {
 
                         drive.DriveForwardDistance(1,7);
                         drive.StrafeLeftDistance(1,10);
-                        drive.TurnRightDistance(1, 31);
+                        drive.TurnRightDegrees(1, 180);
                         drive.StrafeRightDistance(1,15);
                         foundServo.setPosition(0.6);
                         foundServo2.setPosition(0.8);
                         sleep(1000);
                         drive.StrafeLeftDistance(1,40);
-                        drive.TurnLeftDistance(1,30);
+                        drive.TurnLeftDegrees(1,270);
                         foundServo.setPosition(0.4);
                         foundServo2.setPosition(0.6);
                         sleep(1000);
