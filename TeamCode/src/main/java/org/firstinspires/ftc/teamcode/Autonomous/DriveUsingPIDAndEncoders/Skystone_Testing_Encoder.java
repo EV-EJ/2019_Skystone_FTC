@@ -1,42 +1,40 @@
 /* Copyright (c) 2019 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+        *
+        * Redistribution and use in source and binary forms, with or without modification,
+        * are permitted (subject to the limitations in the disclaimer below) provided that
+        * the following conditions are met:
+        *
+        * Redistributions of source code must retain the above copyright notice, this list
+        * of conditions and the following disclaimer.
+        *
+        * Redistributions in binary form must reproduce the above copyright notice, this
+        * list of conditions and the following disclaimer in the documentation and/or
+        * other materials provided with the distribution.
+        *
+        * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+        * promote products derived from this software without specific prior written permission.
+        *
+        * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+        * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+        * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+        * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+        * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+        * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        */
 
-package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
+package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPIDAndEncoders;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -47,6 +45,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderDriveTrain;
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.EncoderAndPIDDriveTrain;
 
 import java.util.ArrayList;
@@ -89,21 +88,18 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@Autonomous(name="Blue Skystone", group ="Concept")
-@Disabled
-public class two_sky_stones extends LinearOpMode {
+@Autonomous(name="Test", group ="Concept")
+//@Disabled
+public class Skystone_Testing_Encoder extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
     private static final boolean PHONE_IS_PORTRAIT = false;
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
-    private ElapsedTime runtime = new ElapsedTime();
     Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo;
-    //FourEncoderDriveTrain drive;
-    EncoderAndPIDDriveTrain drive;
     BNO055IMU imu;
-    double runtest = 0;
+    EncoderAndPIDDriveTrain drive;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -171,10 +167,10 @@ public class two_sky_stones extends LinearOpMode {
         skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
+
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        //drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
         drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
         //rotate = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
@@ -371,13 +367,12 @@ public class two_sky_stones extends LinearOpMode {
         // Note: To use the remote camera preview:
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
-        drive.resetAngle();
-        runtime.reset();
 
         targetsSkyStone.activate();
         if (opModeIsActive()) {
-            //check all the trackable targets to see which one (if any) is visible.
+
             drive.StrafeLeftDistance(1, 12);
+            //drive.TurnLeftDegrees(0.5, 20);
 
             boolean detected = false;
 
@@ -395,106 +390,27 @@ public class two_sky_stones extends LinearOpMode {
                     sleep(200);
 
                     if (trackable.getName().equals("Stone Target")) {
-                        if (runtest == 0){
-                            runtest = runtime.milliseconds();
-                        }
-                        telemetry.addData("Status", "Run Time: " + runtest);
-                        //drive.StopDriving();
-                        detected = true;
-                        OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                        if (robotLocationTransform != null) {
-                            lastLocation = robotLocationTransform;
-                        }
-                        VectorF translation = lastLocation.getTranslation();
-                        telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-                        telemetry.update();
-
-                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
-                        drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
-
+                        drive.StrafeLeftDistance(1, 8.8);
                         skystoneServo.setPosition(0.5275);
                         sleep(700);
                         drive.StrafeRightDistance(1, 9.5);
-                        drive.DriveBackwardDistance(1, 32);
+                        drive.DriveBackwardDistance(0.8,30);
                         skystoneServo.setPosition(0.475);
                         sleep(750);
-                        telemetry.addData("angle", drive.getAngle());
-                        telemetry.update();
-                        drive.DriveForwardDistance(1, 55);
-                        drive.DriveBackwardDistance(1,30);
-
+                        drive.DriveForwardDistance(1,50);
                         detected = false;
+                        drive.TurnLeftDegrees(1, 20);
+                        drive.StrafeLeftDistance(1, 10);
 
-                        while (!detected) {
-                            telemetry.addData("detected?", detected);
-                            //for (VuforiaTrackable trackable : allTrackables) {
-                            trackable = stoneTarget;
-                            sleep(500);
-                            telemetry.addData("Trackable", trackable.getName());
-                            telemetry.update();
-                            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                                telemetry.addData("Visible Target", trackable.getName());
-                                telemetry.update();
-                                sleep(200);
+                        //drive.StrafeLeftDistance(1, 11);
+                        skystoneServo.setPosition(0.5275);
+                        sleep(700);
+                        drive.StrafeRightDistance(1, 13);
+                        drive.DriveBackwardDistance(0.8,60);
+                        skystoneServo.setPosition(0.475);
+                        sleep(750);
+                        telemetry.update();
 
-                                if (trackable.getName().equals("Stone Target")) {
-                                    if (runtest == 0) {
-                                        runtest = runtime.milliseconds();
-                                    }
-                                    telemetry.addData("Status", "Run Time: " + runtest);
-                                    //drive.StopDriving();
-                                    detected = true;
-                                    robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                                    if (robotLocationTransform != null) {
-                                        lastLocation = robotLocationTransform;
-                                    }
-                                    translation = lastLocation.getTranslation();
-                                    telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                                            translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-                                    telemetry.update();
-
-                                    drive.DriveForwardDistance(1, (translation.get(1) / mmPerInch) - 0.5);
-                                    drive.StrafeRightDistance(1, (translation.get(0) / mmPerInch) + 2.65);
-
-                                    skystoneServo.setPosition(0.5275);
-                                    sleep(800);
-                                    drive.StrafeRightDistance(1, 9.5);
-                                    drive.DriveBackwardDistance(1, 52);
-                                    skystoneServo.setPosition(0.475);
-                                    sleep(750);
-                                    telemetry.addData("angle", drive.getAngle());
-                                    telemetry.update();
-                                    drive.DriveBackwardDistance(1,30);
-                                    drive.StrafeRightDistance(1,20);
-                                    drive.DriveForwardDistance(1, 40);
-
-                                        /*drive.DriveForwardDistance(1,12);
-                                        drive.StrafeLeftDistance(1,10);
-                                        drive.TurnRightDistance(1, 31);
-                                        drive.StrafeRightDistance(1,20);
-                                        foundServo.setPosition(0.6);
-                                        foundServo2.setPosition(0.8);
-                                        sleep(1000);
-                                        drive.StrafeLeftDistance(1,40);
-                                        drive.TurnRightDistance(1,15);
-                                        drive.StrafeRightDistance(1,5);
-                                        foundServo.setPosition(0.4);
-                                        foundServo2.setPosition(0.6);
-                                        sleep(1000);
-                                        drive.StrafeLeftDistance(1,45);
-                                        drive.DriveForwardDistance(0.5,5);*/
-
-                                }
-
-                            }
-                            if (!detected) {
-                                telemetry.addData("?", detected);
-                                telemetry.update();
-                                drive.DriveForwardDistance(0.2, 6);
-
-                            }
-                        }
 
                     }
 

@@ -377,6 +377,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
         if (opModeIsActive()) {
             //check all the trackable targets to see which one (if any) is visible.
             drive.StrafeLeftDistance(1, 12);
+            //drive.TurnLeftDegrees(0.5, 20);
 
             boolean detected = false;
 
