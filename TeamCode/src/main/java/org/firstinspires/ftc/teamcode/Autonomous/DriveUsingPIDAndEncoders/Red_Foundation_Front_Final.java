@@ -65,14 +65,15 @@ public class Red_Foundation_Front_Final extends LinearOpMode {
             foundServo2.setPosition(0.8);
             sleep(1000);
             drive.StrafeLeftDistance(1,50);
-            drive.TurnRightDistance(1,50);
+            drive.TurnLeftDistance(1,50);
             drive.StrafeRightDistance(1,20);
-            drive.DriveBackwardDistance(1, 15);
+            drive.DriveForwardDistance(1, 15);
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
             sleep(1000);
             drive.StrafeLeftDistance(1,33);
-            drive.DriveForwardDistance(0.5,15);
+            drive.DriveBackwardDistance(0.5,5);
+            //DriveBackwardDistance(0.5, 8);
         }
     }
 }
