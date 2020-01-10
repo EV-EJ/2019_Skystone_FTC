@@ -59,23 +59,20 @@ public class Red_Foundation_Front_Final extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
-            drive.DriveForwardDistance(1,12);
-            drive.StrafeLeftDistance(1,25);
+            drive.DriveBackwardDistance(1,15);
+            drive.StrafeRightDistance(1,30);
             foundServo.setPosition(0.6);
             foundServo2.setPosition(0.8);
             sleep(1000);
-            //DriveBackwardDistance(1,2);
-            drive.StrafeRightDistance(1,45);
-            //TurnRightDistance(1,17);
-            //DriveForwardDistance(1,25);
-            //StrafeLeftDistance(1,30);
+            drive.StrafeLeftDistance(1,50);
+            drive.TurnRightDistance(1,50);
+            drive.StrafeRightDistance(1,20);
+            drive.DriveBackwardDistance(1, 15);
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
             sleep(1000);
-            //StrafeRightDistance(1,33);
-            drive.DriveBackwardDistance(1,33);
-            drive.StrafeLeftDistance(1, 22);
-            //DriveBackwardDistance(0.5, 8);
+            drive.StrafeLeftDistance(1,33);
+            drive.DriveForwardDistance(0.5,15);
         }
     }
 }
