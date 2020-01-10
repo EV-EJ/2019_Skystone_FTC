@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderDriveTrain;
 //Autonomous program when facing crater
 
 @Autonomous (name = "Blue_Load")
-//@Disabled
+@Disabled
 public class Blue_Loading_Zone_Encoder extends LinearOpMode {
 
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
