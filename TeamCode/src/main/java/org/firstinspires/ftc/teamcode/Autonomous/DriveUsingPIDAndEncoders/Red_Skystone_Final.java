@@ -413,31 +413,30 @@ public class Red_Skystone_Final extends LinearOpMode {
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
 
-                        skystoneServo.setPosition(0.53);
+                        skystoneServo.setPosition(0.54);
                         sleep(800);
                         drive.StrafeRightDistance(1, 10.5);
-                        drive.DriveForwardDistance(1, 32);
+                        drive.TurnLeftDistance(1, 30);
+                        drive.DriveBackwardDistance(1, 32);
                         skystoneServo.setPosition(0.475);
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
-                        drive.DriveForwardDistance(1, 30);
-                        drive.StrafeRightDistance(1,30);
+                        drive.DriveBackwardDistance(1, 33);
+                        drive.StrafeLeftDistance(1,7);
 
-                        drive.DriveBackwardDistance(1,7);
-                        drive.StrafeLeftDistance(1,10);
-                        drive.TurnRightDistance(1, 31);
-                        drive.StrafeRightDistance(1,15);
+                        drive.DriveForwardDistance(1,7);
+                        drive.StrafeRightDistance(1,25);
                         foundServo.setPosition(0.6);
                         foundServo2.setPosition(0.8);
                         sleep(1000);
                         drive.StrafeLeftDistance(1,40);
-                        drive.TurnRightDistance(1,40);
+                        drive.TurnRightDistance(1,25);
                         foundServo.setPosition(0.4);
                         foundServo2.setPosition(0.6);
                         sleep(1000);
-                        drive.StrafeRightDistance(1,5);
-                        drive.StrafeLeftDistance(1,40);
+                        drive.StrafeRightDistance(1,15);
+                        drive.StrafeLeftDistance(1,35);
 
 
                     }
