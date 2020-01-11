@@ -413,9 +413,9 @@ public class Red_Skystone_Final extends LinearOpMode {
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
 
-                        skystoneServo.setPosition(0.5275);
-                        sleep(700);
-                        drive.StrafeRightDistance(1, 9.5);
+                        skystoneServo.setPosition(0.53);
+                        sleep(800);
+                        drive.StrafeRightDistance(1, 10.5);
                         drive.DriveForwardDistance(1, 32);
                         skystoneServo.setPosition(0.475);
                         sleep(750);

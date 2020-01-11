@@ -187,10 +187,10 @@ public class TeleOp_Final extends OpMode {
 
         //Using the intake, intaking or releasing
         if(gamepad1.right_bumper){
-            armMotor.setPower(0.5);
+            armMotor.setPower(-0.5);
             armMotor2.setPower(0.5);
         } else if(gamepad1.left_bumper){
-            armMotor.setPower(-0.5);
+            armMotor.setPower(0.5);
             armMotor2.setPower(-0.5);
         } else{
             armMotor.setPower(0);
