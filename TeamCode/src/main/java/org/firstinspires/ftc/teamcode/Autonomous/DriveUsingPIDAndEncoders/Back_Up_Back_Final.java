@@ -45,7 +45,7 @@ public class Back_Up_Back_Final extends LinearOpMode {
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         
-        //Wheels on the robot funtions
+        //Wheels on the chassis functions
         drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         //Reverse the right motors to move forward based on their orientation on the robot
@@ -63,6 +63,7 @@ public class Back_Up_Back_Final extends LinearOpMode {
         //Running the code
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
+            //drive forward to get under the bridge
             drive.DriveForwardDistance(1,12);
         }
     }

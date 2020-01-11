@@ -97,7 +97,6 @@ public class Blue_Skystone_Final extends LinearOpMode {
     private static final boolean PHONE_IS_PORTRAIT = false;
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
-    private ElapsedTime runtime = new ElapsedTime();
     Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo, skystoneClamp;
     //FourEncoderDriveTrain drive;
     EncoderAndPIDDriveTrain drive;
@@ -373,36 +372,30 @@ public class Blue_Skystone_Final extends LinearOpMode {
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
         drive.resetAngle();
-        runtime.reset();
 
         targetsSkyStone.activate();
         if (opModeIsActive()) {
-            //check all the trackable targets to see which one (if any) is visible.
+            //strafing to find the trackables
             drive.StrafeLeftDistance(1, 12);
-            //drive.TurnLeftDegrees(0.5, 20);
 
             boolean detected = false;
 
 
             while (!detected) {
                 telemetry.addData("detected?", detected);
-                //for (VuforiaTrackable trackable : allTrackables) {
                 VuforiaTrackable trackable = stoneTarget;
                 sleep(500);
                 telemetry.addData("Trackable", trackable.getName());
                 telemetry.update();
+                //checking to see if it can find the skystone has been detected
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     telemetry.update();
                     sleep(200);
 
                     if (trackable.getName().equals("Stone Target")) {
-                        if (runtest == 0){
-                            runtest = runtime.milliseconds();
-                        }
-                        telemetry.addData("Status", "Run Time: " + runtest);
-                        //drive.StopDriving();
                         detected = true;
+                        //getting the distance from the skystone
                         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                         if (robotLocationTransform != null) {
                             lastLocation = robotLocationTransform;
@@ -411,14 +404,15 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                                 translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                         telemetry.update();
-
+                        //going to the skystone
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
-
+                        //dropping the skystone servo and clamp servo
                         skystoneServo.setPosition(0.5275);
                         sleep(700);
                         skystoneClamp.setPosition(0.9);
                         sleep(700);
+                        //going to drop the skystone off, and going to the far corner
                         drive.StrafeRightDistance(1, 9.5);
                         drive.DriveBackwardDistance(1, 32);
                         skystoneServo.setPosition(0.475);
@@ -429,7 +423,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         telemetry.update();
                         drive.DriveBackwardDistance(1, 30);
                         drive.StrafeRightDistance(1,30);
-
+                        //going to the foundation and picking it up, and moving it
                         drive.DriveForwardDistance(1,7);
                         drive.StrafeLeftDistance(1,10);
                         drive.TurnRightDistance(1, 31);
@@ -442,6 +436,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         foundServo.setPosition(0.4);
                         foundServo2.setPosition(0.6);
                         sleep(1000);
+                        //going under the bridge
                         drive.StrafeRightDistance(1,5);
                         drive.StrafeLeftDistance(1,40);
 
@@ -449,7 +444,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                     }
 
                 }
-
+                //if the skystone hasn't been detected yet
                 if (!detected) {
                     telemetry.addData("?", detected);
                     telemetry.update();

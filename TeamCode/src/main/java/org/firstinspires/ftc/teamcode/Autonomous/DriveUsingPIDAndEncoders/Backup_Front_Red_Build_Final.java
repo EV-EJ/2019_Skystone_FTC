@@ -59,6 +59,7 @@ public class Backup_Front_Red_Build_Final extends LinearOpMode {
 
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
+            //driving under the bridge then strafing
             drive.DriveForwardDistance(1, 12);
             drive.StrafeRightDistance(1, 12);
         }
