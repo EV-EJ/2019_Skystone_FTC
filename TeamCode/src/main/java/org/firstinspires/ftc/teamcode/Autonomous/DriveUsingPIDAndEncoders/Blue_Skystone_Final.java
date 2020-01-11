@@ -417,13 +417,13 @@ public class Blue_Skystone_Final extends LinearOpMode {
 
                         skystoneServo.setPosition(0.5275);
                         sleep(700);
-                        skystoneClamp.setPosition(-1);
+                        skystoneClamp.setPosition(1);
                         sleep(700);
                         drive.StrafeRightDistance(1, 9.5);
                         drive.DriveBackwardDistance(1, 32);
                         skystoneServo.setPosition(0.475);
                         sleep(700);
-                        skystoneClamp.setPosition(0);
+                        skystoneClamp.setPosition(0.5);
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();

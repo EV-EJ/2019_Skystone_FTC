@@ -223,11 +223,11 @@ public class TeleOp_Final extends OpMode {
         if (gamepad2.a) {
             telemetry.addData("a","pressed");
             skystoneServo.setPosition(0.527);
-            skystoneClamp.setPosition(-1);
+            skystoneClamp.setPosition(1);
         }
         if (gamepad2.b) {
             telemetry.addData("b", "pressed");
-            skystoneClamp.setPosition(0);
+            skystoneClamp.setPosition(0.5);
             skystoneServo.setPosition(0.49);
         }
             telemetry.addData("Status", "Run Time: " + runtime.toString());
