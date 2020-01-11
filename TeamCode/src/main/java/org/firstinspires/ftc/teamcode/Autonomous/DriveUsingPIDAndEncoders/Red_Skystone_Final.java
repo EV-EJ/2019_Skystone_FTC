@@ -98,7 +98,7 @@ public class Red_Skystone_Final extends LinearOpMode {
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     private ElapsedTime runtime = new ElapsedTime();
-    Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo;
+    Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo, skystoneClamp;
     //FourEncoderDriveTrain drive;
     EncoderAndPIDDriveTrain drive;
     BNO055IMU imu;
@@ -168,6 +168,7 @@ public class Red_Skystone_Final extends LinearOpMode {
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
         skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
+        skystoneClamp = hardwareMap.get(Servo.class, "Skystone Clamp");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -184,6 +185,7 @@ public class Red_Skystone_Final extends LinearOpMode {
         foundServo2.setDirection(Servo.Direction.REVERSE);
         foundServo.setDirection(Servo.Direction.FORWARD);
         skystoneServo.setDirection(Servo.Direction.FORWARD);
+        skystoneClamp.setDirection(Servo.Direction.FORWARD);
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
         /*
@@ -413,20 +415,27 @@ public class Red_Skystone_Final extends LinearOpMode {
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
 
-                        skystoneServo.setPosition(0.54);
+                        skystoneServo.setPosition(0.5275);
+                        sleep(700);
+                        skystoneClamp.setPosition(-1);
+                        sleep(700);
+
                         sleep(800);
                         drive.StrafeRightDistance(1, 10.5);
-                        drive.TurnLeftDistance(1, 30);
-                        drive.DriveBackwardDistance(1, 32);
+                        drive.DriveForwardDistance(1, 32);
+                        skystoneClamp.setPosition(0);
+                        sleep(700);
                         skystoneServo.setPosition(0.475);
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
-                        drive.DriveBackwardDistance(1, 33);
-                        drive.StrafeLeftDistance(1,7);
+                        drive.DriveForwardDistance(1, 35);
+                        drive.StrafeRightDistance(1,10);
 
-                        drive.DriveForwardDistance(1,7);
-                        drive.StrafeRightDistance(1,25);
+                        drive.DriveBackwardDistance(1,7);
+                        drive.StrafeLeftDistance(1,10);
+                        drive.TurnLeftDistance(1, 31);
+                        drive.StrafeRightDistance(1, 15);
                         foundServo.setPosition(0.6);
                         foundServo2.setPosition(0.8);
                         sleep(1000);
@@ -436,6 +445,7 @@ public class Red_Skystone_Final extends LinearOpMode {
                         foundServo2.setPosition(0.6);
                         sleep(1000);
                         drive.StrafeRightDistance(1,15);
+                        drive.DriveForwardDistance(1, 5);
                         drive.StrafeLeftDistance(1,35);
 
 

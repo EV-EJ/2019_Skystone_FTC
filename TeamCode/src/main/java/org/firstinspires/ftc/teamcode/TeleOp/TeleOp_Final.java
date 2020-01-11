@@ -24,7 +24,7 @@ public class TeleOp_Final extends OpMode {
     //defining all of the variables needed for the code
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor armMotor, armMotor2, clawMotor, LFMotor, LBMotor, RFMotor, RBMotor;
-    private Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo;
+    private Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo, skystoneClamp;
     private DigitalChannel limitSwitch;
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
@@ -49,6 +49,7 @@ public class TeleOp_Final extends OpMode {
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
         skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
+        skystoneClamp = hardwareMap.get(Servo.class, "Skystone Clamp");
 
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
 
@@ -70,6 +71,7 @@ public class TeleOp_Final extends OpMode {
         foundServo2.setDirection(Servo.Direction.REVERSE);
         foundServo.setDirection(Servo.Direction.FORWARD);
         skystoneServo.setDirection(Servo.Direction.FORWARD);
+        skystoneClamp.setDirection(Servo.Direction.FORWARD);
 
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
 
@@ -221,9 +223,11 @@ public class TeleOp_Final extends OpMode {
         if (gamepad2.a) {
             telemetry.addData("a","pressed");
             skystoneServo.setPosition(0.527);
+            skystoneClamp.setPosition(-1);
         }
         if (gamepad2.b) {
             telemetry.addData("b", "pressed");
+            skystoneClamp.setPosition(0);
             skystoneServo.setPosition(0.49);
         }
             telemetry.addData("Status", "Run Time: " + runtime.toString());

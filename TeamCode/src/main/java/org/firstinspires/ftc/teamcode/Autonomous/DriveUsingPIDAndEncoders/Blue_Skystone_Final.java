@@ -98,7 +98,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
     private ElapsedTime runtime = new ElapsedTime();
-    Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo;
+    Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo, skystoneClamp;
     //FourEncoderDriveTrain drive;
     EncoderAndPIDDriveTrain drive;
     BNO055IMU imu;
@@ -168,6 +168,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
         foundServo = hardwareMap.get(Servo.class, "found servo");
         foundServo2 = hardwareMap.get(Servo.class, "found servo 2");
         skystoneServo = hardwareMap.get(Servo.class, "Skystone servo");
+        skystoneClamp = hardwareMap.get(Servo.class, "Skystone Clamp");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -184,6 +185,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
         foundServo2.setDirection(Servo.Direction.REVERSE);
         foundServo.setDirection(Servo.Direction.FORWARD);
         skystoneServo.setDirection(Servo.Direction.FORWARD);
+        skystoneClamp.setDirection(Servo.Direction.FORWARD);
         webcamName = hardwareMap.get(WebcamName.class, "webcam");
 
         /*
@@ -415,9 +417,13 @@ public class Blue_Skystone_Final extends LinearOpMode {
 
                         skystoneServo.setPosition(0.5275);
                         sleep(700);
+                        skystoneClamp.setPosition(-1);
+                        sleep(700);
                         drive.StrafeRightDistance(1, 9.5);
                         drive.DriveBackwardDistance(1, 32);
                         skystoneServo.setPosition(0.475);
+                        sleep(700);
+                        skystoneClamp.setPosition(0);
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
