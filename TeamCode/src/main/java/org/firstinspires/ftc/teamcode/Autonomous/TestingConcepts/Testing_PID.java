@@ -80,9 +80,9 @@ public class Testing_PID extends LinearOpMode {
         LFMotor.getCurrentPosition();
             while (opModeIsActive()) {
             //if (opModeIsActive()) {
-                    int inches = 12;
+                    //int inches = 12;
 
-                    double setpoint = 1136 / (4 * 3.14159265);
+                    //double setpoint = 1136 / (4 * 3.14159265);
 
                     /**/
                     do {
