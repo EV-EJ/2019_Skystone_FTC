@@ -377,6 +377,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
         if (opModeIsActive()) {
             //strafing to find the trackables
             drive.StrafeLeftDistance(1, 12);
+            drive.TurnLeftDistance(1,2);
 
             boolean detected = false;
 
@@ -405,7 +406,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                                 translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                         telemetry.update();
                         //going to the skystone
-                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.7);
+                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.9);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
                         //dropping the skystone servo and clamp servo
                         skystoneServo.setPosition(0.5275);
@@ -437,8 +438,10 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         foundServo2.setPosition(0.6);
                         sleep(1000);
                         //going under the bridge
-                        drive.StrafeRightDistance(1,5);
-                        drive.StrafeLeftDistance(1,40);
+                        drive.StrafeRightDistance(1,15);
+                        drive.DriveForwardDistance(1, 20);
+                        drive.StrafeLeftDistance(1,35);
+                        //drive.DriveBackwardDistance(1, 20);
 
 
                     }

@@ -1,5 +1,8 @@
-package org.firstinspires.ftc.teamcode.CodeWeArentUsing.TestingConcepts;
+package org.firstinspires.ftc.teamcode.Autonomous.TestingConcepts;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,10 +16,13 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.PIDController;
 
 
 //Back up Auton that goes to the wall side of the bridge, and parks there
-
+@Config
 @Autonomous (name = "TESTING PID")
-@Disabled
+//@Disabled
 public class Testing_PID extends LinearOpMode {
+    public static double kP = 0;
+    public static double kI = 0;
+    public static double kD = 0;
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
@@ -40,6 +46,8 @@ public class Testing_PID extends LinearOpMode {
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
 
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -47,7 +55,7 @@ public class Testing_PID extends LinearOpMode {
         
         //Wheels on the robot funtions
         drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
-        pidDrive = new PIDController(0, 0, 0.01);
+        pidDrive = new PIDController(kP, kI, kD);
 
         pidDrive.setOutputRange(-1, 1);
         pidDrive.setInputRange(-100000, 100000);
@@ -78,7 +86,7 @@ public class Testing_PID extends LinearOpMode {
 
                     /**/
                     do {
-                        int encode = (LFMotor.getCurrentPosition() /*+ LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition()*/ + RBMotor.getCurrentPosition()) / 2;
+                        int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 2;
 
                         double power = pidDrive.performPID(encode);
 
@@ -87,8 +95,8 @@ public class Testing_PID extends LinearOpMode {
                         telemetry.addData("LB Motor",LBMotor.getCurrentPosition());
                         telemetry.addData("RF Motor",RFMotor.getCurrentPosition());
                         telemetry.addData("RB Motor",RBMotor.getCurrentPosition());
-                        telemetry.addData("time", runtime);
-                        telemetry.addData("power",power);
+                        telemetry.addData("y", runtime);
+                        telemetry.addData("x",power);
                         telemetry.log();
                         telemetry.update();
 

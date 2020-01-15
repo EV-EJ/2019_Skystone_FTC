@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.CodeWeArentUsing.FourEncoderDriveTrain;
 import org.firstinspires.ftc.teamcode.DriveTrainAndPID.EncoderAndPIDDriveTrain;
 
 //Back up Auton that goes to the wall side of the bridge, and parks there
@@ -16,6 +15,7 @@ import org.firstinspires.ftc.teamcode.DriveTrainAndPID.EncoderAndPIDDriveTrain;
 @Autonomous (name = "Back_Up_Back")
 //@Disabled
 public class Back_Up_Back_Final extends LinearOpMode {
+
     //initializaing the future variables
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
@@ -44,6 +44,7 @@ public class Back_Up_Back_Final extends LinearOpMode {
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         
         //Wheels on the chassis functions
         drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
@@ -67,5 +68,6 @@ public class Back_Up_Back_Final extends LinearOpMode {
             drive.DriveForwardDistance(1,12);
         }
     }
+
 
 }

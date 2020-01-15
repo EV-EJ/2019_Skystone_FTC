@@ -379,6 +379,7 @@ public class Red_Skystone_Final extends LinearOpMode {
         if (opModeIsActive()) {
             //check all the trackable targets to see which one (if any) is visible.
             drive.StrafeLeftDistance(1, 12);
+
             //drive.TurnLeftDegrees(0.5, 20);
 
             boolean detected = false;
@@ -413,7 +414,7 @@ public class Red_Skystone_Final extends LinearOpMode {
                         telemetry.update();
 
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.9);
-                        drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
+                        drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4.2);
 
                         skystoneServo.setPosition(0.5275);
                         sleep(700);
@@ -422,7 +423,7 @@ public class Red_Skystone_Final extends LinearOpMode {
 
                         sleep(800);
                         drive.StrafeRightDistance(1, 10.5);
-                        drive.DriveForwardDistance(1, 32);
+                        drive.DriveForwardDistance(1, 37);
                         skystoneClamp.setPosition(0.8);
                         sleep(700);
                         skystoneServo.setPosition(0.475);
@@ -430,7 +431,7 @@ public class Red_Skystone_Final extends LinearOpMode {
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
                         drive.DriveForwardDistance(1, 35);
-                        drive.StrafeRightDistance(1,10);
+                        drive.StrafeRightDistance(1,15);
 
                         drive.DriveBackwardDistance(1,7);
                         drive.StrafeLeftDistance(1,10);
@@ -445,8 +446,8 @@ public class Red_Skystone_Final extends LinearOpMode {
                         foundServo2.setPosition(0.6);
                         sleep(1000);
                         drive.StrafeRightDistance(1,15);
-                        drive.DriveForwardDistance(1, 5);
-                        drive.StrafeLeftDistance(1,30);
+                        drive.DriveBackwardDistance(1, 15);
+                        drive.StrafeLeftDistance(1,27);
 
 
                     }
