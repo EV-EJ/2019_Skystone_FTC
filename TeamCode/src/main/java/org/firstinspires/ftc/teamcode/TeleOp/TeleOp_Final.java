@@ -30,7 +30,7 @@ public class TeleOp_Final extends OpMode {
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private boolean fieldRelativeMode = false;
-    private double globalAngle, speed = 0.7;
+    private double globalAngle, speed = 0.75;
 
 
     @Override
@@ -162,7 +162,7 @@ public class TeleOp_Final extends OpMode {
         if (gamepad1.a){
             speed = 0.3;
         } else{
-            speed = 0.7;
+            speed = 0.75;
         }
 
         //setting the powers for each of the motors
