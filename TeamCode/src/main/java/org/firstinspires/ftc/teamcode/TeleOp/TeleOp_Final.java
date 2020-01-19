@@ -30,7 +30,7 @@ public class TeleOp_Final extends OpMode {
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private boolean fieldRelativeMode = false;
-    private double globalAngle, speed = 0.8;
+    private double globalAngle, speed = 0.7;
 
 
     @Override
@@ -61,7 +61,7 @@ public class TeleOp_Final extends OpMode {
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.REVERSE);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor.setDirection(DcMotor.Direction.FORWARD);
+        armMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor2.setDirection(DcMotor.Direction.REVERSE);
         clawMotor.setDirection(DcMotor.Direction.FORWARD);
 
@@ -162,7 +162,7 @@ public class TeleOp_Final extends OpMode {
         if (gamepad1.a){
             speed = 0.3;
         } else{
-            speed = 0.8;
+            speed = 0.7;
         }
 
         //setting the powers for each of the motors
