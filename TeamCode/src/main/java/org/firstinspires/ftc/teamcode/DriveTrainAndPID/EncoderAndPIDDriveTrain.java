@@ -17,7 +17,7 @@ public class EncoderAndPIDDriveTrain {
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private double globalAngle;
-    private double damp = 0.55;
+    private double damp = 0.5;
 
     public EncoderAndPIDDriveTrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor, BNO055IMU m_imu){
         //defining the motors as the motor values that we get from the class
@@ -34,6 +34,11 @@ public class EncoderAndPIDDriveTrain {
         LBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //setting the motor directions
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
