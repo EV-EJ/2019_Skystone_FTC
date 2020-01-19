@@ -421,7 +421,7 @@ public class Detect_two_stones extends LinearOpMode {
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
-                        drive.DriveForwardDistance(1, 30);
+                        drive.DriveForwardDistance(1, 45);
 
                         detected = false;
 

@@ -128,10 +128,10 @@ public class TeleOp_Final extends OpMode {
         }
 
         //getting the values for the powers for each motor
-        LFPower = Range.clip(-yValue + turnValue + xValue,-1,1);
-        LBPower = Range.clip(-yValue + turnValue - xValue,-1,1);
-        RBPower = Range.clip(-yValue - turnValue + xValue,-1,1);
-        RFPower = Range.clip(-yValue - turnValue - xValue,-1,1);
+        LFPower = Range.clip(-yValue + turnValue + xValue,-0.8,0.8);
+        LBPower = Range.clip(-yValue + turnValue - xValue,-0.8,0.8);
+        RBPower = Range.clip(-yValue - turnValue + xValue,-0.8,0.8);
+        RFPower = Range.clip(-yValue - turnValue - xValue,-0.8,0.8);
 
         //applying the ramping up and ramping down features
         if (LFPower < 0){
@@ -228,7 +228,7 @@ public class TeleOp_Final extends OpMode {
         }
         if (gamepad2.b) {
             telemetry.addData("b", "pressed");
-            skystoneClamp.setPosition(0.8);
+            skystoneClamp.setPosition(0.85);
             skystoneServo.setPosition(0.49);
         }
             telemetry.addData("Status", "Run Time: " + runtime.toString());
