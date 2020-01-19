@@ -45,6 +45,11 @@ public class Back_Up_Back_Final extends LinearOpMode {
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         
         //Wheels on the chassis functions
         drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
@@ -65,7 +70,7 @@ public class Back_Up_Back_Final extends LinearOpMode {
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
             //drive forward to get under the bridge
-            drive.DriveForwardDistance(1,12);
+            drive.DriveForwardDistance(1,6);
         }
     }
 

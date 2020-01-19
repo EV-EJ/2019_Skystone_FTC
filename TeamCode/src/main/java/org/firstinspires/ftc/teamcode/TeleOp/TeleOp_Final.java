@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -56,13 +57,11 @@ public class TeleOp_Final extends OpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         //reversing the motors that need to be reversed, otherwise it sets it as forward
-        armMotor.setDirection(DcMotor.Direction.FORWARD);
-        armMotor2.setDirection(DcMotor.Direction.FORWARD);
         LFMotor.setDirection(DcMotor.Direction.FORWARD);
         LBMotor.setDirection(DcMotor.Direction.FORWARD);
         RFMotor.setDirection(DcMotor.Direction.REVERSE);
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor.setDirection(DcMotor.Direction.FORWARD);
         armMotor2.setDirection(DcMotor.Direction.REVERSE);
         clawMotor.setDirection(DcMotor.Direction.FORWARD);
 
@@ -161,7 +160,7 @@ public class TeleOp_Final extends OpMode {
         slidesValue = gamepad2.left_stick_y;
 
         if (gamepad1.a){
-            speed = 0.2;
+            speed = 0.3;
         } else{
             speed = 1;
         }
@@ -223,7 +222,6 @@ public class TeleOp_Final extends OpMode {
         if (gamepad2.a) {
             telemetry.addData("a","pressed");
             skystoneServo.setPosition(0.527);
-            skystoneClamp.setPosition(0.5);
             skystoneClamp.setPosition(0.9);
         }
         if (gamepad2.b) {

@@ -17,6 +17,7 @@ public class EncoderAndPIDDriveTrain {
     private BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private double globalAngle;
+    private double damp = 0.55;
 
     public EncoderAndPIDDriveTrain(DcMotor m_LFMotor, DcMotor m_LBMotor, DcMotor m_RFMotor, DcMotor m_RBMotor, BNO055IMU m_imu){
         //defining the motors as the motor values that we get from the class
@@ -81,6 +82,8 @@ public class EncoderAndPIDDriveTrain {
 
     //setting the motors, allowing the robot to drive forwards
     public void DriveForward(double power) {
+        power = damp * power;
+
         LFMotor.setPower(power);
         LBMotor.setPower(power);
         RFMotor.setPower(power);
@@ -96,6 +99,7 @@ public class EncoderAndPIDDriveTrain {
 
     //Drive forward using encoders
     public void DriveForwardDistance(double power, double distance)  {
+        power = damp * power;
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -137,6 +141,7 @@ public class EncoderAndPIDDriveTrain {
 
     //turns left by setting the motors to do that
     public void TurnLeft(double power) {
+        power = damp * power;
 
         LFMotor.setPower(-power);
         LBMotor.setPower(-power);
@@ -146,6 +151,7 @@ public class EncoderAndPIDDriveTrain {
 
     //using timing to turn left
     public void TurnLeftTime(double power, long time) throws InterruptedException {
+        power = damp * power;
 
         TurnLeft(power);
         Thread.sleep(time);
@@ -153,6 +159,7 @@ public class EncoderAndPIDDriveTrain {
 
     //turns left using PID
     public void TurnLeftDegrees(double power, double degrees) throws InterruptedException {
+        power = damp * power;
         resetAngle();
 
         if (Math.abs(degrees) > 359) degrees = Math.copySign(359, degrees);
@@ -181,6 +188,7 @@ public class EncoderAndPIDDriveTrain {
 
     //turns left using encoders, with the encoder distance
     public void TurnLeftDistance(double power, double distance)   {
+        power = damp * power;
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -221,12 +229,14 @@ public class EncoderAndPIDDriveTrain {
 
     //driving the robot backwards, by using the drove forwards method
     public void DriveBackward(double power) {
+        power = damp * power;
 
         DriveForward(-power);
     }
 
     //driving the robot backwards using encoder ticks
     public void DriveBackwardDistance(double power, double distance)  {
+        power = damp * power;
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -268,6 +278,7 @@ public class EncoderAndPIDDriveTrain {
 
     //turning right, by setting the motors to the correct power
     public void TurnRight(double power) {
+        power = damp * power;
 
         LFMotor.setPower(power);
         LBMotor.setPower(power);
@@ -277,6 +288,7 @@ public class EncoderAndPIDDriveTrain {
 
     //turn right by using the timing to do so
     public void TurnRightTime(double power, long time) throws InterruptedException {
+        power = damp * power;
 
         TurnRight(power);
         Thread.sleep(time);
@@ -284,6 +296,8 @@ public class EncoderAndPIDDriveTrain {
 
     //turn right using the degree and PID
     public void TurnRightDegrees(double power, double degrees) throws InterruptedException {
+        power = damp * power;
+
         resetAngle();
 
         if (Math.abs(degrees) > 359) degrees = Math.copySign(359, degrees);
@@ -317,6 +331,8 @@ public class EncoderAndPIDDriveTrain {
 
     //turning right using encoders and distance
     public void TurnRightDistance(double power, double distance) {
+        power = damp * power;
+
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -357,6 +373,7 @@ public class EncoderAndPIDDriveTrain {
 
     //strafe right by setting the best powers
     public void StrafeRight(double power) {
+        power = damp * power;
 
         LFMotor.setPower(power);
         LBMotor.setPower(-power);
@@ -366,6 +383,7 @@ public class EncoderAndPIDDriveTrain {
 
     //strafing right using the correct encoder distances
     public void StrafeRightDistance(double power, double distance) {
+        power = damp * power;
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -406,6 +424,7 @@ public class EncoderAndPIDDriveTrain {
 
     //strafing left
     public void StrafeLeft(double power) {
+        power = damp * power;
 
         LFMotor.setPower(-power);
         LBMotor.setPower(power);
@@ -415,6 +434,8 @@ public class EncoderAndPIDDriveTrain {
 
     //strafing left a distance based on encoder values
     public void StrafeLeftDistance(double power, double distance) {
+        power = damp * power;
+
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
