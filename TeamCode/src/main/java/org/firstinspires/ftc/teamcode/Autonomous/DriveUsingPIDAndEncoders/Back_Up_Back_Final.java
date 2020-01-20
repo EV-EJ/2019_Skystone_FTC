@@ -64,7 +64,7 @@ public class Back_Up_Back_Final extends LinearOpMode {
         LFMotor.getCurrentPosition();
         if (opModeIsActive()) {
             //drive forward to get under the bridge
-            drive.DriveForwardDistance(1,6);
+            drive.DriveForwardDistance(1,12);
             sleep(1000000);
         }
     }

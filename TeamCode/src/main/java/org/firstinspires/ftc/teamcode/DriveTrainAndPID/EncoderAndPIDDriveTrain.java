@@ -104,6 +104,8 @@ public class EncoderAndPIDDriveTrain {
 
     //Drive forward using encoders
     public void DriveForwardDistance(double power, double distance)  {
+        distance /= 2;
+
         power = damp * power;
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -193,6 +195,8 @@ public class EncoderAndPIDDriveTrain {
 
     //turns left using encoders, with the encoder distance
     public void TurnLeftDistance(double power, double distance)   {
+        distance /= 2;
+
         power = damp * power;
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -241,6 +245,8 @@ public class EncoderAndPIDDriveTrain {
 
     //driving the robot backwards using encoder ticks
     public void DriveBackwardDistance(double power, double distance)  {
+        distance /= 2;
+
         power = damp * power;
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -336,6 +342,8 @@ public class EncoderAndPIDDriveTrain {
 
     //turning right using encoders and distance
     public void TurnRightDistance(double power, double distance) {
+        distance /= 2;
+
         power = damp * power;
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -388,6 +396,8 @@ public class EncoderAndPIDDriveTrain {
 
     //strafing right using the correct encoder distances
     public void StrafeRightDistance(double power, double distance) {
+        distance /= 2;
+
         power = damp * power;
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -439,6 +449,8 @@ public class EncoderAndPIDDriveTrain {
 
     //strafing left a distance based on encoder values
     public void StrafeLeftDistance(double power, double distance) {
+        distance /= 2;
+
         power = damp * power;
 
         LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
