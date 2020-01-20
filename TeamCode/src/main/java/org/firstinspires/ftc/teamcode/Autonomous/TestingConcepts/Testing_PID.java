@@ -86,7 +86,7 @@ public class Testing_PID extends LinearOpMode {
 
                     /**/
                     do {
-                        int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 2;
+                        int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
 
                         double power = pidDrive.performPID(encode);
 
