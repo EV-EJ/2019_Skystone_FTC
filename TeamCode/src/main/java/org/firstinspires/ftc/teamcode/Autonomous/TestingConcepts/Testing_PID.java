@@ -41,10 +41,6 @@ public class Testing_PID extends LinearOpMode {
         LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
         RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
         RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
-        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
-        limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
-        rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
-        clawServo = hardwareMap.get(Servo.class, "Claw Servo");
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -64,11 +60,6 @@ public class Testing_PID extends LinearOpMode {
         pidDrive.reset();
         pidDrive.enable();
 
-        //Reverse the right motors to move forward based on their orientation on the robot
-        clawMotor.setDirection(DcMotor.Direction.REVERSE);
-        limitSwitch.setMode(DigitalChannel.Mode.INPUT);
-        rotateServo.setDirection(Servo.Direction.FORWARD);
-        clawServo.setDirection(Servo.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Mode", "Init");
@@ -78,34 +69,25 @@ public class Testing_PID extends LinearOpMode {
 
         //Running the code
         LFMotor.getCurrentPosition();
-            while (opModeIsActive()) {
-            //if (opModeIsActive()) {
-                    //int inches = 12;
+        while (opModeIsActive()) {
+            do {
+                int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
 
-                    //double setpoint = 1136 / (4 * 3.14159265);
+                double power = pidDrive.performPID(encode);
 
-                    /**/
-                    do {
-                        int encode = (LFMotor.getCurrentPosition() + LBMotor.getCurrentPosition() + RFMotor.getCurrentPosition() + RBMotor.getCurrentPosition()) / 4;
+                telemetry.addData("encode", encode);
+                telemetry.addData("LF Motor",LFMotor.getCurrentPosition());
+                telemetry.addData("LB Motor",LBMotor.getCurrentPosition());
+                telemetry.addData("RF Motor",RFMotor.getCurrentPosition());
+                telemetry.addData("RB Motor",RBMotor.getCurrentPosition());
+                telemetry.addData("y", runtime);
+                telemetry.addData("x",power);
+                telemetry.log();
+                telemetry.update();
 
-                        double power = pidDrive.performPID(encode);
-
-                        telemetry.addData("encode", encode);
-                        telemetry.addData("LF Motor",LFMotor.getCurrentPosition());
-                        telemetry.addData("LB Motor",LBMotor.getCurrentPosition());
-                        telemetry.addData("RF Motor",RFMotor.getCurrentPosition());
-                        telemetry.addData("RB Motor",RBMotor.getCurrentPosition());
-                        telemetry.addData("y", runtime);
-                        telemetry.addData("x",power);
-                        telemetry.log();
-                        telemetry.update();
-
-
-                        drive.DriveForward(power);
-                    } while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy());
-                //}
-            }
-        //}
+                drive.DriveForward(power);
+            } while (LFMotor.isBusy() && LBMotor.isBusy() && RFMotor.isBusy() && RBMotor.isBusy());
+        }
     }
 
 }
