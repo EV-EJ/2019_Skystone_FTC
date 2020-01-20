@@ -406,11 +406,11 @@ public class Blue_Skystone_Final extends LinearOpMode {
                                 translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                         telemetry.update();
                         //going to the skystone
+                        skystoneServo.setPosition(0.527);
+                        sleep(700);
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.9);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
                         //dropping the skystone servo and clamp servo
-                        skystoneServo.setPosition(0.5275);
-                        sleep(700);
                         skystoneClamp.setPosition(0.9);
                         sleep(700);
                         //going to drop the skystone off, and going to the far corner
