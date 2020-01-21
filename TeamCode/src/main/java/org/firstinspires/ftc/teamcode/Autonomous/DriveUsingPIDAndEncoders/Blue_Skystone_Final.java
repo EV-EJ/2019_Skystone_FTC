@@ -411,18 +411,26 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.9);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
                         //dropping the skystone servo and clamp servo
-                        skystoneClamp.setPosition(0.9);
+                        skystoneClamp.setPosition(0.95);
                         sleep(700);
                         //going to drop the skystone off, and going to the far corner
                         drive.StrafeRightDistance(1, 9.5);
                         drive.DriveBackwardDistance(1, 32);
                         skystoneServo.setPosition(0.475);
                         sleep(700);
-                        skystoneClamp.setPosition(0.8);
+                        skystoneClamp.setPosition(0.7);
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
-                        drive.DriveBackwardDistance(1, 30);
+                        drive.DriveForwardDistance(1,38);
+                        skystoneServo.setPosition(0.527);
+                        sleep(700);
+                        drive.StrafeLeftDistance(1,9.5);
+                        skystoneClamp.setPosition(0.95);
+                        sleep(700);
+                        drive.StrafeRightDistance(1,9.5);
+                        drive.DriveBackwardDistance(1,38);
+                        /*drive.DriveBackwardDistance(1, 30);
                         drive.StrafeRightDistance(1,30);
                         //going to the foundation and picking it up, and moving it
                         drive.DriveForwardDistance(1,7);
@@ -441,9 +449,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         drive.StrafeRightDistance(1,15);
                         drive.DriveForwardDistance(1, 20);
                         drive.StrafeLeftDistance(1,35);
-                        //drive.DriveBackwardDistance(1, 20);
-
-
+                        //drive.DriveBackwardDistance(1, 20);*/
                     }
 
                 }

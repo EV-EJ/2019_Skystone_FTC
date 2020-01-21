@@ -175,7 +175,7 @@ public class TeleOp_Final extends OpMode {
         if (slidesValue == 0){
             clawMotor.setPower(-0.2);
         } else if (limitSwitch.getState() || slidesValue >= 0) {
-            clawMotor.setPower(Range.clip(slidesValue, -0.6, -0.02));
+            clawMotor.setPower(Range.clip(slidesValue, -0.7 , -0.02));
         }
 
         //moving the claw servo to pick up or release the stone

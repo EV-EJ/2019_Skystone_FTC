@@ -76,7 +76,7 @@ public class Red_Foundation_Back_Final extends LinearOpMode {
             foundServo2.setPosition(0.6);
             sleep(1000);
             //going under the bridge
-            drive.StrafeLeftDistance(1,33);
+            drive.StrafeLeftDistance(1,30);
             drive.DriveBackwardDistance(0.5,5);
             //DriveBackwardDistance(0.5, 8);
         }

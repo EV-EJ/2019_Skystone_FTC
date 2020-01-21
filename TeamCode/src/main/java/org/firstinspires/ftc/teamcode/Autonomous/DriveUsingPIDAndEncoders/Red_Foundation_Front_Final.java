@@ -78,7 +78,6 @@ public class Red_Foundation_Front_Final extends LinearOpMode {
             //going back under the bridge
             drive.StrafeLeftDistance(1,33);
             drive.DriveForwardDistance(0.5,15);
-            //DriveBackwardDistance(0.5, 8);
         }
     }
 }

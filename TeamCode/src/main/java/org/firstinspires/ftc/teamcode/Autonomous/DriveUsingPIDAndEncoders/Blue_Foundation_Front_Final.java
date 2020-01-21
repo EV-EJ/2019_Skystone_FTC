@@ -28,6 +28,10 @@ public class Blue_Foundation_Front_Final extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Initialize the hardware variables.
+        LFMotor  = hardwareMap.get(DcMotor.class, "LF Motor");
+        LBMotor  = hardwareMap.get(DcMotor.class, "LB Motor");
+        RFMotor  = hardwareMap.get(DcMotor.class, "RF Motor");
+        RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
         clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
         limitSwitch = hardwareMap.get(DigitalChannel.class, "Limit Stop");
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
