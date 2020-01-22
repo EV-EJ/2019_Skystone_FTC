@@ -27,15 +27,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPIDAndEncoders;
+package org.firstinspires.ftc.teamcode.CodeWeArentUsing;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -89,8 +89,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @Autonomous(name="Blue Skystone", group ="Concept")
-//@Disabled
-public class Blue_Skystone_Final extends LinearOpMode {
+@Disabled
+public class two_skystones_blue extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = FRONT;
@@ -418,10 +418,22 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         drive.DriveBackwardDistance(1, 32);
                         skystoneServo.setPosition(0.475);
                         sleep(700);
-                        skystoneClamp.setPosition(0.6);
+                        skystoneClamp.setPosition(0.3);
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
+                        drive.DriveForwardDistance(1,44);
+                        skystoneServo.setPosition(0.527);
+                        sleep(700);
+                        drive.StrafeLeftDistance(1,9.5);
+                        skystoneClamp.setPosition(0.95);
+                        sleep(700);
+                        drive.StrafeRightDistance(1,9.5);
+                        drive.DriveBackwardDistance(1,55);
+                        skystoneServo.setPosition(0.475);
+                        sleep(700);
+                        skystoneClamp.setPosition(0.3);
+                        sleep(750);
                         drive.DriveBackwardDistance(1, 30);
                         drive.StrafeRightDistance(1,30);
                         //going to the foundation and picking it up, and moving it
@@ -441,6 +453,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         drive.StrafeRightDistance(1,15);
                         drive.DriveForwardDistance(1, 20);
                         drive.StrafeLeftDistance(1,35);
+                        //drive.DriveBackwardDistance(1, 20);*/
                     }
 
                 }
