@@ -398,12 +398,8 @@ public class Red_Skystone_Final extends LinearOpMode {
                     sleep(200);
 
                     if (trackable.getName().equals("Stone Target")) {
-                        if (runtest == 0){
-                            runtest = runtime.milliseconds();
-                        }
-                        telemetry.addData("Status", "Run Time: " + runtest);
-                        //drive.StopDriving();
                         detected = true;
+                        //getting the distance from the skystone
                         OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                         if (robotLocationTransform != null) {
                             lastLocation = robotLocationTransform;
@@ -412,45 +408,41 @@ public class Red_Skystone_Final extends LinearOpMode {
                         telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                                 translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                         telemetry.update();
-                        skystoneServo.setPosition(0.527);
+                        //going to the skystone
+                        skystoneServo.setPosition(0.53);
                         sleep(700);
-
-                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.9);
-                        drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4.2);
-
-
+                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) + 0);
+                        drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
+                        //dropping the skystone servo and clamp servo
                         skystoneClamp.setPosition(0.95);
                         sleep(700);
-
-                        sleep(800);
-                        drive.StrafeRightDistance(1, 10.5);
-                        drive.DriveForwardDistance(1, 37);
-                        skystoneClamp.setPosition(0.6);
-                        sleep(700);
+                        //going to drop the skystone off, and going to the far corner
+                        drive.StrafeRightDistance(1, 9.5);
+                        drive.DriveForwardDistance(1.5, 60);
                         skystoneServo.setPosition(0.475);
+                        sleep(700);
+                        drive.StrafeLeftDistance(0.5,10);
+                        skystoneClamp.setPosition(0.6);
                         sleep(750);
                         telemetry.addData("angle", drive.getAngle());
                         telemetry.update();
-                        drive.DriveForwardDistance(1, 35);
-                        drive.StrafeRightDistance(1,15);
+                        drive.StrafeRightDistance(1, 6);
+                        drive.TurnRightDistance(1, 31);
+                        drive.DriveBackwardDistance(1, 3);
+                        drive.StrafeRightDistance(1, 8);
 
-                        drive.DriveBackwardDistance(1,7);
-                        drive.StrafeLeftDistance(1,10);
-                        drive.TurnLeftDistance(1, 31);
-                        drive.StrafeRightDistance(1, 15);
                         foundServo.setPosition(0.6);
                         foundServo2.setPosition(0.8);
                         sleep(1000);
-                        drive.StrafeLeftDistance(1,40);
-                        drive.TurnRightDistance(1,25);
+                        drive.StrafeLeftDistance(1,35);
+                        drive.TurnRightDistance(1,45.5);
+                        drive.StrafeRightDistance(1,15);
+                        drive.DriveBackwardDistance(1, 20);
                         foundServo.setPosition(0.4);
                         foundServo2.setPosition(0.6);
                         sleep(1000);
-                        drive.StrafeRightDistance(1,15);
-                        drive.DriveBackwardDistance(1, 15);
-                        drive.StrafeLeftDistance(1,27);
-
-
+                        //going under the bridge
+                        drive.StrafeLeftDistance(1,30);
                     }
 
                 }
