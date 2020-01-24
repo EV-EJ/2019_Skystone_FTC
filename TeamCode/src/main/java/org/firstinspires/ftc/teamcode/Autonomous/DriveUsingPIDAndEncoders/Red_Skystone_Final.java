@@ -412,19 +412,20 @@ public class Red_Skystone_Final extends LinearOpMode {
                         telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                                 translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
                         telemetry.update();
+                        skystoneServo.setPosition(0.527);
+                        sleep(700);
 
                         drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) - 0.9);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4.2);
 
-                        skystoneServo.setPosition(0.5275);
-                        sleep(700);
-                        skystoneClamp.setPosition(0.9);
+
+                        skystoneClamp.setPosition(0.95);
                         sleep(700);
 
                         sleep(800);
                         drive.StrafeRightDistance(1, 10.5);
                         drive.DriveForwardDistance(1, 37);
-                        skystoneClamp.setPosition(0.8);
+                        skystoneClamp.setPosition(0.6);
                         sleep(700);
                         skystoneServo.setPosition(0.475);
                         sleep(750);
