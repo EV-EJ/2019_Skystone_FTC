@@ -24,7 +24,7 @@ public class TeleOp_Final extends OpMode {
 
     //defining all of the variables needed for the code
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor armMotor, armMotor2, clawMotor, LFMotor, LBMotor, RFMotor, RBMotor;
+    private DcMotor armMotor, armMotor2, /*clawMotor,*/ LFMotor, LBMotor, RFMotor, RBMotor;
     private Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo, skystoneClamp;
     private DigitalChannel limitSwitch;
     private BNO055IMU imu;
@@ -43,7 +43,7 @@ public class TeleOp_Final extends OpMode {
         RBMotor  = hardwareMap.get(DcMotor.class, "RB Motor");
         armMotor = hardwareMap.get(DcMotor.class, "Arm Motor 1");
         armMotor2 = hardwareMap.get(DcMotor.class, "Arm Motor 2");
-        clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
+        //clawMotor = hardwareMap.get(DcMotor.class,"Claw Up Motor");
 
         rotateServo = hardwareMap.get(Servo.class, "Rotate Servo");
         clawServo = hardwareMap.get(Servo.class, "Claw Servo");
@@ -63,7 +63,7 @@ public class TeleOp_Final extends OpMode {
         RBMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor2.setDirection(DcMotor.Direction.REVERSE);
-        clawMotor.setDirection(DcMotor.Direction.FORWARD);
+        //clawMotor.setDirection(DcMotor.Direction.FORWARD);
 
         rotateServo.setDirection(Servo.Direction.FORWARD);
         clawServo.setDirection(Servo.Direction.FORWARD);
@@ -172,11 +172,11 @@ public class TeleOp_Final extends OpMode {
         RBMotor.setPower(Range.clip(RBPower, -speed, speed));
 
         //getting the double reverse 4 bar linkage to move up and down
-        if (slidesValue == 0){
+        /*if (slidesValue == 0){
             clawMotor.setPower(-0.2);
         } else if (limitSwitch.getState() || slidesValue >= 0) {
             clawMotor.setPower(Range.clip(slidesValue, -0.7 , -0.02));
-        }
+        }*/
 
         //moving the claw servo to pick up or release the stone
         if (gamepad1.x) {

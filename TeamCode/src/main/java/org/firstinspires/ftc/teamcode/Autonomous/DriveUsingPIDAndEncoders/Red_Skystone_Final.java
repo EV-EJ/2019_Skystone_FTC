@@ -97,7 +97,6 @@ public class Red_Skystone_Final extends LinearOpMode {
     private static final boolean PHONE_IS_PORTRAIT = false;
     DcMotor LFMotor, LBMotor, RFMotor, RBMotor, clawMotor;
     DigitalChannel limitSwitch;
-    private ElapsedTime runtime = new ElapsedTime();
     Servo rotateServo, clawServo, foundServo, foundServo2, skystoneServo, skystoneClamp;
     //FourEncoderDriveTrain drive;
     EncoderAndPIDDriveTrain drive;
@@ -373,7 +372,6 @@ public class Red_Skystone_Final extends LinearOpMode {
         // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
         // Tap the preview window to receive a fresh image.
         drive.resetAngle();
-        runtime.reset();
 
         targetsSkyStone.activate();
         if (opModeIsActive()) {
