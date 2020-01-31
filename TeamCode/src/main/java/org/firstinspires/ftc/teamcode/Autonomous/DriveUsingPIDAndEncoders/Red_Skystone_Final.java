@@ -103,18 +103,6 @@ public class Red_Skystone_Final extends LinearOpMode {
     BNO055IMU imu;
     double runtest = 0;
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
     private static final String VUFORIA_KEY =
             "AU27zyj/////AAABmbi6j9hGd03juLw0wdlnhzYGc6WIPFQciceSue6dY/M84h84mnZ2Mo+UYwWe1jGvdWJnklN3R9MllNm5tpLfaVjK8CQ0jMa4GUcVXgDLoMb/FYJtDKEPvxjkWY3JIO77XuEku4IK2K4PGh92RC7kwZaf36pnQtEsBhRjC6vxBY8UlRYSOl+wAeF86GfzyQTQSXtyu2I6Tli4/mw5pXOdXtw73z81BLcSd9SyImZ4EMxfrMG8FXz1JzA3L4w7jCFB68DUuwa/jIpaL/jPYF2DlJAKw+YyXXU0qxF0YT3ZeQZABunfOsBLNBBwyXu8UDvyGrpsBXSvC9+riPITCfaECm6tXOl0PQ3Ju7ceTJkv1JKz";
 
@@ -173,9 +161,7 @@ public class Red_Skystone_Final extends LinearOpMode {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        //drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
         drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
-        //rotate = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
@@ -358,11 +344,6 @@ public class Red_Skystone_Final extends LinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-        // WARNING:
-        // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
-        // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
-        // CONSEQUENTLY do not put any driving commands in this loop.
-        // To restore the normal opmode structure, just un-comment the following line:
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
@@ -378,14 +359,11 @@ public class Red_Skystone_Final extends LinearOpMode {
             //check all the trackable targets to see which one (if any) is visible.
             drive.StrafeLeftDistance(1, 12);
 
-            //drive.TurnLeftDegrees(0.5, 20);
-
             boolean detected = false;
 
 
             while (!detected) {
                 telemetry.addData("detected?", detected);
-                //for (VuforiaTrackable trackable : allTrackables) {
                 VuforiaTrackable trackable = stoneTarget;
                 sleep(500);
                 telemetry.addData("Trackable", trackable.getName());
@@ -409,13 +387,13 @@ public class Red_Skystone_Final extends LinearOpMode {
                         //going to the skystone
                         skystoneServo.setPosition(0.53);
                         sleep(700);
-                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) + 0);
+                        drive.DriveForwardDistance(1,(translation.get(1) / mmPerInch) + 0.5);
                         drive.StrafeRightDistance(1,(translation.get(0) / mmPerInch) + 4);
                         //dropping the skystone servo and clamp servo
                         skystoneClamp.setPosition(0.95);
                         sleep(700);
                         //going to drop the skystone off, and going to the far corner
-                        drive.StrafeRightDistance(1, 9.5);
+                        drive.StrafeRightDistance(1, 8.5);
                         drive.DriveForwardDistance(1.5, 60);
                         skystoneServo.setPosition(0.475);
                         sleep(700);

@@ -61,14 +61,14 @@ public class Red_Foundation_Back_Final extends LinearOpMode {
         if (opModeIsActive()) {
             //driving to the center of the foundation
             drive.DriveBackwardDistance(1,15);
-            drive.StrafeRightDistance(1,30);
+            drive.StrafeRightDistance(1,25);
             //grabbing onto the foundation
             foundServo.setPosition(0.6);
             foundServo2.setPosition(0.8);
             sleep(1000);
             //going to the building zone and turning
             drive.StrafeLeftDistance(1,50);
-            drive.TurnRightDistance(1,35);
+            drive.TurnRightDistance(1,38);
             drive.StrafeRightDistance(1,20);
             drive.DriveBackwardDistance(1, 15);
             //releasing the foundation
@@ -78,7 +78,6 @@ public class Red_Foundation_Back_Final extends LinearOpMode {
             //going under the bridge
             drive.StrafeLeftDistance(1,30);
             drive.DriveBackwardDistance(0.5,5);
-            //DriveBackwardDistance(0.5, 8);
         }
     }
 }

@@ -1,32 +1,3 @@
-/* Copyright (c) 2019 FIRST. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted (subject to the limitations in the disclaimer below) provided that
- * the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list
- * of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice, this
- * list of conditions and the following disclaimer in the documentation and/or
- * other materials provided with the distribution.
- *
- * Neither the name of FIRST nor the names of its contributors may be used to endorse or
- * promote products derived from this software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
- * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
 package org.firstinspires.ftc.teamcode.Autonomous.DriveUsingPIDAndEncoders;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -173,9 +144,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
 
-        //drive = new FourEncoderDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor);
         drive = new EncoderAndPIDDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
-        //rotate = new PidDriveTrain(LFMotor, LBMotor, RFMotor, RBMotor, imu);
 
         clawMotor.setDirection(DcMotor.Direction.REVERSE);
         limitSwitch.setMode(DigitalChannel.Mode.INPUT);
@@ -318,7 +287,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         //
-        // Create a transformation matrix describing where the phone is on the robot.
+        // Create a transformation matr1ix describing where the phone is on the robot.
         //
         // NOTE !!!!  It's very important that you turn OFF your phone's Auto-Screen-Rotation option.
         // Lock it into Portrait for these numbers to work.
@@ -358,11 +327,6 @@ public class Blue_Skystone_Final extends LinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-        // WARNING:
-        // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
-        // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
-        // CONSEQUENTLY do not put any driving commands in this loop.
-        // To restore the normal opmode structure, just un-comment the following line:
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
 
@@ -377,7 +341,6 @@ public class Blue_Skystone_Final extends LinearOpMode {
         if (opModeIsActive()) {
             //strafing to find the trackables
             drive.StrafeLeftDistance(1, 12);
-            //+3drive.TurnLeftDistance(1,2);
 
             boolean detected = false;
 
@@ -414,7 +377,7 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         skystoneClamp.setPosition(0.95);
                         sleep(700);
                         //going to drop the skystone off, and going to the far corner
-                        drive.StrafeRightDistance(1, 9.5);
+                        drive.StrafeRightDistance(1, 8.5);
                         drive.DriveBackwardDistance(1.5, 60);
                         skystoneServo.setPosition(0.475);
                         sleep(700);
@@ -428,13 +391,6 @@ public class Blue_Skystone_Final extends LinearOpMode {
                         drive.DriveForwardDistance(1, 3);
                         drive.StrafeRightDistance(1, 8);
 
-                        /*drive.DriveBackwardDistance(3, 20);
-                        drive.StrafeRightDistance(3,40);
-                        //going to the foundation and picking it up, and moving it
-                        drive.DriveForwardDistance(1,7);
-                        drive.StrafeLeftDistance(1,10);
-                        drive.TurnRightDistance(1, 31);
-                        drive.StrafeRightDistance(1,15);*/
                         foundServo.setPosition(0.6);
                         foundServo2.setPosition(0.8);
                         sleep(1000);
