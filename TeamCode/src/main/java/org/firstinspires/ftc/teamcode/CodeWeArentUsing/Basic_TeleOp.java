@@ -124,7 +124,7 @@ public class Basic_TeleOp extends OpMode
         } else if(gamepad2.left_bumper){
             rotateServo.setPosition(Servo.MAX_POSITION);
         }
-        if (gamepad2.x) {
+        if (gamepad2.x) {heh
             telemetry.addData("x","pressed");
             foundServo.setPosition(0.4);
             foundServo2.setPosition(0.6);
